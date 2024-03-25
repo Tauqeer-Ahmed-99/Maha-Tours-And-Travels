@@ -20,11 +20,10 @@ import AuthContext from "../context/auth/AuthContext";
 import Dialog from "../components/Dialog";
 import { Link } from "react-router-dom";
 import { Routes } from "../routes/routes";
-import useWallpaper from "@src/hooks/useWallpaper";
+import Wallpaper from "@src/components/Wallpaper";
+import AuthFooter from "@src/components/AuthFooter";
 
 const LoginScreen = () => {
-  const wallpaper = useWallpaper();
-
   const initialValues = {
     name: {
       value: "",
@@ -308,31 +307,10 @@ const LoginScreen = () => {
               </form>
             </Stack>
           </Box>
-          <Box component="footer" sx={{ py: 1 }}>
-            <Typography level="body-xs" textAlign="center">
-              © Maha Tours and Travels {new Date().getFullYear()}
-            </Typography>
-          </Box>
+          <AuthFooter onSignup />
         </Box>
       </Box>
-      <Box
-        sx={{
-          height: "100%",
-          position: "fixed",
-          right: 0,
-          top: 0,
-          bottom: 0,
-          left: { xs: 0, md: "50vw" },
-          transition:
-            "background-image var(--Transition-duration), left var(--Transition-duration) !important",
-          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          backgroundColor: "background.level1",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundImage: `url(${wallpaper})`,
-        }}
-      />
+      <Wallpaper />
       <Dialog />
     </>
   );

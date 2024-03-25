@@ -118,7 +118,7 @@ const authReducer = (context = initialContext, action: IAction): IContext => {
     case ActionType.PASSWORD_RECOVERY_SUCCESS:
       return {
         ...context,
-        isLoading: true,
+        isLoading: false,
         message: payload?.message as string,
       };
     case ActionType.PASSWORD_RECOVERY_FAIL:

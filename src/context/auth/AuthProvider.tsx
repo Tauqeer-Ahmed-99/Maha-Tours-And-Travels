@@ -2,7 +2,13 @@ import React, { useReducer, useEffect } from "react";
 import AuthContext from "./AuthContext";
 import { ActionType, IAuthContext } from "./authTypes";
 import authReducer, { initialContext } from "./authReducer";
-import { onAuthStateChanged, updateProfile } from "firebase/auth";
+import {
+  browserLocalPersistence,
+  browserSessionPersistence,
+  onAuthStateChanged,
+  setPersistence,
+  updateProfile,
+} from "firebase/auth";
 import { auth } from "../../../firebase";
 import {
   createUserWithEmailAndPassword,
@@ -83,12 +89,17 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
-  const signin = async (email: string, password: string) => {
+  const signin = async (email: string, password: string, remember: boolean) => {
     try {
       dispatch({
         type: ActionType.USER_SIGNIN_START,
         payload: { message: "Logging in..." },
       });
+
+      await setPersistence(
+        auth,
+        remember ? browserLocalPersistence : browserSessionPersistence
+      );
 
       const userCreds = await signInWithEmailAndPassword(auth, email, password);
 

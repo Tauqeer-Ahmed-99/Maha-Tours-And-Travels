@@ -16,25 +16,40 @@ import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import ColorSchemeToggle from "../components/ColorSchemeToggle";
 import useForm, { FieldValue } from "../hooks/useForm";
 import Dialog from "../components/Dialog";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import AuthContext from "../context/auth/AuthContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { Routes } from "../routes/routes";
-import useWallpaper from "../hooks/useWallpaper";
+import Wallpaper from "@src/components/Wallpaper";
+import AuthFooter from "@src/components/AuthFooter";
+import { isEmail } from "@src/utilities/utils";
 
 const LoginScreen = () => {
-  const wallpaper = useWallpaper();
+  const [recoveryEmailSent, setRecoveryEmailSent] = useState(false);
+  const { search } = useLocation();
+
+  const queryParams = new URLSearchParams(search);
+
+  const forgotPassword = Boolean(queryParams.get("forgot-password"));
 
   const initialValues = {
     email: {
       value: "",
-      validate: (email: FieldValue) => (email as string).trim().length < 1,
+      validate: (email: FieldValue) =>
+        forgotPassword
+          ? !isEmail(email as string)
+          : (email as string).trim().length < 1,
     },
 
     password: {
       value: "",
       validate: (password: FieldValue) =>
         (password as string).trim().length < 1,
+    },
+
+    remember: {
+      value: false,
+      validate: (remember: FieldValue) => remember === undefined,
     },
   };
 
@@ -53,8 +68,21 @@ const LoginScreen = () => {
     if (isFormValid) {
       authContext.signin(
         (formValues.email as string).trim(),
-        (formValues.password as string).trim()
+        (formValues.password as string).trim(),
+        formValues.remember as boolean
       );
+    }
+  };
+
+  const handleGetRecoveryEmail = async () => {
+    validateForm();
+    const isEmailValid = formErrors.email === false;
+    if (isEmailValid) {
+      await authContext.sendPasswordRecoveryEmail(
+        (formValues.email as string).trim()
+      );
+
+      setRecoveryEmailSent(true);
     }
   };
 
@@ -136,17 +164,26 @@ const LoginScreen = () => {
             <Stack gap={4} sx={{ mb: 2 }}>
               <Stack gap={1}>
                 <Typography component="h1" level="h3">
-                  Sign in
+                  {forgotPassword ? "Recover Account" : "Sign in"}
                 </Typography>
                 <Typography level="body-sm">
-                  New to company? <Link to={Routes.SignupScreen}>Sign up!</Link>
+                  {forgotPassword ? (
+                    "Enter Registered email address."
+                  ) : (
+                    <>
+                      New to company?{" "}
+                      <Link to={Routes.SignupScreen}>Sign up!</Link>
+                    </>
+                  )}
                 </Typography>
               </Stack>
             </Stack>
             <Stack gap={4} sx={{ mt: 2 }}>
               <form>
                 <FormControl error={formErrors.email}>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>
+                    {forgotPassword ? "Registered Email" : "Email"}
+                  </FormLabel>
                   <Input
                     type="email"
                     name="email"
@@ -160,66 +197,72 @@ const LoginScreen = () => {
                       Please enter an email.
                     </FormHelperText>
                   )}
+                  {recoveryEmailSent &&
+                    authContext.message === "Password Recovery Email Sent." && (
+                      <FormHelperText
+                        sx={{ fontSize: "0.75rem", color: "green" }}
+                      >
+                        <InfoOutlined color="success" />
+                        {authContext.message} If it is a valid registered email.
+                      </FormHelperText>
+                    )}
                 </FormControl>
-                <FormControl error={formErrors.password}>
-                  <FormLabel>Password</FormLabel>
-                  <Input
-                    type="password"
-                    name="password"
-                    value={formValues.password as string}
-                    onChange={handleInputChange}
-                    onBlur={handleInputBlur}
-                  />
-                  {formErrors.password && (
-                    <FormHelperText sx={{ fontSize: "0.75rem" }}>
-                      <InfoOutlined />
-                      Please enter a password.
-                    </FormHelperText>
-                  )}
-                </FormControl>
-                <Stack gap={4} sx={{ mt: 2 }}>
-                  <Box
-                    sx={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      alignItems: "center",
-                    }}
-                  >
-                    <Checkbox size="sm" label="Remember me" name="persistent" />
-                    <Link to="#">Forgot your password?</Link>
-                  </Box>
-                  <Button onClick={handleSignin} fullWidth>
-                    Sign in
-                  </Button>
-                </Stack>
+                {!forgotPassword && (
+                  <FormControl error={formErrors.password}>
+                    <FormLabel>Password</FormLabel>
+                    <Input
+                      type="password"
+                      name="password"
+                      value={formValues.password as string}
+                      onChange={handleInputChange}
+                      onBlur={handleInputBlur}
+                    />
+                    {formErrors.password && (
+                      <FormHelperText sx={{ fontSize: "0.75rem" }}>
+                        <InfoOutlined />
+                        Please enter a password.
+                      </FormHelperText>
+                    )}
+                  </FormControl>
+                )}
+                {!forgotPassword ? (
+                  <Stack gap={4} sx={{ mt: 2 }}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                      }}
+                    >
+                      <Checkbox
+                        size="sm"
+                        label="Remember me"
+                        name="remember"
+                        checked={formValues.remember as boolean}
+                        onChange={handleInputChange}
+                      />
+                      <Link to="?forgot-password=true">
+                        Forgot your password?
+                      </Link>
+                    </Box>
+                    <Button onClick={handleSignin} fullWidth>
+                      Sign in
+                    </Button>
+                  </Stack>
+                ) : (
+                  <Stack gap={4} sx={{ mt: 2 }}>
+                    <Button onClick={handleGetRecoveryEmail} fullWidth>
+                      Get Recovery Email
+                    </Button>
+                  </Stack>
+                )}
               </form>
             </Stack>
           </Box>
-          <Box component="footer" sx={{ py: 3 }}>
-            <Typography level="body-xs" textAlign="center">
-              © Maha Tours and Travels {new Date().getFullYear()}
-            </Typography>
-          </Box>
+          <AuthFooter />
         </Box>
       </Box>
-      <Box
-        sx={{
-          height: "100%",
-          position: "fixed",
-          right: 0,
-          top: 0,
-          bottom: 0,
-          left: { xs: 0, md: "50vw" },
-          transition:
-            "background-image var(--Transition-duration), left var(--Transition-duration) !important",
-          transitionDelay: "calc(var(--Transition-duration) + 0.1s)",
-          backgroundColor: "background.level1",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          backgroundRepeat: "no-repeat",
-          backgroundImage: `url(${wallpaper})`,
-        }}
-      />
+      <Wallpaper />
       <Dialog />
     </>
   );

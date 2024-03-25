@@ -14,7 +14,7 @@ export interface IAuthContext {
     password: string,
     securityKey: string
   ) => Promise<void>;
-  signin: (email: string, password: string) => Promise<void>;
+  signin: (email: string, password: string, remember: boolean) => Promise<void>;
   signout: () => Promise<void>;
   sendPasswordRecoveryEmail: (email: string) => Promise<void>;
   confirmPasswordRecoveryCode: (
