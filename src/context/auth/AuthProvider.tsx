@@ -56,7 +56,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     phone: string,
     email: string,
     password: string,
-    _securityKey: string
+    securityKeyFromUser: string
   ) => {
     try {
       dispatch({
@@ -64,23 +64,29 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         payload: { message: "Registering User..." },
       });
 
-      const userCreds = await createUserWithEmailAndPassword(
-        auth,
-        email,
-        password
-      );
+      const securityKey = import.meta.env.VITE_SECURITY_KEY;
 
-      await updateProfile(userCreds.user, {
-        displayName: name,
-        photoURL: phone,
-      });
-
-      const user = userCreds.user;
-
-      dispatch({
-        type: ActionType.CREATE_USER_SUCCESS,
-        payload: { user, message: "Registration Successful." },
-      });
+      if (securityKey === securityKeyFromUser) {
+        const userCreds = await createUserWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+        await updateProfile(userCreds.user, {
+          displayName: name,
+          photoURL: phone,
+        });
+        const user = userCreds.user;
+        dispatch({
+          type: ActionType.CREATE_USER_SUCCESS,
+          payload: { user, message: "Registration Successful." },
+        });
+      } else {
+        dispatch({
+          type: ActionType.CREATE_USER_FAIL,
+          payload: { errorMessage: "Invalid Security Key." },
+        });
+      }
     } catch (error) {
       dispatch({
         type: ActionType.CREATE_USER_FAIL,

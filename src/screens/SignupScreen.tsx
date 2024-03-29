@@ -53,7 +53,7 @@ const LoginScreen = () => {
     },
     securityKey: {
       value: "",
-      validate: (securityKey: FieldValue) => securityKey !== "123456",
+      validate: (securityKey: FieldValue) => securityKey === undefined,
     },
   };
 
