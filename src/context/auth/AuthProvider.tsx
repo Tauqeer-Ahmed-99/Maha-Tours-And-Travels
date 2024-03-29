@@ -17,7 +17,7 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
 } from "firebase/auth";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Routes } from "../../routes/routes";
 
 interface AuthProviderProps {
@@ -28,6 +28,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [context, dispatch] = useReducer(authReducer, initialContext);
 
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch({
@@ -40,7 +41,12 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           type: ActionType.LOAD_USER_SUCCESS,
           payload: { user, message: "Auth Session Retrieved." },
         });
-        navigate(Routes.DashboardScreen);
+        if (
+          pathname === Routes.LoginScreen ||
+          pathname === Routes.SignupScreen
+        ) {
+          navigate(Routes.DashboardScreen);
+        }
       } else {
         dispatch({
           type: ActionType.LOAD_USER_FAIL,
@@ -49,6 +55,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         navigate(Routes.LoginScreen);
       }
     });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const signup = async (
@@ -56,7 +63,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     phone: string,
     email: string,
     password: string,
-    securityKeyFromUser: string
+    securityKeyFromUser: string,
   ) => {
     try {
       dispatch({
@@ -70,7 +77,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const userCreds = await createUserWithEmailAndPassword(
           auth,
           email,
-          password
+          password,
         );
         await updateProfile(userCreds.user, {
           displayName: name,
@@ -104,7 +111,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
       await setPersistence(
         auth,
-        remember ? browserLocalPersistence : browserSessionPersistence
+        remember ? browserLocalPersistence : browserSessionPersistence,
       );
 
       const userCreds = await signInWithEmailAndPassword(auth, email, password);
@@ -167,7 +174,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const confirmPasswordRecoveryCode = async (
     code: string,
-    newPassword: string
+    newPassword: string,
   ) => {
     try {
       dispatch({
