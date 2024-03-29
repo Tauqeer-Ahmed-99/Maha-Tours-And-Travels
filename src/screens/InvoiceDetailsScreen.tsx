@@ -51,7 +51,10 @@ const InvoiceDetailsScreen = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [customerIndex, setCustomerIndex] = useState<null | number>(null);
 
-  const billToCustomerFields = useMemo(() => Object.keys(billToCustomer), []);
+  const billToCustomerFields = useMemo(
+    () => Object.keys(billToCustomer),
+    [billToCustomer],
+  );
 
   const isCreatingNewInvoice = invoiceId === "new";
 

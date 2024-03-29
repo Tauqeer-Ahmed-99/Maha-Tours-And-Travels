@@ -17,7 +17,7 @@ import {
   sendPasswordResetEmail,
   confirmPasswordReset,
 } from "firebase/auth";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Routes } from "../../routes/routes";
 
 interface AuthProviderProps {
@@ -28,7 +28,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
   const [context, dispatch] = useReducer(authReducer, initialContext);
 
   const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   useEffect(() => {
     dispatch({
@@ -41,12 +40,8 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           type: ActionType.LOAD_USER_SUCCESS,
           payload: { user, message: "Auth Session Retrieved." },
         });
-        if (
-          pathname === Routes.LoginScreen ||
-          pathname === Routes.SignupScreen
-        ) {
-          navigate(Routes.DashboardScreen);
-        }
+
+        navigate(Routes.DashboardScreen);
       } else {
         dispatch({
           type: ActionType.LOAD_USER_FAIL,
