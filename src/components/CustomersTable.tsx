@@ -1,10 +1,10 @@
 import Table from "@mui/joy/Table";
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/joy";
-import AddCircleOutlineRoundedIcon from "@mui/icons-material/AddCircleOutlineRounded";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DoDisturbAltRoundedIcon from "@mui/icons-material/DoDisturbAltRounded";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
+import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { Customer } from "@src/utilities/models";
 import React from "react";
 import InvoiceInput from "./InvoiceInput";
@@ -19,9 +19,8 @@ export default function CustomersTable({
   handleCustomerFieldChange,
   onEditCustomer,
   onRemoveCustomer,
-  saveEditedCustomer,
-}: //   cancelEditingCustomer,
-{
+  toggleEditingCustomer,
+}: {
   customers: Customer[];
   isAddingCustomer: boolean;
   customerIndex: number | null;
@@ -30,29 +29,30 @@ export default function CustomersTable({
   onCancelSaveCustomer: () => void;
   handleCustomerFieldChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number,
+    index: number
   ) => void;
   onEditCustomer: (customerIndex: number) => void;
   onRemoveCustomer: (customerIndex: number) => void;
-  saveEditedCustomer: () => void;
-  cancelEditingCustomer: () => void;
+  toggleEditingCustomer: () => void;
 }) {
   return (
     <Box my={2}>
       <Typography mb={2} level="title-lg">
         Customers
       </Typography>
-      {customers.length > 0 && (
-        <Table aria-label="table sizes" size={"md"}>
+      {customers.length > 0 ? (
+        <Table aria-label="table customers" size="md">
           <thead>
             <tr>
-              <th style={{ width: "12px" }}>#</th>
+              <th style={{ width: "25px" }}>#</th>
               <th style={{ width: "30%" }}>Name</th>
               <th>Contact</th>
               <th>Aadhar</th>
               <th>PAN</th>
               <th>Passport</th>
-              {!isAddingCustomer && <th style={{ width: "100px" }}>Action</th>}
+              {!isAddingCustomer && (
+                <th style={{ maxWidth: "100px" }}>Action</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -145,7 +145,7 @@ export default function CustomersTable({
                             <IconButton
                               variant="outlined"
                               color="primary"
-                              onClick={saveEditedCustomer}
+                              onClick={toggleEditingCustomer}
                             >
                               <SaveRoundedIcon />
                             </IconButton>
@@ -188,6 +188,13 @@ export default function CustomersTable({
             ))}
           </tbody>
         </Table>
+      ) : (
+        <Box>
+          <Typography>
+            Bill to Customer is the only customer, no additional customer
+            available.
+          </Typography>
+        </Box>
       )}
       <Box display="flex" justifyContent="flex-end">
         {isAddingCustomer ? (
@@ -210,8 +217,9 @@ export default function CustomersTable({
           </>
         ) : (
           <Button
-            startDecorator={<AddCircleOutlineRoundedIcon />}
+            startDecorator={<PersonAddOutlinedIcon />}
             onClick={onAddCustomer}
+            sx={{ my: 2 }}
           >
             Add Customer
           </Button>

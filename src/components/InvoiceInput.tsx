@@ -25,7 +25,7 @@ const InvoiceInput = ({
 }) => {
   return (
     <FormControl error={error}>
-      <FormLabel>{label ?? ""}</FormLabel>
+      <FormLabel sx={{ m: 0 }}>{label ?? ""}</FormLabel>
       <Input
         type={type}
         name={name}
