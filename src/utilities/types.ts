@@ -4,14 +4,3 @@ export enum PaymentMode {
   NEFT = "NEFT",
   RTGS = "RTGS",
 }
-
-export interface ITableRow {
-  name: string;
-  data: unknown;
-}
-
-export interface ITableColumn {
-  name: string;
-  width?: string;
-  renderer?: (data: unknown) => React.ReactNode;
-}
