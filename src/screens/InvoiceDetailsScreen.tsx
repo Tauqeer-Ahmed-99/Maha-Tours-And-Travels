@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Box from "@mui/joy/Box";
 import CustomersTable from "@src/components/CustomersTable";
 import { Amounts, Customer, Payment } from "@src/utilities/models";
@@ -11,16 +11,25 @@ import InvoiceDialog from "@src/components/InvoiceDialog";
 import BillToCustomer from "@src/components/BillToCustomer";
 import InvoiceHeading from "@src/components/InvoiceHeading";
 import InvoiceFooter from "@src/components/InvoiceFooter";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
+import { TravellingType } from "@src/utilities/types";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
+import InvoiceLoadingSkeleton from "@src/components/InvoiceLoadingSkeleton";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@src/routes/routes";
 
 const InvoiceDetailsScreen = () => {
   const { invoiceId } = useParams();
 
-  const [travellingType, setTravellingType] = useState<
-    "hajj" | "umrah" | "other"
-  >("umrah");
+  const invoicesContext = useContext(InvoicesContext);
+
+  const [travellingType, setTravellingType] = useState<TravellingType>(
+    TravellingType.HAJJ
+  );
 
   const [billToCustomer, setBillToCustomer] = useState(new Customer());
   const [isBillToATraveller, setIsBillToATraveller] = useState(true);
+  const [invoiceDate, setInvoiceDate] = useState<Date>(new Date());
 
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [isAddingCustomer, setIsAddingCustomer] = useState(false);
@@ -43,6 +52,24 @@ const InvoiceDetailsScreen = () => {
   );
   const [isEditingAmounts, setIsEditingAmounts] = useState(false);
 
+  const navigate = useNavigate();
+
+  const invoice = invoicesContext.invoices.find(
+    (invoice) => invoice.invoiceId === invoiceId
+  ) as Invoice;
+
+  useEffect(() => {
+    if (invoice) {
+      setBillToCustomer(invoice.billToCustomer);
+      setTravellingType(invoice.travellingType);
+      setIsBillToATraveller(invoice.isBillToATraveller);
+      setCustomers(invoice.customers);
+      setPayments(invoice.payments);
+      setAmounts(invoice.amounts);
+      setInvoiceDate(invoice.date);
+    }
+  }, [invoiceId, invoicesContext.invoices]);
+
   useEffect(() => {
     setAmounts(
       (amounts) =>
@@ -53,7 +80,18 @@ const InvoiceDetailsScreen = () => {
           amounts.tcsPercent
         )
     );
-  }, [isBillToATraveller, customers]);
+  }, [isBillToATraveller, customers, invoicesContext.invoices]);
+
+  useEffect(() => {
+    if (invoicesContext.invoices.length > 0) {
+      const url = Routes.InvoiceDetailsScreen.replace(
+        ":invoiceId",
+        invoicesContext.invoices[invoicesContext.invoices.length - 1]
+          ?.invoiceId as string
+      );
+      navigate(url, { replace: true });
+    }
+  }, [invoicesContext.invoices]);
 
   const isCreatingNewInvoice = invoiceId === "new";
 
@@ -123,9 +161,15 @@ const InvoiceDetailsScreen = () => {
             : Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
         };
 
-        return i === index
-          ? new Payment(newPay.paymentNumber, newPay.mode, newPay.amount)
-          : payment;
+        const newPayment = new Payment(
+          newPay.paymentNumber,
+          newPay.mode,
+          newPay.amount
+        );
+
+        newPayment.paymentId = newPay.paymentId;
+
+        return i === index ? newPayment : payment;
       })
     );
   };
@@ -180,7 +224,11 @@ const InvoiceDetailsScreen = () => {
     openPaymentConfirmation();
   };
 
-  const onRemoveCustomerConfirm = () => {
+  const onRemoveCustomerConfirm = async () => {
+    await invoicesContext.removeCustomer(
+      invoiceId as string,
+      customers[customerIndex as number].customerId as string
+    );
     setCustomers((prevCustomers) =>
       prevCustomers.filter((_, index) => index !== customerIndex)
     );
@@ -188,7 +236,11 @@ const InvoiceDetailsScreen = () => {
     closeConfirmation();
   };
 
-  const onRemovePaymentConfirm = () => {
+  const onRemovePaymentConfirm = async () => {
+    await invoicesContext.removePayment(
+      invoiceId as string,
+      payments[paymentIndex as number].paymentId as string
+    );
     setPayments((prevPayments) =>
       prevPayments.filter((_, index) => index !== paymentIndex)
     );
@@ -234,9 +286,24 @@ const InvoiceDetailsScreen = () => {
     );
   };
 
-  const onSaveInvoice = () => {
-    console.log(billToCustomer, customers, payments);
+  const onSaveInvoice = async () => {
+    const invoice: Invoice = {
+      invoiceId,
+      billToCustomer,
+      amounts,
+      customers,
+      date: invoiceDate,
+      isBillToATraveller,
+      payments,
+      travellingType,
+    };
+
+    await invoicesContext.saveInvoice(invoice);
   };
+
+  if (invoicesContext.isLoading) {
+    return <InvoiceLoadingSkeleton />;
+  }
 
   return (
     <Box>
@@ -244,6 +311,7 @@ const InvoiceDetailsScreen = () => {
         isCreatingNewInvoice={isCreatingNewInvoice}
         travellingType={travellingType}
         setTravellingType={setTravellingType}
+        invoiceDate={invoiceDate}
       />
       <BillToCustomer
         billToCustomer={billToCustomer}
@@ -252,6 +320,7 @@ const InvoiceDetailsScreen = () => {
         handleBillToFieldChange={handleBillToFieldChange}
       />
       <CustomersTable
+        invoiceId={invoice?.invoiceId}
         customers={customers}
         customerIndex={customerIndex}
         isAddingCustomer={isAddingCustomer}
@@ -270,6 +339,7 @@ const InvoiceDetailsScreen = () => {
         handleAmountsFieldChange={handleAmountsFieldChange}
       />
       <PaymentsTable
+        invoiceId={invoice?.invoiceId}
         payments={payments}
         paymentIndex={paymentIndex}
         isAddingPayment={isAddingPayment}

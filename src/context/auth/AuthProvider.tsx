@@ -41,12 +41,6 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
           type: ActionType.LOAD_USER_SUCCESS,
           payload: { user, message: "Auth Session Retrieved." },
         });
-        if (
-          pathname === Routes.LoginScreen ||
-          pathname === Routes.SignupScreen
-        ) {
-          navigate(Routes.DashboardScreen);
-        }
       } else {
         dispatch({
           type: ActionType.LOAD_USER_FAIL,
@@ -57,6 +51,14 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (context.user) {
+      if (pathname === Routes.LoginScreen || pathname === Routes.SignupScreen) {
+        navigate(Routes.DashboardScreen);
+      }
+    }
+  }, [context.user]);
 
   const signup = async (
     name: string,

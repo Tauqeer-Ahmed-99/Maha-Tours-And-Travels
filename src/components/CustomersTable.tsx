@@ -1,3 +1,4 @@
+import React, { useContext, useState } from "react";
 import Table from "@mui/joy/Table";
 import { Box, Button, IconButton, Tooltip, Typography } from "@mui/joy";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
@@ -6,10 +7,12 @@ import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import PersonAddOutlinedIcon from "@mui/icons-material/PersonAddOutlined";
 import { Customer } from "@src/utilities/models";
-import React from "react";
 import InvoiceInput from "./InvoiceInput";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 export default function CustomersTable({
+  invoiceId,
   customers,
   isAddingCustomer,
   customerIndex,
@@ -21,6 +24,7 @@ export default function CustomersTable({
   onRemoveCustomer,
   toggleEditingCustomer,
 }: {
+  invoiceId?: string;
   customers: Customer[];
   isAddingCustomer: boolean;
   customerIndex: number | null;
@@ -35,6 +39,20 @@ export default function CustomersTable({
   onRemoveCustomer: (customerIndex: number) => void;
   toggleEditingCustomer: () => void;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const invoicesContext = useContext(InvoicesContext);
+
+  const onSave = async () => {
+    setIsLoading(true);
+    invoicesContext.addCustomer(
+      invoiceId as string,
+      customers[customers.length - 1]
+    );
+    setIsLoading(false);
+    onSaveCustomer();
+  };
+
   return (
     <Box my={2}>
       <Typography mb={2} level="title-lg">
@@ -57,7 +75,7 @@ export default function CustomersTable({
           </thead>
           <tbody>
             {customers.map((customer, idx) => (
-              <tr key={customer.name + idx}>
+              <tr key={customer.customerId ?? idx}>
                 <td>{idx + 1}</td>
                 <td>
                   {(isAddingCustomer && idx === customers.length - 1) ||
@@ -66,6 +84,7 @@ export default function CustomersTable({
                       name="name"
                       onChange={(e) => handleCustomerFieldChange(e, idx)}
                       value={customer.name}
+                      disabled={isLoading}
                     />
                   ) : (
                     customer.name
@@ -78,6 +97,7 @@ export default function CustomersTable({
                       name="contact"
                       onChange={(e) => handleCustomerFieldChange(e, idx)}
                       value={customer.contact}
+                      disabled={isLoading}
                     />
                   ) : (
                     customer.contact
@@ -90,6 +110,7 @@ export default function CustomersTable({
                       name="aadhar"
                       onChange={(e) => handleCustomerFieldChange(e, idx)}
                       value={customer.aadhar}
+                      disabled={isLoading}
                     />
                   ) : (
                     customer.aadhar
@@ -102,6 +123,7 @@ export default function CustomersTable({
                       name="pan"
                       onChange={(e) => handleCustomerFieldChange(e, idx)}
                       value={customer.pan}
+                      disabled={isLoading}
                     />
                   ) : (
                     customer.pan
@@ -114,6 +136,7 @@ export default function CustomersTable({
                       name="passport"
                       onChange={(e) => handleCustomerFieldChange(e, idx)}
                       value={customer.passport}
+                      disabled={isLoading}
                     />
                   ) : (
                     customer.passport
@@ -145,7 +168,13 @@ export default function CustomersTable({
                             <IconButton
                               variant="outlined"
                               color="primary"
-                              onClick={toggleEditingCustomer}
+                              onClick={() => {
+                                invoicesContext.editCustomer(
+                                  invoiceId as string,
+                                  customer
+                                );
+                                toggleEditingCustomer();
+                              }}
                             >
                               <SaveRoundedIcon />
                             </IconButton>
@@ -174,7 +203,9 @@ export default function CustomersTable({
                             <IconButton
                               variant="outlined"
                               color="primary"
-                              onClick={() => onEditCustomer(idx)}
+                              onClick={() => {
+                                onEditCustomer(idx);
+                              }}
                             >
                               <EditNoteOutlinedIcon />
                             </IconButton>
@@ -205,12 +236,20 @@ export default function CustomersTable({
               variant="outlined"
               color="warning"
               sx={{ mr: 2 }}
+              disabled={isLoading}
             >
               Cancel
             </Button>
+
             <Button
-              startDecorator={<SaveRoundedIcon />}
-              onClick={onSaveCustomer}
+              startDecorator={
+                isLoading ? (
+                  <CircularProgress variant="solid" />
+                ) : (
+                  <SaveRoundedIcon />
+                )
+              }
+              onClick={onSave}
             >
               Save
             </Button>

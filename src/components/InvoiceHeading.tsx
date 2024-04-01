@@ -6,15 +6,18 @@ import {
   RadioGroup,
   Typography,
 } from "@mui/joy";
+import { TravellingType } from "@src/utilities/types";
 
 const InvoiceHeading = ({
   isCreatingNewInvoice,
   travellingType,
   setTravellingType,
+  invoiceDate,
 }: {
   isCreatingNewInvoice: boolean;
-  travellingType: "hajj" | "umrah" | "other";
-  setTravellingType: (travellingType: "hajj" | "umrah" | "other") => void;
+  travellingType: TravellingType;
+  setTravellingType: (travellingType: TravellingType) => void;
+  invoiceDate?: Date;
 }) => {
   return (
     <Box
@@ -40,14 +43,14 @@ const InvoiceHeading = ({
             {/* <FormLabel>Travellerage Type</FormLabel> */}
             <RadioGroup
               onChange={(e) =>
-                setTravellingType(e.target.value as "hajj" | "umrah" | "other")
+                setTravellingType(e.target.value as TravellingType)
               }
               value={travellingType}
             >
               <Box display="flex" gap={2}>
-                <Radio value="hajj" label="Hajj" variant="soft" />
-                <Radio value="umrah" label="Umrah" variant="soft" />
-                <Radio value="other" label="Others" variant="soft" />
+                <Radio value="Hajj" label="Hajj" variant="soft" />
+                <Radio value="Umrah" label="Umrah" variant="soft" />
+                <Radio value="Other" label="Others" variant="soft" />
               </Box>
             </RadioGroup>
           </FormControl>
@@ -55,7 +58,9 @@ const InvoiceHeading = ({
         <Divider orientation="vertical" sx={{ mx: 2 }} />
         <Typography level="title-md">
           Date:{" "}
-          {isCreatingNewInvoice ? new Date().toDateString() : "Customer's Date"}
+          {isCreatingNewInvoice
+            ? new Date().toDateString()
+            : invoiceDate?.toDateString()}
         </Typography>
       </Box>
     </Box>

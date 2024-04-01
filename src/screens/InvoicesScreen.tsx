@@ -3,14 +3,19 @@ import InvoiceTabel from "@src/components/InvoiceTable";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes/routes";
+import { useContext } from "react";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
 
 const InvoicesScreen = () => {
   const navigate = useNavigate();
 
+  const invoicesContext = useContext(InvoicesContext);
+
   const onNewInvoiceClick = () => {
+    invoicesContext.createNewInvoice();
     const route = (Routes.InvoiceDetailsScreen as string).replace(
       ":invoiceId",
-      "new",
+      "new"
     );
     navigate(route);
   };

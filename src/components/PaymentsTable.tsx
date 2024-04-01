@@ -6,11 +6,13 @@ import DoDisturbAltRoundedIcon from "@mui/icons-material/DoDisturbAltRounded";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Payment } from "@src/utilities/models";
-import React from "react";
+import React, { useContext } from "react";
 import InvoiceInput from "./InvoiceInput";
 import GroupMenu, { GroupMenuEvent } from "./Menu";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
 
 export default function CustomersTable({
+  invoiceId,
   payments,
   isAddingPayment,
   paymentIndex,
@@ -22,6 +24,7 @@ export default function CustomersTable({
   onRemovePayment,
   toggleEditingPayment,
 }: {
+  invoiceId?: string;
   payments: Payment[];
   isAddingPayment: boolean;
   paymentIndex: number | null;
@@ -36,6 +39,16 @@ export default function CustomersTable({
   onRemovePayment: (paymentIndex: number) => void;
   toggleEditingPayment: () => void;
 }) {
+  const invoicesContext = useContext(InvoicesContext);
+
+  const onSave = async () => {
+    await invoicesContext.addPayment(
+      invoiceId as string,
+      payments[payments.length - 1]
+    );
+    onSavePayment();
+  };
+
   return (
     <Box my={2}>
       <Typography mb={2} level="title-lg">
@@ -48,10 +61,6 @@ export default function CustomersTable({
               <th style={{ width: "25px" }}>#</th>
               <th>Payment Type</th>
               <th>Last 4 digits</th>
-              {/* <th>Quantity</th> */}
-              {/* <th>Price / Unit</th> */}
-              {/* <th>GST %</th> */}
-              {/* <th>GST Amount</th> */}
               <th>Amount</th>
               <th>Date</th>
               {!isAddingPayment && (
@@ -92,62 +101,6 @@ export default function CustomersTable({
                     payment.paymentNumber
                   )}
                 </td>
-                {/* <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <InvoiceInput
-                      name="qty"
-                      onChange={(e) => handlePaymentFieldChange(e, idx)}
-                      value={payment.qty?.toString()}
-                    />
-                  ) : (
-                    payment.qty
-                  )}
-                </td> */}
-                {/* <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <InvoiceInput
-                      name="pricePerUnit"
-                      onChange={(e) => handlePaymentFieldChange(e, idx)}
-                      value={payment.pricePerUnit?.toString()}
-                    />
-                  ) : (
-                    payment.pricePerUnit
-                  )}
-                </td> */}
-                {/* <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <GroupMenu
-                      options={["5", "10", "15", "18"]}
-                      selectedOption={payment.gstPercent?.toString()}
-                      setSelectedOption={(option) =>
-                        handlePaymentFieldChange(
-                          { target: { name: "gstPercent", value: option } },
-                          idx
-                        )
-                      }
-                    />
-                  ) : (
-                    // <InvoiceInput
-                    //   name="gstPercent"
-                    //   onChange={(e) => handlePaymentFieldChange(e, idx)}
-                    //   value={payment.gstPercent?.toString()}
-                    // />
-                    payment.gstPercent
-                  )}
-                </td> */}
-                {/* <td>
-                  {
-                    // <InvoiceInput
-                    //   name="gstPercent"
-                    //   onChange={(e) => handlePaymentFieldChange(e, idx)}
-                    //   value={payment.gstPercent?.toString()}
-                    // />
-                    payment.gstAmount
-                  }
-                </td> */}
                 <td>
                   {(isAddingPayment && idx === payments.length - 1) ||
                   paymentIndex === idx ? (
@@ -177,34 +130,25 @@ export default function CustomersTable({
                   <td>
                     <Box display="flex" justifyContent="space-around">
                       {paymentIndex === idx ? (
-                        <>
-                          {/* <Tooltip
-                            title="Cancel"
-                            placement="top"
+                        <Tooltip
+                          title="Save"
+                          placement="top"
+                          variant="outlined"
+                        >
+                          <IconButton
                             variant="outlined"
+                            color="primary"
+                            onClick={async () => {
+                              await invoicesContext.editPayment(
+                                invoiceId as string,
+                                payment
+                              );
+                              toggleEditingPayment();
+                            }}
                           >
-                            <IconButton
-                              variant="outlined"
-                              color="warning"
-                              onClick={cancelEditingCustomer}
-                            >
-                              <CancelOutlinedIcon />
-                            </IconButton>
-                          </Tooltip> */}
-                          <Tooltip
-                            title="Save"
-                            placement="top"
-                            variant="outlined"
-                          >
-                            <IconButton
-                              variant="outlined"
-                              color="primary"
-                              onClick={toggleEditingPayment}
-                            >
-                              <SaveRoundedIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </>
+                            <SaveRoundedIcon />
+                          </IconButton>
+                        </Tooltip>
                       ) : (
                         <>
                           <Tooltip
@@ -259,10 +203,7 @@ export default function CustomersTable({
             >
               Cancel
             </Button>
-            <Button
-              startDecorator={<SaveRoundedIcon />}
-              onClick={onSavePayment}
-            >
+            <Button startDecorator={<SaveRoundedIcon />} onClick={onSave}>
               Save
             </Button>
           </>
