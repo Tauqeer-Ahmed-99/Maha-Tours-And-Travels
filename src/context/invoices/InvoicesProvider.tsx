@@ -79,7 +79,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
   const createNewInvoice = async () => {
     const invoice: Invoice = {
       billToCustomer: new Customer(),
-      invoiceNumber: "",
+      invoiceNumber: Number(),
       isBillToATraveller: true,
       amounts: new Amounts(1, 500000, 5, 5),
       travellingType: TravellingType.HAJJ,
@@ -97,7 +97,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       const invoiceNumber = await generateInvoiceNumber();
 
-      invoice.invoiceNumber = `${invoice.travellingType}-${invoiceNumber}`;
+      invoice.invoiceNumber = invoiceNumber;
 
       const res = await axios.post(url, JSON.stringify(invoice));
 
@@ -139,6 +139,30 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
         invoices.map((_invoice) =>
           _invoice.invoiceId === invoice.invoiceId ? invoice : _invoice,
         ),
+      );
+
+      return new Response(ResponseStatus.SUCCESS, res);
+    } catch (err) {
+      const error = err as AxiosError;
+      console.log(error);
+      setIsError(true);
+      setErrorMessage(error.message);
+      return new Response(ResponseStatus.ERROR, undefined, error);
+    }
+  };
+
+  const deleteInvoice = async (invoiceId: string) => {
+    try {
+      const authToken = await authContext.user?.getIdToken();
+
+      const url =
+        import.meta.env.VITE_RTDB_BASE_URL +
+        `/invoices/${invoiceId}.json?auth=${authToken}`;
+
+      const res = await axios.delete(url);
+
+      setInvoices((invoices) =>
+        invoices.filter((invoice) => invoice.invoiceId !== invoiceId),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -390,6 +414,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     errorMessage,
     createNewInvoice,
     saveInvoice,
+    deleteInvoice,
     addCustomer,
     editCustomer,
     removeCustomer,

@@ -3,7 +3,7 @@ import { Amounts, Customer, Payment, Response } from "@src/utilities/models";
 
 export interface Invoice {
   invoiceId?: string;
-  invoiceNumber: string;
+  invoiceNumber: number;
   travellingType: TravellingType;
   billToCustomer: Customer;
   isBillToATraveller: boolean;
@@ -27,5 +27,6 @@ export interface InvoiceContext {
   editPayment: (invoiceId: string, payment: Payment) => Promise<Response>;
   removeCustomer: (invoiceId: string, customerId: string) => Promise<Response>;
   removePayment: (invoiceId: string, paymentId: string) => Promise<Response>;
+  deleteInvoice: (invoiceId: string) => Promise<Response>;
   clearErrors: () => void;
 }

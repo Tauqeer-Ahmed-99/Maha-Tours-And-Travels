@@ -26,6 +26,8 @@ const invoicesContext: InvoiceContext = {
     new Response(ResponseStatus.SUCCESS),
   removePayment: async (_invoiceId: string, _paymentId: string) =>
     new Response(ResponseStatus.SUCCESS),
+  deleteInvoice: async (_invoiceId: string) =>
+    new Response(ResponseStatus.SUCCESS),
   clearErrors: () => {},
 };
 

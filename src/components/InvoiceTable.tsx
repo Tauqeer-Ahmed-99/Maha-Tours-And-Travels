@@ -1,11 +1,11 @@
-import Sheet from "@mui/joy/Sheet";
 import Table from "@mui/joy/Table";
 import InvoiceRow from "./InvoiceRow";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
+import TableWrapper from "./TableWrapper";
 
 const InvoiceTabel = ({ invoices }: { invoices: Invoice[] }) => {
   return (
-    <Sheet>
+    <TableWrapper>
       <Table
         aria-label="collapsible table"
         sx={{
@@ -13,6 +13,9 @@ const InvoiceTabel = ({ invoices }: { invoices: Invoice[] }) => {
             {
               borderBottom: 0,
             },
+          "& > tbody > tr:hover": {
+            background: "#dadada",
+          },
         }}
       >
         <thead>
@@ -35,7 +38,7 @@ const InvoiceTabel = ({ invoices }: { invoices: Invoice[] }) => {
           ))}
         </tbody>
       </Table>
-    </Sheet>
+    </TableWrapper>
   );
 };
 

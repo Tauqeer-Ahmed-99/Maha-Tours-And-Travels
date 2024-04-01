@@ -32,7 +32,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
 
   return (
     <React.Fragment>
-      <tr onClick={handleInvoiceRowClick}>
+      <tr onClick={handleInvoiceRowClick} style={{ cursor: "pointer" }}>
         <td>
           <IconButton
             aria-label="expand row"
@@ -47,8 +47,10 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </td>
-        <td>{row.invoiceNumber}</td>
-        <th scope="row">{row.billToCustomer.name}</th>
+        <td>{row.travellingType + "-" + row.invoiceNumber}</td>
+        <td>
+          <b>{row.billToCustomer.name}</b>
+        </td>
         <td>{row.amounts.totalAmount}</td>
         <td>{amountReceived}</td>
         <td>{row.amounts.totalAmount - amountReceived}</td>

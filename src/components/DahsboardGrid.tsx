@@ -23,7 +23,7 @@ const DahsboardGrid = () => {
       const travellingType = invoice.travellingType.toLowerCase();
 
       invoicesData[`${travellingType}Invoices`] += 1;
-      invoicesData[`${travellingType}NetAmount`] += 1;
+      invoicesData[`${travellingType}NetAmount`] += invoice.amounts.totalAmount;
       invoice.payments.forEach(
         (payment) =>
           (invoicesData[`${travellingType}ReceivedAmount`] += payment.amount),

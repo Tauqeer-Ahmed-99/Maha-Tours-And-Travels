@@ -32,7 +32,7 @@ const InvoiceDetailsScreen = () => {
   const [travellingType, setTravellingType] = useState<TravellingType>(
     TravellingType.HAJJ,
   );
-  const [invoiceNumber, setInvoiceNumber] = useState("");
+  const [invoiceNumber, setInvoiceNumber] = useState(Number());
   const [billToCustomer, setBillToCustomer] = useState(new Customer());
   const [isBillToATraveller, setIsBillToATraveller] = useState(true);
   const [invoiceDate, setInvoiceDate] = useState<Date>(new Date());

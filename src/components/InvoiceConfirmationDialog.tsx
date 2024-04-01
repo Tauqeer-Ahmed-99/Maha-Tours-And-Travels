@@ -7,7 +7,6 @@ import Divider from "@mui/joy/Divider";
 import Modal from "@mui/joy/Modal";
 import ModalDialog from "@mui/joy/ModalDialog";
 import Typography from "@mui/joy/Typography";
-
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 
 const InvoiceDialog = ({

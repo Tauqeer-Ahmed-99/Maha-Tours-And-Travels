@@ -20,7 +20,7 @@ const InvoiceHeading = ({
   travellingType: TravellingType;
   setTravellingType: (travellingType: TravellingType) => void;
   invoiceDate?: Date;
-  invoiceNumber?: string;
+  invoiceNumber?: number;
 }) => {
   return (
     <Box
@@ -71,7 +71,7 @@ const InvoiceHeading = ({
         </Typography>
         <Divider orientation="vertical" sx={{ mx: 2 }} />
         <Typography level="title-md">
-          Invoice Number: {invoiceNumber}
+          Invoice Number: {travellingType + "-" + invoiceNumber}
         </Typography>
       </Box>
     </Box>

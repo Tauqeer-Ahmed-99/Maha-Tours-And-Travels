@@ -15,6 +15,7 @@ import React, { useContext, useState } from "react";
 import InvoiceInput from "./InvoiceInput";
 import GroupMenu, { GroupMenuEvent } from "./GroupMenu";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
+import TableWrapper from "./TableWrapper";
 
 export default function CustomersTable({
   invoiceId,
@@ -70,139 +71,141 @@ export default function CustomersTable({
         Payments
       </Typography>
       {payments.length > 0 ? (
-        <Table aria-label="table payments" size="md">
-          <thead>
-            <tr>
-              <th style={{ width: "25px" }}>#</th>
-              <th>Payment Type</th>
-              <th>Last 4 digits</th>
-              <th>Amount</th>
-              <th>Date</th>
-              {!isAddingPayment && (
-                <th style={{ maxWidth: "100px" }}>Action</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {payments.map((payment, idx) => (
-              <tr key={payment.paymentId ?? idx}>
-                <td>{idx + 1}</td>
-                <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <GroupMenu
-                      options={["CASH", "CHEQUE", "NEFT", "RTGS"]}
-                      selectedOption={payment.mode}
-                      disabled={isLoading}
-                      setSelectedOption={(option) =>
-                        handlePaymentFieldChange(
-                          { target: { name: "mode", value: option } },
-                          idx,
-                        )
-                      }
-                    />
-                  ) : (
-                    payment.mode
-                  )}
-                </td>
-                <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <InvoiceInput
-                      name="paymentNumber"
-                      onChange={(e) => handlePaymentFieldChange(e, idx)}
-                      value={payment.paymentNumber?.toString()}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    payment.paymentNumber
-                  )}
-                </td>
-                <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <InvoiceInput
-                      name="amount"
-                      onChange={(e) => handlePaymentFieldChange(e, idx)}
-                      value={payment.amount?.toString()}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    payment.amount
-                  )}
-                </td>
-                <td>
-                  {(isAddingPayment && idx === payments.length - 1) ||
-                  paymentIndex === idx ? (
-                    <InvoiceInput
-                      name="date"
-                      onChange={(e) => handlePaymentFieldChange(e, idx)}
-                      value={payment.date.toDateString()}
-                      disabled
-                    />
-                  ) : (
-                    payment.date.toDateString()
-                  )}
-                </td>
+        <TableWrapper>
+          <Table aria-label="table payments" size="md">
+            <thead>
+              <tr>
+                <th style={{ width: "25px" }}>#</th>
+                <th>Payment Type</th>
+                <th>Last 4 digits</th>
+                <th>Amount</th>
+                <th>Date</th>
                 {!isAddingPayment && (
+                  <th style={{ maxWidth: "100px" }}>Action</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {payments.map((payment, idx) => (
+                <tr key={payment.paymentId ?? idx}>
+                  <td>{idx + 1}</td>
                   <td>
-                    <Box display="flex" justifyContent="space-around">
-                      {paymentIndex === idx ? (
-                        <Tooltip
-                          title={isLoading ? "Saving" : "Save"}
-                          placement="top"
-                          variant="outlined"
-                        >
-                          <IconButton
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => onSaveEditing(payment)}
-                            disabled={isLoading}
-                          >
-                            {isLoading ? (
-                              <CircularProgress />
-                            ) : (
-                              <SaveRoundedIcon />
-                            )}
-                          </IconButton>
-                        </Tooltip>
-                      ) : (
-                        <>
+                    {(isAddingPayment && idx === payments.length - 1) ||
+                    paymentIndex === idx ? (
+                      <GroupMenu
+                        options={["CASH", "CHEQUE", "NEFT", "RTGS"]}
+                        selectedOption={payment.mode}
+                        disabled={isLoading}
+                        setSelectedOption={(option) =>
+                          handlePaymentFieldChange(
+                            { target: { name: "mode", value: option } },
+                            idx,
+                          )
+                        }
+                      />
+                    ) : (
+                      payment.mode
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingPayment && idx === payments.length - 1) ||
+                    paymentIndex === idx ? (
+                      <InvoiceInput
+                        name="paymentNumber"
+                        onChange={(e) => handlePaymentFieldChange(e, idx)}
+                        value={payment.paymentNumber?.toString()}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      payment.paymentNumber
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingPayment && idx === payments.length - 1) ||
+                    paymentIndex === idx ? (
+                      <InvoiceInput
+                        name="amount"
+                        onChange={(e) => handlePaymentFieldChange(e, idx)}
+                        value={payment.amount?.toString()}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      payment.amount
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingPayment && idx === payments.length - 1) ||
+                    paymentIndex === idx ? (
+                      <InvoiceInput
+                        name="date"
+                        onChange={(e) => handlePaymentFieldChange(e, idx)}
+                        value={payment.date.toDateString()}
+                        disabled
+                      />
+                    ) : (
+                      payment.date.toDateString()
+                    )}
+                  </td>
+                  {!isAddingPayment && (
+                    <td>
+                      <Box display="flex" justifyContent="space-around">
+                        {paymentIndex === idx ? (
                           <Tooltip
-                            title="Delete Payment"
-                            placement="top"
-                            variant="outlined"
-                          >
-                            <IconButton
-                              variant="outlined"
-                              color="warning"
-                              onClick={() => onRemovePayment(idx)}
-                            >
-                              <CancelOutlinedIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip
-                            title="Edit Payment"
+                            title={isLoading ? "Saving" : "Save"}
                             placement="top"
                             variant="outlined"
                           >
                             <IconButton
                               variant="outlined"
                               color="primary"
-                              onClick={() => onEditPayment(idx)}
+                              onClick={() => onSaveEditing(payment)}
+                              disabled={isLoading}
                             >
-                              <EditNoteOutlinedIcon />
+                              {isLoading ? (
+                                <CircularProgress />
+                              ) : (
+                                <SaveRoundedIcon />
+                              )}
                             </IconButton>
                           </Tooltip>
-                        </>
-                      )}
-                    </Box>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                        ) : (
+                          <>
+                            <Tooltip
+                              title="Delete Payment"
+                              placement="top"
+                              variant="outlined"
+                            >
+                              <IconButton
+                                variant="outlined"
+                                color="warning"
+                                onClick={() => onRemovePayment(idx)}
+                              >
+                                <CancelOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip
+                              title="Edit Payment"
+                              placement="top"
+                              variant="outlined"
+                            >
+                              <IconButton
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => onEditPayment(idx)}
+                              >
+                                <EditNoteOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </>
+                        )}
+                      </Box>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
       ) : (
         <Box>
           <Typography>No payment available.</Typography>

@@ -11,6 +11,7 @@ import GroupMenu, { GroupMenuEvent } from "./GroupMenu";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
+import TableWrapper from "./TableWrapper";
 
 const AmountTable = ({
   invocieId,
@@ -42,85 +43,87 @@ const AmountTable = ({
       <Typography mb={2} level="title-lg">
         Amounts
       </Typography>
-      <Table aria-label="table customers" size="md">
-        <thead>
-          <tr>
-            <th style={{ width: "25px" }}>#</th>
-            <th>Quantity</th>
-            <th>Price / Unit</th>
-            <th>GST %</th>
-            <th>GST Amount</th>
-            <th>Amount</th>
-            <th style={{ maxWidth: "100px" }}>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td>{amounts.qty}</td>
-            <td>
-              {isEditingAmounts ? (
-                <InvoiceInput
-                  name="pricePerUnit"
-                  onChange={(e) => handleAmountsFieldChange(e)}
-                  value={amounts.pricePerUnit?.toString()}
-                  disabled={isSaving}
-                />
-              ) : (
-                amounts?.pricePerUnit
-              )}
-            </td>
-            <td>
-              {isEditingAmounts ? (
-                <GroupMenu
-                  options={["5", "10", "15", "18"]}
-                  selectedOption={amounts.gstPercent?.toString()}
-                  disabled={isSaving}
-                  setSelectedOption={(option) =>
-                    handleAmountsFieldChange({
-                      target: { name: "gstPercent", value: option },
-                    })
+      <TableWrapper>
+        <Table aria-label="table customers" size="md">
+          <thead>
+            <tr>
+              <th style={{ width: "25px" }}>#</th>
+              <th>Quantity</th>
+              <th>Price / Unit</th>
+              <th>GST %</th>
+              <th>GST Amount</th>
+              <th>Amount</th>
+              <th style={{ maxWidth: "100px" }}>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td></td>
+              <td>{amounts.qty}</td>
+              <td>
+                {isEditingAmounts ? (
+                  <InvoiceInput
+                    name="pricePerUnit"
+                    onChange={(e) => handleAmountsFieldChange(e)}
+                    value={amounts.pricePerUnit?.toString()}
+                    disabled={isSaving}
+                  />
+                ) : (
+                  amounts?.pricePerUnit
+                )}
+              </td>
+              <td>
+                {isEditingAmounts ? (
+                  <GroupMenu
+                    options={["5", "10", "15", "18"]}
+                    selectedOption={amounts.gstPercent?.toString()}
+                    disabled={isSaving}
+                    setSelectedOption={(option) =>
+                      handleAmountsFieldChange({
+                        target: { name: "gstPercent", value: option },
+                      })
+                    }
+                  />
+                ) : (
+                  amounts.gstPercent + "%"
+                )}
+              </td>
+              <td>{amounts?.gstAmount}</td>
+              <td>{amounts?.totalAmountWithGst}</td>
+              <td>
+                <Tooltip
+                  title={
+                    isEditingAmounts
+                      ? isSaving
+                        ? "Saving Amount"
+                        : "Save Amount"
+                      : "Edit Amounts"
                   }
-                />
-              ) : (
-                amounts.gstPercent + "%"
-              )}
-            </td>
-            <td>{amounts?.gstAmount}</td>
-            <td>{amounts?.totalAmountWithGst}</td>
-            <td>
-              <Tooltip
-                title={
-                  isEditingAmounts
-                    ? isSaving
-                      ? "Saving Amount"
-                      : "Save Amount"
-                    : "Edit Amounts"
-                }
-                placement="top"
-                variant="outlined"
-              >
-                <IconButton
+                  placement="top"
                   variant="outlined"
-                  color="primary"
-                  onClick={saveAmounts}
-                  disabled={isSaving}
                 >
-                  {isEditingAmounts ? (
-                    isSaving ? (
-                      <CircularProgress />
+                  <IconButton
+                    variant="outlined"
+                    color="primary"
+                    onClick={saveAmounts}
+                    disabled={isSaving}
+                  >
+                    {isEditingAmounts ? (
+                      isSaving ? (
+                        <CircularProgress />
+                      ) : (
+                        <SaveRoundedIcon />
+                      )
                     ) : (
-                      <SaveRoundedIcon />
-                    )
-                  ) : (
-                    <EditNoteOutlinedIcon />
-                  )}
-                </IconButton>
-              </Tooltip>
-            </td>
-          </tr>
-        </tbody>
-      </Table>
+                      <EditNoteOutlinedIcon />
+                    )}
+                  </IconButton>
+                </Tooltip>
+              </td>
+            </tr>
+          </tbody>
+        </Table>
+      </TableWrapper>
     </Box>
   );
 };

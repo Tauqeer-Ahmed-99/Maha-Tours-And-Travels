@@ -14,6 +14,7 @@ import { Customer } from "@src/utilities/models";
 import InvoiceInput from "./InvoiceInput";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import CircularProgress from "@mui/joy/CircularProgress";
+import TableWrapper from "./TableWrapper";
 
 export default function CustomersTable({
   invoiceId,
@@ -70,150 +71,152 @@ export default function CustomersTable({
         Customers
       </Typography>
       {customers.length > 0 ? (
-        <Table aria-label="table customers" size="md">
-          <thead>
-            <tr>
-              <th style={{ width: "25px" }}>#</th>
-              <th style={{ width: "30%" }}>Name</th>
-              <th>Contact</th>
-              <th>Aadhar</th>
-              <th>PAN</th>
-              <th>Passport</th>
-              {!isAddingCustomer && (
-                <th style={{ maxWidth: "100px" }}>Action</th>
-              )}
-            </tr>
-          </thead>
-          <tbody>
-            {customers.map((customer, idx) => (
-              <tr key={customer.customerId ?? idx}>
-                <td>{idx + 1}</td>
-                <td>
-                  {(isAddingCustomer && idx === customers.length - 1) ||
-                  customerIndex === idx ? (
-                    <InvoiceInput
-                      name="name"
-                      onChange={(e) => handleCustomerFieldChange(e, idx)}
-                      value={customer.name}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    customer.name
-                  )}
-                </td>
-                <td>
-                  {(isAddingCustomer && idx === customers.length - 1) ||
-                  customerIndex === idx ? (
-                    <InvoiceInput
-                      name="contact"
-                      onChange={(e) => handleCustomerFieldChange(e, idx)}
-                      value={customer.contact}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    customer.contact
-                  )}
-                </td>
-                <td>
-                  {(isAddingCustomer && idx === customers.length - 1) ||
-                  customerIndex === idx ? (
-                    <InvoiceInput
-                      name="aadhar"
-                      onChange={(e) => handleCustomerFieldChange(e, idx)}
-                      value={customer.aadhar}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    customer.aadhar
-                  )}
-                </td>
-                <td>
-                  {(isAddingCustomer && idx === customers.length - 1) ||
-                  customerIndex === idx ? (
-                    <InvoiceInput
-                      name="pan"
-                      onChange={(e) => handleCustomerFieldChange(e, idx)}
-                      value={customer.pan}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    customer.pan
-                  )}
-                </td>
-                <td>
-                  {(isAddingCustomer && idx === customers.length - 1) ||
-                  customerIndex === idx ? (
-                    <InvoiceInput
-                      name="passport"
-                      onChange={(e) => handleCustomerFieldChange(e, idx)}
-                      value={customer.passport}
-                      disabled={isLoading}
-                    />
-                  ) : (
-                    customer.passport
-                  )}
-                </td>
+        <TableWrapper>
+          <Table aria-label="table customers" size="md">
+            <thead>
+              <tr>
+                <th style={{ width: "25px" }}>#</th>
+                <th style={{ width: "30%" }}>Name</th>
+                <th>Contact</th>
+                <th>Aadhar</th>
+                <th>PAN</th>
+                <th>Passport</th>
                 {!isAddingCustomer && (
+                  <th style={{ maxWidth: "100px" }}>Action</th>
+                )}
+              </tr>
+            </thead>
+            <tbody>
+              {customers.map((customer, idx) => (
+                <tr key={customer.customerId ?? idx}>
+                  <td>{idx + 1}</td>
                   <td>
-                    <Box display="flex" justifyContent="space-around">
-                      {customerIndex === idx ? (
-                        <Tooltip
-                          title={isLoading ? "Saving" : "Save"}
-                          placement="top"
-                          variant="outlined"
-                        >
-                          <IconButton
-                            variant="outlined"
-                            color="primary"
-                            onClick={() => onSaveEditing(customer)}
-                            disabled={isLoading}
-                          >
-                            {isLoading ? (
-                              <CircularProgress />
-                            ) : (
-                              <SaveRoundedIcon />
-                            )}
-                          </IconButton>
-                        </Tooltip>
-                      ) : (
-                        <>
+                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    customerIndex === idx ? (
+                      <InvoiceInput
+                        name="name"
+                        onChange={(e) => handleCustomerFieldChange(e, idx)}
+                        value={customer.name}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      customer.name
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    customerIndex === idx ? (
+                      <InvoiceInput
+                        name="contact"
+                        onChange={(e) => handleCustomerFieldChange(e, idx)}
+                        value={customer.contact}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      customer.contact
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    customerIndex === idx ? (
+                      <InvoiceInput
+                        name="aadhar"
+                        onChange={(e) => handleCustomerFieldChange(e, idx)}
+                        value={customer.aadhar}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      customer.aadhar
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    customerIndex === idx ? (
+                      <InvoiceInput
+                        name="pan"
+                        onChange={(e) => handleCustomerFieldChange(e, idx)}
+                        value={customer.pan}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      customer.pan
+                    )}
+                  </td>
+                  <td>
+                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    customerIndex === idx ? (
+                      <InvoiceInput
+                        name="passport"
+                        onChange={(e) => handleCustomerFieldChange(e, idx)}
+                        value={customer.passport}
+                        disabled={isLoading}
+                      />
+                    ) : (
+                      customer.passport
+                    )}
+                  </td>
+                  {!isAddingCustomer && (
+                    <td>
+                      <Box display="flex" justifyContent="space-around">
+                        {customerIndex === idx ? (
                           <Tooltip
-                            title="Delete Customer"
-                            placement="top"
-                            variant="outlined"
-                          >
-                            <IconButton
-                              variant="outlined"
-                              color="warning"
-                              onClick={() => onRemoveCustomer(idx)}
-                            >
-                              <CancelOutlinedIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip
-                            title="Edit Customer"
+                            title={isLoading ? "Saving" : "Save"}
                             placement="top"
                             variant="outlined"
                           >
                             <IconButton
                               variant="outlined"
                               color="primary"
-                              onClick={() => {
-                                onEditCustomer(idx);
-                              }}
+                              onClick={() => onSaveEditing(customer)}
+                              disabled={isLoading}
                             >
-                              <EditNoteOutlinedIcon />
+                              {isLoading ? (
+                                <CircularProgress />
+                              ) : (
+                                <SaveRoundedIcon />
+                              )}
                             </IconButton>
                           </Tooltip>
-                        </>
-                      )}
-                    </Box>
-                  </td>
-                )}
-              </tr>
-            ))}
-          </tbody>
-        </Table>
+                        ) : (
+                          <>
+                            <Tooltip
+                              title="Delete Customer"
+                              placement="top"
+                              variant="outlined"
+                            >
+                              <IconButton
+                                variant="outlined"
+                                color="warning"
+                                onClick={() => onRemoveCustomer(idx)}
+                              >
+                                <CancelOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                            <Tooltip
+                              title="Edit Customer"
+                              placement="top"
+                              variant="outlined"
+                            >
+                              <IconButton
+                                variant="outlined"
+                                color="primary"
+                                onClick={() => {
+                                  onEditCustomer(idx);
+                                }}
+                              >
+                                <EditNoteOutlinedIcon />
+                              </IconButton>
+                            </Tooltip>
+                          </>
+                        )}
+                      </Box>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+        </TableWrapper>
       ) : (
         <Box>
           <Typography>
