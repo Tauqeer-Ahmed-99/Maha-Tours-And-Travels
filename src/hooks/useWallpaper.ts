@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useColorScheme } from "@mui/joy";
+import { useColorScheme } from "@mui/joy/styles";
 
 import Kaaba1 from "@src/assets/haramain-sharifain/Masjid-al-Haram/kaaba-1.jpg";
 import Kaaba2 from "@src/assets/haramain-sharifain/Masjid-al-Haram/kaaba-2.jpg";
@@ -27,15 +27,15 @@ const useWallpaper = () => {
   const { mode } = useColorScheme();
 
   const [wallpaper, setWallpaper] = useState(
-    mode === "light" ? MasjidUnNabawai1 : Kaaba1
+    mode === "light" ? MasjidUnNabawai1 : Kaaba1,
   );
 
   useEffect(() => {
     const interval = setInterval(() => {
       setWallpaper(
         getRandomWallpaper(
-          mode === "light" ? masjidUnNabawiImages : kaabaImages
-        )
+          mode === "light" ? masjidUnNabawiImages : kaabaImages,
+        ),
       );
     }, 5000);
 

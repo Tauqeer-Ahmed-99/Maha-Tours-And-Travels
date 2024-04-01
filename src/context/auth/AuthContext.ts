@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { createContext } from "react";
 
 import { IAuthContext } from "./authTypes";
@@ -14,14 +15,14 @@ export const initialAuthContext: IAuthContext = {
     _phone: string,
     _email: string,
     _password: string,
-    _securityKey: string
+    _securityKey: string,
   ) => {},
   signin: async (_email: string, _password: string, _remember: boolean) => {},
   signout: async () => {},
   sendPasswordRecoveryEmail: async (_email: string) => {},
   confirmPasswordRecoveryCode: async (
     _code: string,
-    _newPassword: string
+    _newPassword: string,
   ) => {},
   clearError: () => {},
 };

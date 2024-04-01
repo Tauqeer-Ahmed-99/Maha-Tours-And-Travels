@@ -1,4 +1,5 @@
-import { PaymentMode } from "./types";
+import { AxiosError, AxiosResponse } from "axios";
+import { PaymentMode, ResponseStatus } from "./types";
 
 export class Customer {
   customerId?: string;
@@ -20,7 +21,7 @@ export class Customer {
     addressLine1?: string,
     addressLine2?: string,
     city?: string,
-    country?: string
+    country?: string,
   ) {
     this.name = name ?? "";
     this.contact = contact ?? "";
@@ -44,7 +45,7 @@ export class Amounts {
     qty?: number,
     pricePerUnit?: number,
     gstPercent?: number,
-    tcsPercent?: number
+    tcsPercent?: number,
   ) {
     this.qty = qty ?? 0;
     this.pricePerUnit = pricePerUnit ?? 0;
@@ -84,11 +85,27 @@ export class Payment {
     paymentNumber?: number,
     mode?: PaymentMode,
     amount?: number,
-    date?: Date
+    date?: Date,
   ) {
     this.paymentNumber = paymentNumber ?? 0;
     this.mode = mode ?? PaymentMode.CHEQUE;
     this.amount = amount ?? 0;
     this.date = date ?? new Date();
+  }
+}
+
+export class Response {
+  status: ResponseStatus;
+  response?: AxiosResponse;
+  error?: unknown;
+
+  constructor(
+    status: ResponseStatus,
+    response?: AxiosResponse,
+    error?: AxiosError,
+  ) {
+    this.status = status;
+    this.response = response;
+    this.error = error;
   }
 }

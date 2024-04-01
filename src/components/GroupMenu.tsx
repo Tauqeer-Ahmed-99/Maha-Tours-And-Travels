@@ -15,16 +15,19 @@ export default function GroupMenu({
   options,
   selectedOption,
   setSelectedOption,
+  disabled,
 }: {
   options: string[];
   selectedOption: string;
   setSelectedOption: (option: string) => void;
+  disabled?: boolean;
 }) {
   return (
     <Dropdown>
       <MenuButton
         endDecorator={<ArrowDropDown />}
         sx={{ width: "100%", textAlign: "start" }}
+        disabled={disabled}
       >
         {selectedOption}
       </MenuButton>

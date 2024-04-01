@@ -10,8 +10,11 @@ import {
 } from "@react-pdf/renderer";
 
 import React from "@src/assets/haramain-sharifain/Masjid-al-Haram/kaaba-1.jpg";
+// import { useParams } from "react-router-dom";
 
-const InvoiceTemplateScreen = () => {
+const PreviewInvoiceScreen = () => {
+  // const { invoiceId } = useParams();
+
   return (
     <Box height="100%" width="100%">
       <PDFViewer style={{ width: "100%", height: "100%" }}>
@@ -45,4 +48,4 @@ const InvoiceTemplateScreen = () => {
   );
 };
 
-export default InvoiceTemplateScreen;
+export default PreviewInvoiceScreen;

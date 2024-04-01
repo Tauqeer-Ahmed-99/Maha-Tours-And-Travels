@@ -1,23 +1,26 @@
-import {
-  Box,
-  Divider,
-  FormControl,
-  Radio,
-  RadioGroup,
-  Typography,
-} from "@mui/joy";
+import Box from "@mui/joy/Box";
+import FormControl from "@mui/joy/FormControl";
+import Radio from "@mui/joy/Radio";
+import RadioGroup from "@mui/joy/RadioGroup";
+import Divider from "@mui/joy/Divider";
+import Typography from "@mui/joy/Typography";
+
 import { TravellingType } from "@src/utilities/types";
 
 const InvoiceHeading = ({
+  billToCustomerName,
   isCreatingNewInvoice,
   travellingType,
   setTravellingType,
   invoiceDate,
+  invoiceNumber,
 }: {
+  billToCustomerName?: string;
   isCreatingNewInvoice: boolean;
   travellingType: TravellingType;
   setTravellingType: (travellingType: TravellingType) => void;
   invoiceDate?: Date;
+  invoiceNumber?: string;
 }) => {
   return (
     <Box
@@ -29,7 +32,11 @@ const InvoiceHeading = ({
       }}
     >
       <Typography level="title-lg">
-        {isCreatingNewInvoice ? "New Invoice" : "Customer's Invoice"}
+        {isCreatingNewInvoice
+          ? "New Invoice"
+          : billToCustomerName?.trim() && billToCustomerName?.trim().length > 0
+          ? `${billToCustomerName}'s Invoice`
+          : "Customer's Invoice"}
       </Typography>
       <Box
         sx={{
@@ -61,6 +68,10 @@ const InvoiceHeading = ({
           {isCreatingNewInvoice
             ? new Date().toDateString()
             : invoiceDate?.toDateString()}
+        </Typography>
+        <Divider orientation="vertical" sx={{ mx: 2 }} />
+        <Typography level="title-md">
+          Invoice Number: {invoiceNumber}
         </Typography>
       </Box>
     </Box>

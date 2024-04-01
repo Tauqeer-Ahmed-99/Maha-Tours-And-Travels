@@ -1,14 +1,19 @@
 import Table from "@mui/joy/Table";
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
+import Typography from "@mui/joy/Typography";
+import CircularProgress from "@mui/joy/CircularProgress";
 import PriceCheckOutlinedIcon from "@mui/icons-material/PriceCheckOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DoDisturbAltRoundedIcon from "@mui/icons-material/DoDisturbAltRounded";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import { Payment } from "@src/utilities/models";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import InvoiceInput from "./InvoiceInput";
-import GroupMenu, { GroupMenuEvent } from "./Menu";
+import GroupMenu, { GroupMenuEvent } from "./GroupMenu";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 
 export default function CustomersTable({
@@ -33,20 +38,30 @@ export default function CustomersTable({
   onCancelSavePayment: () => void;
   handlePaymentFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
-    index: number
+    index: number,
   ) => void;
   onEditPayment: (paymentIndex: number) => void;
   onRemovePayment: (paymentIndex: number) => void;
   toggleEditingPayment: () => void;
 }) {
+  const [isLoading, setIsLoading] = useState(false);
   const invoicesContext = useContext(InvoicesContext);
 
   const onSave = async () => {
+    setIsLoading(true);
     await invoicesContext.addPayment(
       invoiceId as string,
-      payments[payments.length - 1]
+      payments[payments.length - 1],
     );
+    setIsLoading(false);
     onSavePayment();
+  };
+
+  const onSaveEditing = async (payment: Payment) => {
+    setIsLoading(true);
+    await invoicesContext.editPayment(invoiceId as string, payment);
+    setIsLoading(false);
+    toggleEditingPayment();
   };
 
   return (
@@ -78,10 +93,11 @@ export default function CustomersTable({
                     <GroupMenu
                       options={["CASH", "CHEQUE", "NEFT", "RTGS"]}
                       selectedOption={payment.mode}
+                      disabled={isLoading}
                       setSelectedOption={(option) =>
                         handlePaymentFieldChange(
                           { target: { name: "mode", value: option } },
-                          idx
+                          idx,
                         )
                       }
                     />
@@ -96,6 +112,7 @@ export default function CustomersTable({
                       name="paymentNumber"
                       onChange={(e) => handlePaymentFieldChange(e, idx)}
                       value={payment.paymentNumber?.toString()}
+                      disabled={isLoading}
                     />
                   ) : (
                     payment.paymentNumber
@@ -108,6 +125,7 @@ export default function CustomersTable({
                       name="amount"
                       onChange={(e) => handlePaymentFieldChange(e, idx)}
                       value={payment.amount?.toString()}
+                      disabled={isLoading}
                     />
                   ) : (
                     payment.amount
@@ -131,22 +149,21 @@ export default function CustomersTable({
                     <Box display="flex" justifyContent="space-around">
                       {paymentIndex === idx ? (
                         <Tooltip
-                          title="Save"
+                          title={isLoading ? "Saving" : "Save"}
                           placement="top"
                           variant="outlined"
                         >
                           <IconButton
                             variant="outlined"
                             color="primary"
-                            onClick={async () => {
-                              await invoicesContext.editPayment(
-                                invoiceId as string,
-                                payment
-                              );
-                              toggleEditingPayment();
-                            }}
+                            onClick={() => onSaveEditing(payment)}
+                            disabled={isLoading}
                           >
-                            <SaveRoundedIcon />
+                            {isLoading ? (
+                              <CircularProgress />
+                            ) : (
+                              <SaveRoundedIcon />
+                            )}
                           </IconButton>
                         </Tooltip>
                       ) : (
@@ -200,11 +217,18 @@ export default function CustomersTable({
               variant="outlined"
               color="warning"
               sx={{ mr: 2 }}
+              disabled={isLoading}
             >
               Cancel
             </Button>
-            <Button startDecorator={<SaveRoundedIcon />} onClick={onSave}>
-              Save
+            <Button
+              startDecorator={
+                isLoading ? <CircularProgress /> : <SaveRoundedIcon />
+              }
+              onClick={onSave}
+              disabled={isLoading}
+            >
+              {isLoading ? "Saving" : "Save"}
             </Button>
           </>
         ) : (

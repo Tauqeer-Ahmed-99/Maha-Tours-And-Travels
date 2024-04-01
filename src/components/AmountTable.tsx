@@ -1,23 +1,42 @@
-import { Box, IconButton, Table, Tooltip, Typography } from "@mui/joy";
+import { useContext, useState } from "react";
+import Box from "@mui/joy/Box";
+import CircularProgress from "@mui/joy/CircularProgress";
+import IconButton from "@mui/joy/IconButton";
+import Table from "@mui/joy/Table";
+import Tooltip from "@mui/joy/Tooltip";
+import Typography from "@mui/joy/Typography";
 import { Amounts } from "@src/utilities/models";
 import InvoiceInput from "./InvoiceInput";
-import GroupMenu, { GroupMenuEvent } from "./Menu";
+import GroupMenu, { GroupMenuEvent } from "./GroupMenu";
 import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
 
 const AmountTable = ({
+  invocieId,
   amounts,
   isEditingAmounts,
   setIsEditingAmounts,
   handleAmountsFieldChange,
 }: {
+  invocieId?: string;
   amounts: Amounts;
   isEditingAmounts: boolean;
   setIsEditingAmounts: (isEditing: boolean) => void;
   handleAmountsFieldChange: (
-    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent
+    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
   ) => void;
 }) => {
+  const [isSaving, setIsSaving] = useState(false);
+  const invoicesContext = useContext(InvoicesContext);
+
+  const saveAmounts = async () => {
+    setIsSaving(true);
+    invoicesContext.saveAmounts(invocieId as string, amounts);
+    setIsSaving(false);
+    setIsEditingAmounts(!isEditingAmounts);
+  };
+
   return (
     <Box my={2}>
       <Typography mb={2} level="title-lg">
@@ -45,6 +64,7 @@ const AmountTable = ({
                   name="pricePerUnit"
                   onChange={(e) => handleAmountsFieldChange(e)}
                   value={amounts.pricePerUnit?.toString()}
+                  disabled={isSaving}
                 />
               ) : (
                 amounts?.pricePerUnit
@@ -55,6 +75,7 @@ const AmountTable = ({
                 <GroupMenu
                   options={["5", "10", "15", "18"]}
                   selectedOption={amounts.gstPercent?.toString()}
+                  disabled={isSaving}
                   setSelectedOption={(option) =>
                     handleAmountsFieldChange({
                       target: { name: "gstPercent", value: option },
@@ -69,17 +90,28 @@ const AmountTable = ({
             <td>{amounts?.totalAmountWithGst}</td>
             <td>
               <Tooltip
-                title={isEditingAmounts ? "Save Amount" : "Edit Amounts"}
+                title={
+                  isEditingAmounts
+                    ? isSaving
+                      ? "Saving Amount"
+                      : "Save Amount"
+                    : "Edit Amounts"
+                }
                 placement="top"
                 variant="outlined"
               >
                 <IconButton
                   variant="outlined"
                   color="primary"
-                  onClick={() => setIsEditingAmounts(!isEditingAmounts)}
+                  onClick={saveAmounts}
+                  disabled={isSaving}
                 >
                   {isEditingAmounts ? (
-                    <SaveRoundedIcon />
+                    isSaving ? (
+                      <CircularProgress />
+                    ) : (
+                      <SaveRoundedIcon />
+                    )
                   ) : (
                     <EditNoteOutlinedIcon />
                   )}

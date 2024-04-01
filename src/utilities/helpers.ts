@@ -1,6 +1,6 @@
 export const getCustomerFieldLabel = (
   field: string,
-  isBillToCustomer = false
+  isBillToCustomer = false,
 ) => {
   switch (field) {
     case "name":
@@ -21,6 +21,31 @@ export const getCustomerFieldLabel = (
       return "City";
     case "country":
       return "Country";
+    default:
+      return field;
+  }
+};
+
+export const getDashboardCardLabel = (field: string) => {
+  switch (field) {
+    case "hajjInvoices":
+      return "Hajj Applications";
+    case "hajjNetAmount":
+      return "Hajj Total Amount";
+    case "hajjReceivedAmount":
+      return "Hajj Received Amount";
+    case "umrahInvoices":
+      return "Umrah Applications";
+    case "umrahNetAmount":
+      return "Umrah Total Amount";
+    case "umrahReceivedAmount":
+      return "Umrah Received Amount";
+    case "otherInvoices":
+      return "Other Applications";
+    case "otherNetAmount":
+      return "Other Total Amount";
+    case "otherReceivedAmount":
+      return "Other Received Amount";
     default:
       return field;
   }

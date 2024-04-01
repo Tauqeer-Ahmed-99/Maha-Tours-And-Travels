@@ -1,4 +1,6 @@
-import { Box, Grid, Skeleton } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Grid from "@mui/joy/Grid";
+import Skeleton from "@mui/joy/Skeleton";
 
 const InvoiceLoadingSkeleton = () => {
   return (
@@ -11,21 +13,27 @@ const InvoiceLoadingSkeleton = () => {
             md={idx !== 0 ? 6 : undefined}
             lg={idx !== 0 ? 4 : undefined}
           >
-            <Skeleton variant="text" level="h1" />
+            <Skeleton variant="text" animation="wave" level="h1" />
           </Grid>
         ))}
       </Grid>
       <Box my={2}>
-        <Skeleton variant="text" level="h1" sx={{ width: "50%" }} height={50} />
+        <Skeleton
+          variant="text"
+          animation="wave"
+          level="h1"
+          sx={{ width: "50%" }}
+          height={50}
+        />
       </Box>
       <Box my={2}>
-        <Skeleton variant="text" level="h1" height={50} />
+        <Skeleton variant="text" animation="wave" level="h1" height={50} />
       </Box>
       <Box my={2}>
-        <Skeleton variant="text" level="h1" height={50} />
+        <Skeleton variant="text" animation="wave" level="h1" height={50} />
       </Box>
       <Box my={2}>
-        <Skeleton variant="text" level="h1" height={50} />
+        <Skeleton variant="text" animation="wave" level="h1" height={50} />
       </Box>
     </Box>
   );

@@ -1,8 +1,12 @@
-import DashboardScreen from "../screens/DashboardScreen";
-import SignupScreen from "../screens/SignupScreen";
-import LoginScreen from "../screens/LoginScreen";
-import ProfileScreen from "../screens/ProfileScreen";
-import NotFoundScreen from "../screens/NotFoundScreen";
+import DashboardScreen from "@src/screens/DashboardScreen";
+import SignupScreen from "@src/screens/SignupScreen";
+import LoginScreen from "@src/screens/LoginScreen";
+import InvoicesScreen from "@src/screens/InvoicesScreen";
+import InvoiceDetailsScreen from "@src/screens/InvoiceDetailsScreen";
+import PreviewInvoiceScreen from "@src/screens/PreviewInvoiceScreen";
+import InvoiceTemplateScreen from "@src/screens/InvoiceTemplateScreen";
+import ProfileScreen from "@src/screens/ProfileScreen";
+import NotFoundScreen from "@src/screens/NotFoundScreen";
 
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
 import AddCircleRoundedIcon from "@mui/icons-material/AddCircleRounded";
@@ -10,12 +14,8 @@ import LoginRoundedIcon from "@mui/icons-material/LoginRounded";
 import SpaceDashboardRoundedIcon from "@mui/icons-material/SpaceDashboardRounded";
 import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
-
-import InvoicesScreen from "../screens/InvoicesScreen";
 import PersonOutlineRoundedIcon from "@mui/icons-material/PersonOutlineRounded";
 import DoNotDisturbRoundedIcon from "@mui/icons-material/DoNotDisturbRounded";
-import InvoiceTemplateScreen from "../screens/InvoiceTemplateScreen";
-import InvoiceDetailsScreen from "@src/screens/InvoiceDetailsScreen";
 
 export enum Routes {
   HomeScreen = "/",
@@ -24,6 +24,7 @@ export enum Routes {
   DashboardScreen = "/dashboard",
   InvoicesScreen = "/invoices",
   InvoiceDetailsScreen = "/invoices/invoice/:invoiceId",
+  InvoicePreviewScreen = "/invoices/preview/:invoiceId",
   InvoicesTemplateScreen = "/template",
   ProfileScreen = "/profile",
   NotFoundScreen = "/*",
@@ -80,10 +81,18 @@ const routes: IRoute[] = [
     navigation: true,
   },
   {
-    name: "Create Invoice",
+    name: "Invoice Details",
     path: Routes.InvoiceDetailsScreen,
     icon: NoteAddRoundedIcon,
     screen: InvoiceDetailsScreen,
+    appBar: true,
+    navigation: false,
+  },
+  {
+    name: "Preview Invoice",
+    path: Routes.InvoicePreviewScreen,
+    icon: ReceiptRoundedIcon,
+    screen: PreviewInvoiceScreen,
     appBar: true,
     navigation: false,
   },

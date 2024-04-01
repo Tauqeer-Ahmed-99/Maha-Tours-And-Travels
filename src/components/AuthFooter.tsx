@@ -1,4 +1,5 @@
-import { Box, Typography } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
 
 const AuthFooter = ({ onSignup }: { onSignup?: boolean }) => {
   return (

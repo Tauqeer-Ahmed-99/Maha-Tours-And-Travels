@@ -1,14 +1,13 @@
-import {
-  Box,
-  Button,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  Modal,
-  ModalDialog,
-  Typography,
-} from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import DialogActions from "@mui/joy/DialogActions";
+import DialogContent from "@mui/joy/DialogContent";
+import DialogTitle from "@mui/joy/DialogTitle";
+import Divider from "@mui/joy/Divider";
+import Modal from "@mui/joy/Modal";
+import ModalDialog from "@mui/joy/ModalDialog";
+import Typography from "@mui/joy/Typography";
+
 import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 
 const InvoiceDialog = ({
@@ -32,31 +31,20 @@ const InvoiceDialog = ({
         <DialogTitle>
           <WarningRoundedIcon />
           <Typography>
-            {isConfirmationOpen ? "Remove Customer?" : "Remove Payment?"}
+            {isConfirmationOpen ? "Delete Customer?" : "Delete Payment?"}
           </Typography>
         </DialogTitle>
         <Divider />
         <DialogContent>
           <Box display="flex" alignItems="center">
             <Typography>
-              {`Are you sure? you want to remove this ${
+              {`Are you sure? you want to delete this ${
                 isConfirmationOpen ? "customer" : "payment"
               }?`}
             </Typography>
           </Box>
         </DialogContent>
         <DialogActions>
-          <Button
-            variant="solid"
-            color="warning"
-            onClick={
-              isConfirmationOpen
-                ? onRemoveCustomerConfirm
-                : onRemovePaymentConfirm
-            }
-          >
-            Yes
-          </Button>
           <Button
             variant="solid"
             color="primary"
@@ -67,6 +55,17 @@ const InvoiceDialog = ({
             }
           >
             No
+          </Button>
+          <Button
+            variant="solid"
+            color="danger"
+            onClick={
+              isConfirmationOpen
+                ? onRemoveCustomerConfirm
+                : onRemovePaymentConfirm
+            }
+          >
+            Yes
           </Button>
         </DialogActions>
       </ModalDialog>

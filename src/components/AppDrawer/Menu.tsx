@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from "react";
 import JoyMenu, { MenuActions } from "@mui/joy/Menu";
 import MenuItem from "@mui/joy/MenuItem";
@@ -31,7 +32,7 @@ export default function Menu(props: {
   };
 
   const handleButtonKeyDown = (
-    event: React.KeyboardEvent<HTMLButtonElement>
+    event: React.KeyboardEvent<HTMLButtonElement>,
   ) => {
     if (event.key === "ArrowDown" || event.key === "ArrowUp") {
       event.preventDefault();

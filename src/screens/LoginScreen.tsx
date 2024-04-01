@@ -1,3 +1,4 @@
+import { useContext, useState } from "react";
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -9,15 +10,13 @@ import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
-import { FormHelperText } from "@mui/joy";
+import FormHelperText from "@mui/joy/FormHelperText";
 import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-
-import ColorSchemeToggle from "../components/ColorSchemeToggle";
-import useForm, { FieldValue } from "../hooks/useForm";
-import Dialog from "../components/Dialog";
-import { useContext, useState } from "react";
-import AuthContext from "../context/auth/AuthContext";
+import useForm, { FieldValue } from "@src/hooks/useForm";
+import ColorSchemeToggle from "@src/components/ColorSchemeToggle";
+import Dialog from "@src/components/Dialog";
+import AuthContext from "@src/context/auth/AuthContext";
 import { Link, useLocation } from "react-router-dom";
 import { Routes } from "../routes/routes";
 import Wallpaper from "@src/components/Wallpaper";
@@ -69,7 +68,7 @@ const LoginScreen = () => {
       authContext.signin(
         (formValues.email as string).trim(),
         (formValues.password as string).trim(),
-        formValues.remember as boolean
+        formValues.remember as boolean,
       );
     }
   };
@@ -79,7 +78,7 @@ const LoginScreen = () => {
     const isEmailValid = formErrors.email === false;
     if (isEmailValid) {
       await authContext.sendPasswordRecoveryEmail(
-        (formValues.email as string).trim()
+        (formValues.email as string).trim(),
       );
 
       setRecoveryEmailSent(true);

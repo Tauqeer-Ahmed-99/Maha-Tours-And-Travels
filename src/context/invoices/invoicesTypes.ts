@@ -1,8 +1,9 @@
 import { TravellingType } from "@src/utilities/types";
-import { Amounts, Customer, Payment } from "@src/utilities/models";
+import { Amounts, Customer, Payment, Response } from "@src/utilities/models";
 
 export interface Invoice {
   invoiceId?: string;
+  invoiceNumber: string;
   travellingType: TravellingType;
   billToCustomer: Customer;
   isBillToATraveller: boolean;
@@ -15,12 +16,16 @@ export interface Invoice {
 export interface InvoiceContext {
   invoices: Invoice[];
   isLoading: boolean;
-  createNewInvoice: () => Promise<void>;
-  saveInvoice: (invoice: Invoice) => Promise<void>;
-  addCustomer: (invoiceId: string, customer: Customer) => Promise<void>;
-  editCustomer: (invoiceId: string, customer: Customer) => Promise<void>;
-  addPayment: (invoiceId: string, payment: Payment) => Promise<void>;
-  editPayment: (invoiceId: string, payment: Payment) => Promise<void>;
-  removeCustomer: (invoiceId: string, customerId: string) => Promise<void>;
-  removePayment: (invoiceId: string, paymentId: string) => Promise<void>;
+  isError: boolean;
+  errorMessage: string;
+  createNewInvoice: () => Promise<Response>;
+  saveInvoice: (invoice: Invoice) => Promise<Response>;
+  addCustomer: (invoiceId: string, customer: Customer) => Promise<Response>;
+  editCustomer: (invoiceId: string, customer: Customer) => Promise<Response>;
+  saveAmounts: (invoiceId: string, amounts: Amounts) => Promise<Response>;
+  addPayment: (invoiceId: string, payment: Payment) => Promise<Response>;
+  editPayment: (invoiceId: string, payment: Payment) => Promise<Response>;
+  removeCustomer: (invoiceId: string, customerId: string) => Promise<Response>;
+  removePayment: (invoiceId: string, paymentId: string) => Promise<Response>;
+  clearErrors: () => void;
 }

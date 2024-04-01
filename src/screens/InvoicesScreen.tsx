@@ -1,24 +1,52 @@
-import { Box, Button, Typography } from "@mui/joy";
+import { useContext, useEffect, useState } from "react";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import Typography from "@mui/joy/Typography";
 import InvoiceTabel from "@src/components/InvoiceTable";
 import NoteAddRoundedIcon from "@mui/icons-material/NoteAddRounded";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes/routes";
-import { useContext } from "react";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
+import InvoiceInput from "@src/components/InvoiceInput";
+import InvoicesSkeleton from "@src/components/InvoicesSkeleton";
 
 const InvoicesScreen = () => {
   const navigate = useNavigate();
 
   const invoicesContext = useContext(InvoicesContext);
+  const [filteredInvoices, setFilteredInvoices] = useState(
+    invoicesContext.invoices,
+  );
 
   const onNewInvoiceClick = () => {
     invoicesContext.createNewInvoice();
     const route = (Routes.InvoiceDetailsScreen as string).replace(
       ":invoiceId",
-      "new"
+      "new",
     );
     navigate(route);
   };
+
+  const handleFilterTermChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const term = e.target.value.trim().toLocaleLowerCase();
+    if (term.length > 0) {
+      const filteredInvocies = invoicesContext.invoices.filter(
+        (invoice) =>
+          invoice.invoiceNumber.toLocaleLowerCase().includes(term) ||
+          invoice.billToCustomer.name.toLocaleLowerCase().includes(term) ||
+          invoice.customers.some((customer) =>
+            customer.name.toLocaleLowerCase().includes(term),
+          ),
+      );
+      setFilteredInvoices(filteredInvocies);
+    } else {
+      setFilteredInvoices(invoicesContext.invoices);
+    }
+  };
+
+  useEffect(() => {
+    setFilteredInvoices(invoicesContext.invoices);
+  }, [invoicesContext.invoices]);
 
   return (
     <Box>
@@ -36,9 +64,20 @@ const InvoicesScreen = () => {
           New Invoice
         </Button>
       </Box>
-
+      <Box my={2}>
+        <InvoiceInput
+          label="Search Invoices"
+          placeholder="Search invoices by Invoice Number or Customer Name"
+          mb={1}
+          onChange={handleFilterTermChange}
+        />
+      </Box>
       <Box>
-        <InvoiceTabel />
+        {invoicesContext.isLoading ? (
+          <InvoicesSkeleton />
+        ) : (
+          <InvoiceTabel invoices={filteredInvoices} />
+        )}
       </Box>
     </Box>
   );

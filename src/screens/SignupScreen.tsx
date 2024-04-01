@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import GlobalStyles from "@mui/joy/GlobalStyles";
 import CssBaseline from "@mui/joy/CssBaseline";
 import Box from "@mui/joy/Box";
@@ -75,7 +76,7 @@ const LoginScreen = () => {
         (formValues.phone as string).trim(),
         (formValues.email as string).trim(),
         (formValues.password as string).trim(),
-        (formValues.securityKey as string).trim()
+        (formValues.securityKey as string).trim(),
       );
     }
   };

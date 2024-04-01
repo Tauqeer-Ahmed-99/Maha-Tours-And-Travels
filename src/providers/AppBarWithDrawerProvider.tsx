@@ -4,7 +4,7 @@ import CssBaseline from "@mui/joy/CssBaseline";
 import Layout from "@src/components/AppDrawer/Layout";
 import Navigation from "@src/components/AppDrawer/Navigation";
 import Header from "@src/components/AppDrawer/Header";
-import { Box } from "@mui/joy";
+import Box from "@mui/joy/Box";
 
 export default function AppBarWithDrawerProvider({
   children,

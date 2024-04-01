@@ -1,4 +1,4 @@
-import { Box } from "@mui/joy";
+import Box from "@mui/joy/Box";
 import useWallpaper from "@src/hooks/useWallpaper";
 
 const Wallpaper = () => {

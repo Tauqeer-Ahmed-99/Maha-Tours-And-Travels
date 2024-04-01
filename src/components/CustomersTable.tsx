@@ -1,6 +1,10 @@
 import React, { useContext, useState } from "react";
 import Table from "@mui/joy/Table";
-import { Box, Button, IconButton, Tooltip, Typography } from "@mui/joy";
+import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
+import IconButton from "@mui/joy/IconButton";
+import Tooltip from "@mui/joy/Tooltip";
+import Typography from "@mui/joy/Typography";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import DoDisturbAltRoundedIcon from "@mui/icons-material/DoDisturbAltRounded";
 import CancelOutlinedIcon from "@mui/icons-material/CancelOutlined";
@@ -33,7 +37,7 @@ export default function CustomersTable({
   onCancelSaveCustomer: () => void;
   handleCustomerFieldChange: (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => void;
   onEditCustomer: (customerIndex: number) => void;
   onRemoveCustomer: (customerIndex: number) => void;
@@ -47,10 +51,17 @@ export default function CustomersTable({
     setIsLoading(true);
     invoicesContext.addCustomer(
       invoiceId as string,
-      customers[customers.length - 1]
+      customers[customers.length - 1],
     );
-    setIsLoading(false);
     onSaveCustomer();
+    setIsLoading(false);
+  };
+
+  const onSaveEditing = (customer: Customer) => {
+    setIsLoading(true);
+    invoicesContext.editCustomer(invoiceId as string, customer);
+    setIsLoading(false);
+    toggleEditingCustomer();
   };
 
   return (
@@ -146,40 +157,24 @@ export default function CustomersTable({
                   <td>
                     <Box display="flex" justifyContent="space-around">
                       {customerIndex === idx ? (
-                        <>
-                          {/* <Tooltip
-                            title="Cancel"
-                            placement="top"
+                        <Tooltip
+                          title={isLoading ? "Saving" : "Save"}
+                          placement="top"
+                          variant="outlined"
+                        >
+                          <IconButton
                             variant="outlined"
+                            color="primary"
+                            onClick={() => onSaveEditing(customer)}
+                            disabled={isLoading}
                           >
-                            <IconButton
-                              variant="outlined"
-                              color="warning"
-                              onClick={cancelEditingCustomer}
-                            >
-                              <CancelOutlinedIcon />
-                            </IconButton>
-                          </Tooltip> */}
-                          <Tooltip
-                            title="Save"
-                            placement="top"
-                            variant="outlined"
-                          >
-                            <IconButton
-                              variant="outlined"
-                              color="primary"
-                              onClick={() => {
-                                invoicesContext.editCustomer(
-                                  invoiceId as string,
-                                  customer
-                                );
-                                toggleEditingCustomer();
-                              }}
-                            >
+                            {isLoading ? (
+                              <CircularProgress />
+                            ) : (
                               <SaveRoundedIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </>
+                            )}
+                          </IconButton>
+                        </Tooltip>
                       ) : (
                         <>
                           <Tooltip
@@ -250,8 +245,9 @@ export default function CustomersTable({
                 )
               }
               onClick={onSave}
+              disabled={isLoading}
             >
-              Save
+              {isLoading ? "Saving" : "Save"}
             </Button>
           </>
         ) : (

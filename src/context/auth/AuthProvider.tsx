@@ -58,6 +58,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         navigate(Routes.DashboardScreen);
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [context.user]);
 
   const signup = async (
@@ -65,7 +66,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     phone: string,
     email: string,
     password: string,
-    securityKeyFromUser: string
+    securityKeyFromUser: string,
   ) => {
     try {
       dispatch({
@@ -79,7 +80,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         const userCreds = await createUserWithEmailAndPassword(
           auth,
           email,
-          password
+          password,
         );
         await updateProfile(userCreds.user, {
           displayName: name,
@@ -113,7 +114,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
       await setPersistence(
         auth,
-        remember ? browserLocalPersistence : browserSessionPersistence
+        remember ? browserLocalPersistence : browserSessionPersistence,
       );
 
       const userCreds = await signInWithEmailAndPassword(auth, email, password);
@@ -176,7 +177,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
 
   const confirmPasswordRecoveryCode = async (
     code: string,
-    newPassword: string
+    newPassword: string,
   ) => {
     try {
       dispatch({

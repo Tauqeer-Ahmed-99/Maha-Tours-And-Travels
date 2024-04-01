@@ -4,10 +4,10 @@ import CustomersTable from "@src/components/CustomersTable";
 import { Amounts, Customer, Payment } from "@src/utilities/models";
 import { useParams } from "react-router-dom";
 import PaymentsTable from "@src/components/PaymentsTable";
-import { GroupMenuEvent } from "@src/components/Menu";
+import { GroupMenuEvent } from "@src/components/GroupMenu";
 import AmountTable from "@src/components/AmountTable";
 import AmountsSummary from "@src/components/AmountsSummary";
-import InvoiceDialog from "@src/components/InvoiceDialog";
+import InvoiceConfirmationDialog from "@src/components/InvoiceConfirmationDialog";
 import BillToCustomer from "@src/components/BillToCustomer";
 import InvoiceHeading from "@src/components/InvoiceHeading";
 import InvoiceFooter from "@src/components/InvoiceFooter";
@@ -17,16 +17,22 @@ import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import InvoiceLoadingSkeleton from "@src/components/InvoiceLoadingSkeleton";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes/routes";
+import LoadingDialog from "@src/components/LoadingDialog";
+import useSaveShortcut from "@src/hooks/useSaveShortcut";
 
 const InvoiceDetailsScreen = () => {
   const { invoiceId } = useParams();
+  const [isCreatingNewInvoice, setIsCreatingNewInvoice] = useState(
+    invoiceId === "new",
+  );
+  const [isSaving, setIsSaving] = useState(false);
 
   const invoicesContext = useContext(InvoicesContext);
 
   const [travellingType, setTravellingType] = useState<TravellingType>(
-    TravellingType.HAJJ
+    TravellingType.HAJJ,
   );
-
+  const [invoiceNumber, setInvoiceNumber] = useState("");
   const [billToCustomer, setBillToCustomer] = useState(new Customer());
   const [isBillToATraveller, setIsBillToATraveller] = useState(true);
   const [invoiceDate, setInvoiceDate] = useState<Date>(new Date());
@@ -47,28 +53,29 @@ const InvoiceDetailsScreen = () => {
       isBillToATraveller ? customers.length + 1 : customers.length,
       500000,
       5,
-      5
-    )
+      5,
+    ),
   );
   const [isEditingAmounts, setIsEditingAmounts] = useState(false);
 
   const navigate = useNavigate();
 
   const invoice = invoicesContext.invoices.find(
-    (invoice) => invoice.invoiceId === invoiceId
+    (invoice) => invoice.invoiceId === invoiceId,
   ) as Invoice;
 
   useEffect(() => {
     if (invoice) {
       setBillToCustomer(invoice.billToCustomer);
       setTravellingType(invoice.travellingType);
+      setInvoiceNumber(invoice.invoiceNumber);
       setIsBillToATraveller(invoice.isBillToATraveller);
       setCustomers(invoice.customers);
       setPayments(invoice.payments);
       setAmounts(invoice.amounts);
       setInvoiceDate(invoice.date);
     }
-  }, [invoiceId, invoicesContext.invoices]);
+  }, [invoice, invoiceId, invoicesContext.invoices]);
 
   useEffect(() => {
     setAmounts(
@@ -77,23 +84,34 @@ const InvoiceDetailsScreen = () => {
           isBillToATraveller ? customers.length + 1 : customers.length,
           amounts.pricePerUnit,
           amounts.gstPercent,
-          amounts.tcsPercent
-        )
+          amounts.tcsPercent,
+        ),
     );
   }, [isBillToATraveller, customers, invoicesContext.invoices]);
 
   useEffect(() => {
-    if (invoicesContext.invoices.length > 0) {
-      const url = Routes.InvoiceDetailsScreen.replace(
-        ":invoiceId",
-        invoicesContext.invoices[invoicesContext.invoices.length - 1]
-          ?.invoiceId as string
-      );
-      navigate(url, { replace: true });
+    if (!invoicesContext.isError) {
+      if (
+        invoicesContext.invoices.length > 0 &&
+        isCreatingNewInvoice &&
+        !invoicesContext.isLoading
+      ) {
+        const url = Routes.InvoiceDetailsScreen.replace(
+          ":invoiceId",
+          invoicesContext.invoices[invoicesContext.invoices.length - 1]
+            ?.invoiceId as string,
+        );
+        navigate(url, { replace: true });
+      }
+    } else {
+      navigate(Routes.InvoicesScreen, { replace: true });
     }
-  }, [invoicesContext.invoices]);
-
-  const isCreatingNewInvoice = invoiceId === "new";
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    invoicesContext.invoices,
+    invoicesContext.isError,
+    invoicesContext.isLoading,
+  ]);
 
   const handleBillToFieldChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBillToCustomer((prevState) => ({
@@ -132,7 +150,7 @@ const InvoiceDetailsScreen = () => {
 
   const handleCustomerFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     setCustomers((prevCustomers) =>
       prevCustomers.map((customer, i) =>
@@ -141,21 +159,21 @@ const InvoiceDetailsScreen = () => {
               ...customer,
               [e.target.name]: e.target.value,
             }
-          : customer
-      )
+          : customer,
+      ),
     );
   };
 
   const handlePaymentFieldChange = (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
-    index: number
+    index: number,
   ) => {
     setPayments((prevPayments) =>
       prevPayments.map((payment, i) => {
         const newPay = {
           ...payment,
           [e.target.name]: isNaN(
-            Number((e as React.ChangeEvent<HTMLInputElement>).target.value)
+            Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
           )
             ? (e as React.ChangeEvent<HTMLInputElement>).target.value
             : Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
@@ -164,24 +182,24 @@ const InvoiceDetailsScreen = () => {
         const newPayment = new Payment(
           newPay.paymentNumber,
           newPay.mode,
-          newPay.amount
+          newPay.amount,
         );
 
         newPayment.paymentId = newPay.paymentId;
 
         return i === index ? newPayment : payment;
-      })
+      }),
     );
   };
 
   const handleAmountsFieldChange = (
-    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent
+    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
   ) => {
     setAmounts((prevAmounts) => {
       const newAmount = {
         ...prevAmounts,
         [e.target.name]: isNaN(
-          Number((e as React.ChangeEvent<HTMLInputElement>).target.value)
+          Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
         )
           ? (e as React.ChangeEvent<HTMLInputElement>).target.value
           : Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
@@ -191,7 +209,7 @@ const InvoiceDetailsScreen = () => {
         newAmount.qty,
         newAmount.pricePerUnit,
         newAmount.gstPercent,
-        newAmount.tcsPercent
+        newAmount.tcsPercent,
       );
     });
   };
@@ -227,10 +245,10 @@ const InvoiceDetailsScreen = () => {
   const onRemoveCustomerConfirm = async () => {
     await invoicesContext.removeCustomer(
       invoiceId as string,
-      customers[customerIndex as number].customerId as string
+      customers[customerIndex as number].customerId as string,
     );
     setCustomers((prevCustomers) =>
-      prevCustomers.filter((_, index) => index !== customerIndex)
+      prevCustomers.filter((_, index) => index !== customerIndex),
     );
     setCustomerIndex(null);
     closeConfirmation();
@@ -239,10 +257,10 @@ const InvoiceDetailsScreen = () => {
   const onRemovePaymentConfirm = async () => {
     await invoicesContext.removePayment(
       invoiceId as string,
-      payments[paymentIndex as number].paymentId as string
+      payments[paymentIndex as number].paymentId as string,
     );
     setPayments((prevPayments) =>
-      prevPayments.filter((_, index) => index !== paymentIndex)
+      prevPayments.filter((_, index) => index !== paymentIndex),
     );
     setPaymentIndex(null);
     closePaymentConfirmation();
@@ -281,14 +299,16 @@ const InvoiceDetailsScreen = () => {
           prevAmounts.qty,
           prevAmounts.pricePerUnit,
           prevAmounts.gstPercent,
-          tcsPercent
-        )
+          tcsPercent,
+        ),
     );
   };
 
   const onSaveInvoice = async () => {
+    setIsSaving(true);
     const invoice: Invoice = {
       invoiceId,
+      invoiceNumber,
       billToCustomer,
       amounts,
       customers,
@@ -299,7 +319,22 @@ const InvoiceDetailsScreen = () => {
     };
 
     await invoicesContext.saveInvoice(invoice);
+    setIsSaving(false);
+    setIsCreatingNewInvoice(false);
   };
+
+  useSaveShortcut(onSaveInvoice, [
+    invoicesContext.invoices,
+    invoiceId,
+    invoiceNumber,
+    billToCustomer,
+    amounts,
+    customers,
+    invoiceDate,
+    isBillToATraveller,
+    payments,
+    travellingType,
+  ]);
 
   if (invoicesContext.isLoading) {
     return <InvoiceLoadingSkeleton />;
@@ -309,9 +344,11 @@ const InvoiceDetailsScreen = () => {
     <Box>
       <InvoiceHeading
         isCreatingNewInvoice={isCreatingNewInvoice}
+        billToCustomerName={billToCustomer.name}
         travellingType={travellingType}
         setTravellingType={setTravellingType}
         invoiceDate={invoiceDate}
+        invoiceNumber={invoice?.invoiceNumber}
       />
       <BillToCustomer
         billToCustomer={billToCustomer}
@@ -333,6 +370,7 @@ const InvoiceDetailsScreen = () => {
         toggleEditingCustomer={toggleEditingCustomer}
       />
       <AmountTable
+        invocieId={invoiceId}
         amounts={amounts}
         isEditingAmounts={isEditingAmounts}
         setIsEditingAmounts={setIsEditingAmounts}
@@ -356,8 +394,11 @@ const InvoiceDetailsScreen = () => {
         payments={payments}
         handleTCSChange={handleTCSChange}
       />
-      <InvoiceFooter onSaveInvoice={onSaveInvoice} />
-      <InvoiceDialog
+      <InvoiceFooter
+        invoiceId={invoice?.invoiceId}
+        onSaveInvoice={onSaveInvoice}
+      />
+      <InvoiceConfirmationDialog
         isConfirmationOpen={isConfirmationOpen}
         isPaymentConfirmationOpen={isPaymentConfirmationOpen}
         onRemoveCustomerCancel={onRemoveCustomerCancel}
@@ -365,6 +406,7 @@ const InvoiceDetailsScreen = () => {
         onRemovePaymentCancel={onRemovePaymentCancel}
         onRemovePaymentConfirm={onRemovePaymentConfirm}
       />
+      <LoadingDialog open={isSaving} loadingMessage="Saving Invoice..." />
     </Box>
   );
 };

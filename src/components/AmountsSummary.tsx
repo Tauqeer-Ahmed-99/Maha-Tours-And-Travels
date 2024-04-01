@@ -1,6 +1,7 @@
 import { useMemo } from "react";
-import { Box, Typography } from "@mui/joy";
-import GroupMenu from "./Menu";
+import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
+import GroupMenu from "./GroupMenu";
 import { Amounts, Payment } from "@src/utilities/models";
 
 const AmountsSummary = ({

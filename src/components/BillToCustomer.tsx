@@ -1,5 +1,7 @@
-import { Box, Checkbox, Grid } from "@mui/joy";
 import React, { useMemo } from "react";
+import Box from "@mui/joy/Box";
+import Checkbox from "@mui/joy/Checkbox";
+import Grid from "@mui/joy/Grid";
 import InvoiceInput from "./InvoiceInput";
 import { Customer } from "@src/utilities/models";
 import { getCustomerFieldLabel } from "@src/utilities/helpers";
@@ -17,7 +19,7 @@ const BillToCustomer = ({
 }) => {
   const billToCustomerFields = useMemo(
     () => Object.keys(billToCustomer).filter((field) => field !== "customerId"),
-    [billToCustomer]
+    [billToCustomer],
   );
 
   return (

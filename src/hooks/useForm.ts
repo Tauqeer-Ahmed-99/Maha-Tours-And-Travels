@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useCallback, useEffect } from "react";
 
 export type FieldValue = string | File | boolean;
@@ -6,7 +7,7 @@ type ObjectOfFormValuesWhereKeyNamesMatchedWithInputFieldNames = {
     value: string | boolean;
     validate: (
       fieldValue: FieldValue,
-      values: ObjectOfFormValuesWhereKeyNamesMatchedWithInputFieldNames
+      values: ObjectOfFormValuesWhereKeyNamesMatchedWithInputFieldNames,
     ) => boolean;
   };
 };
@@ -17,7 +18,7 @@ export type AllFormValues =
 export type FormValues = { [key: string]: string | boolean };
 type FormErrors = { [key: string]: boolean };
 type InputOnChangeFunction = (
-  event: React.ChangeEvent<HTMLInputElement>
+  event: React.ChangeEvent<HTMLInputElement>,
 ) => void;
 type InputOnBlurFunction = (event: React.FocusEvent<HTMLInputElement>) => void;
 type ResetFormFunction = () => void;
@@ -26,7 +27,7 @@ type ResetFormErrorsFunction = () => void;
 type ValidateFormFunction = () => boolean;
 
 const useForm = (
-  initialValues: ObjectOfFormValuesWhereKeyNamesMatchedWithInputFieldNames
+  initialValues: ObjectOfFormValuesWhereKeyNamesMatchedWithInputFieldNames,
 ) => {
   const initialErrors: any = { ...initialValues };
 
@@ -49,17 +50,17 @@ const useForm = (
     (
       event:
         | React.FocusEvent<HTMLInputElement>
-        | React.ChangeEvent<HTMLInputElement>
+        | React.ChangeEvent<HTMLInputElement>,
     ) => {
       setFieldErrors((prevState) => ({
         ...prevState,
         [event.target.name]: values[event.target.name].validate(
           event.target.value,
-          values
+          values,
         ),
       }));
     },
-    [values]
+    [values],
   );
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,7 +99,7 @@ const useForm = (
     for (const fieldName in values) {
       const fieldError = values[fieldName].validate(
         values[fieldName].value,
-        values
+        values,
       );
       setFieldErrors((prevValues) => ({
         ...prevValues,
@@ -113,6 +114,7 @@ const useForm = (
     if (event) {
       validateField(event);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, event]);
 
   const resetValues = () => {
@@ -142,7 +144,7 @@ const useForm = (
     ValidateFormFunction,
     ResetFormFunction,
     ResetFormValuesFunction,
-    ResetFormErrorsFunction
+    ResetFormErrorsFunction,
   ];
 };
 

@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import * as React from "react";
 import Box, { BoxProps } from "@mui/joy/Box";
 import Sheet from "@mui/joy/Sheet";
@@ -107,7 +108,7 @@ function Main(props: BoxProps) {
 }
 
 function SideDrawer(
-  props: BoxProps & { onClose: React.MouseEventHandler<HTMLDivElement> }
+  props: BoxProps & { onClose: React.MouseEventHandler<HTMLDivElement> },
 ) {
   const { onClose, ...other } = props;
   return (
