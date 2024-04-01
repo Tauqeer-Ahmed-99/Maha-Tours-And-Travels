@@ -66,19 +66,25 @@ const InvoicesScreen = () => {
           New Invoice
         </Button>
       </Box>
-      <Box my={2}>
-        <InvoiceInput
-          label="Search Invoices"
-          placeholder="Search invoices by Invoice Number or Customer Name"
-          mb={1}
-          onChange={handleFilterTermChange}
-        />
-      </Box>
+      {invoicesContext.invoices.length > 0 && (
+        <Box my={2}>
+          <InvoiceInput
+            label="Search Invoices"
+            placeholder="Search invoices by Invoice Number or Customer Name"
+            mb={1}
+            onChange={handleFilterTermChange}
+          />
+        </Box>
+      )}
       <Box>
         {invoicesContext.isLoading ? (
           <InvoicesSkeleton />
-        ) : (
+        ) : filteredInvoices.length > 0 ? (
           <InvoiceTabel invoices={filteredInvoices} />
+        ) : (
+          <Typography textAlign="center">
+            Invoices not found. Create a new one.
+          </Typography>
         )}
       </Box>
     </Box>
