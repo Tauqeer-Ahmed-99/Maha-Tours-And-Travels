@@ -59,11 +59,16 @@ const InvoiceFooter = ({
   };
 
   return (
-    <Box display="flex" justifyContent="flex-end" my={2}>
+    <Box
+      display="flex"
+      justifyContent="flex-end"
+      my={2}
+      sx={{ flexDirection: { xs: "column-reverse", lg: "row" } }}
+    >
       <Button
         onClick={handleDeleteInvoice}
         startDecorator={<DeleteOutlineRoundedIcon />}
-        sx={{ mr: 2 }}
+        sx={{ m: 2 }}
         color="danger"
         variant="outlined"
       >
@@ -72,11 +77,15 @@ const InvoiceFooter = ({
       <Button
         onClick={handlePreviewInvoice}
         startDecorator={<ReceiptRoundedIcon />}
-        sx={{ mr: 2 }}
+        sx={{ m: 2 }}
       >
         Preview Invoice
       </Button>
-      <Button onClick={onSaveInvoice} startDecorator={<SaveRoundedIcon />}>
+      <Button
+        onClick={onSaveInvoice}
+        startDecorator={<SaveRoundedIcon />}
+        sx={{ m: 2 }}
+      >
         Save Invoice
       </Button>
       <Modal open={open}>

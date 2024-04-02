@@ -4,7 +4,12 @@ import Sheet from "@mui/joy/Sheet";
 
 const TableWrapper = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Box sx={{ overflowX: "auto", maxWidth: "100%" }}>
+    <Box
+      sx={{
+        overflow: "auto",
+        maxWidth: "calc(100vw - 3.2rem)",
+      }}
+    >
       <Sheet sx={{ minWidth: "870px" }}>{children}</Sheet>
     </Box>
   );
