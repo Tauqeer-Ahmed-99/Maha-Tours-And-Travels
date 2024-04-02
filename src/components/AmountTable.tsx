@@ -12,14 +12,13 @@ import EditNoteOutlinedIcon from "@mui/icons-material/EditNoteOutlined";
 import SaveRoundedIcon from "@mui/icons-material/SaveRounded";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import TableWrapper from "./TableWrapper";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
 
 const AmountTable = ({
-  invocieId,
-  amounts,
+  invoice,
   handleAmountsFieldChange,
 }: {
-  invocieId?: string;
-  amounts: Amounts;
+  invoice?: Invoice;
   handleAmountsFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
   ) => void;
@@ -35,7 +34,10 @@ const AmountTable = ({
   const saveAmounts = async () => {
     setIsEditing(false);
     setIsLoading(true);
-    await invoicesContext.saveAmounts(invocieId as string, amounts);
+    await invoicesContext.saveAmounts(
+      invoice as Invoice,
+      invoice?.amounts as Amounts,
+    );
     setIsLoading(false);
   };
 
@@ -60,24 +62,26 @@ const AmountTable = ({
           <tbody>
             <tr>
               <td></td>
-              <td>{amounts.qty}</td>
+              <td>{invoice?.amounts?.qty}</td>
               <td>
                 {isEditing ? (
                   <InvoiceInput
                     name="pricePerUnit"
                     onChange={(e) => handleAmountsFieldChange(e)}
-                    value={amounts.pricePerUnit?.toString()}
+                    value={invoice?.amounts?.pricePerUnit?.toString()}
                     disabled={isLoading}
                   />
                 ) : (
-                  amounts?.pricePerUnit
+                  invoice?.amounts?.pricePerUnit
                 )}
               </td>
               <td>
                 {isEditing ? (
                   <GroupMenu
                     options={["5", "10", "15", "18"]}
-                    selectedOption={amounts.gstPercent?.toString()}
+                    selectedOption={
+                      invoice?.amounts?.gstPercent?.toString() ?? "5"
+                    }
                     disabled={isLoading}
                     setSelectedOption={(option) =>
                       handleAmountsFieldChange({
@@ -86,11 +90,11 @@ const AmountTable = ({
                     }
                   />
                 ) : (
-                  amounts.gstPercent + "%"
+                  invoice?.amounts?.gstPercent + "%"
                 )}
               </td>
-              <td>{amounts?.gstAmount}</td>
-              <td>{amounts?.totalAmountWithGst}</td>
+              <td>{invoice?.amounts?.gstAmount}</td>
+              <td>{invoice?.amounts?.totalAmountWithGst}</td>
               <td>
                 <Tooltip
                   title={

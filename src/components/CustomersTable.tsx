@@ -15,10 +15,10 @@ import InvoiceInput from "./InvoiceInput";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import CircularProgress from "@mui/joy/CircularProgress";
 import TableWrapper from "./TableWrapper";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
 
 export default function CustomersTable({
-  invoiceId,
-  customers,
+  invoice,
   isAddingCustomer,
   customerIndex,
   onAddCustomer,
@@ -29,8 +29,7 @@ export default function CustomersTable({
   onRemoveCustomer,
   toggleEditingCustomer,
 }: {
-  invoiceId?: string;
-  customers: Customer[];
+  invoice?: Invoice;
   isAddingCustomer: boolean;
   customerIndex: number | null;
   onAddCustomer: () => void;
@@ -51,8 +50,8 @@ export default function CustomersTable({
   const onSave = async () => {
     setIsLoading(true);
     await invoicesContext.addCustomer(
-      invoiceId as string,
-      customers[customers.length - 1],
+      invoice as Invoice,
+      invoice?.customers?.[invoice?.customers.length - 1] as Customer,
     );
     onSaveCustomer();
     setIsLoading(false);
@@ -60,7 +59,7 @@ export default function CustomersTable({
 
   const onSaveEditing = async (customer: Customer) => {
     setIsLoading(true);
-    await invoicesContext.editCustomer(invoiceId as string, customer);
+    await invoicesContext.editCustomer(invoice as Invoice, customer);
     setIsLoading(false);
     toggleEditingCustomer();
   };
@@ -70,7 +69,7 @@ export default function CustomersTable({
       <Typography mb={2} level="title-lg">
         Customers
       </Typography>
-      {customers.length > 0 ? (
+      {(invoice?.customers?.length ?? 0) > 0 ? (
         <TableWrapper>
           <Table aria-label="table customers" size="md">
             <thead>
@@ -87,11 +86,12 @@ export default function CustomersTable({
               </tr>
             </thead>
             <tbody>
-              {customers.map((customer, idx) => (
+              {invoice?.customers?.map((customer, idx) => (
                 <tr key={customer.customerId ?? idx}>
                   <td>{idx + 1}</td>
                   <td>
-                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    {(isAddingCustomer &&
+                      idx === invoice?.customers.length - 1) ||
                     customerIndex === idx ? (
                       <InvoiceInput
                         name="name"
@@ -104,7 +104,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    {(isAddingCustomer &&
+                      idx === invoice?.customers.length - 1) ||
                     customerIndex === idx ? (
                       <InvoiceInput
                         name="contact"
@@ -117,7 +118,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    {(isAddingCustomer &&
+                      idx === invoice?.customers.length - 1) ||
                     customerIndex === idx ? (
                       <InvoiceInput
                         name="aadhar"
@@ -130,7 +132,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    {(isAddingCustomer &&
+                      idx === invoice?.customers.length - 1) ||
                     customerIndex === idx ? (
                       <InvoiceInput
                         name="pan"
@@ -143,7 +146,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingCustomer && idx === customers.length - 1) ||
+                    {(isAddingCustomer &&
+                      idx === invoice?.customers.length - 1) ||
                     customerIndex === idx ? (
                       <InvoiceInput
                         name="passport"

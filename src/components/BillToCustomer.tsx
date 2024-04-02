@@ -12,13 +12,16 @@ const BillToCustomer = ({
   setIsBillToATraveller,
   handleBillToFieldChange,
 }: {
-  billToCustomer: Customer;
-  isBillToATraveller: boolean;
+  billToCustomer?: Customer;
+  isBillToATraveller?: boolean;
   setIsBillToATraveller: (isTraveller: boolean) => void;
   handleBillToFieldChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }) => {
   const billToCustomerFields = useMemo(
-    () => Object.keys(billToCustomer).filter((field) => field !== "customerId"),
+    () =>
+      Object.keys(billToCustomer ?? {}).filter(
+        (field) => field !== "customerId",
+      ),
     [billToCustomer],
   );
 
@@ -47,7 +50,7 @@ const BillToCustomer = ({
         <Checkbox
           label="Is Bill To a Traveller?"
           onChange={(e) => setIsBillToATraveller(e.target.checked)}
-          checked={isBillToATraveller}
+          checked={isBillToATraveller ?? false}
         />
       </Box>
     </>

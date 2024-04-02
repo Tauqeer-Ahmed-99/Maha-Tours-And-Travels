@@ -16,10 +16,10 @@ import InvoiceInput from "./InvoiceInput";
 import GroupMenu, { GroupMenuEvent } from "./GroupMenu";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import TableWrapper from "./TableWrapper";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
 
 export default function CustomersTable({
-  invoiceId,
-  payments,
+  invoice,
   isAddingPayment,
   paymentIndex,
   onAddPayment,
@@ -30,8 +30,7 @@ export default function CustomersTable({
   onRemovePayment,
   toggleEditingPayment,
 }: {
-  invoiceId?: string;
-  payments: Payment[];
+  invoice?: Invoice;
   isAddingPayment: boolean;
   paymentIndex: number | null;
   onAddPayment: () => void;
@@ -51,8 +50,8 @@ export default function CustomersTable({
   const onSave = async () => {
     setIsLoading(true);
     await invoicesContext.addPayment(
-      invoiceId as string,
-      payments[payments.length - 1],
+      invoice as Invoice,
+      invoice?.payments?.[invoice?.payments.length - 1] as Payment,
     );
     setIsLoading(false);
     onSavePayment();
@@ -60,7 +59,7 @@ export default function CustomersTable({
 
   const onSaveEditing = async (payment: Payment) => {
     setIsLoading(true);
-    await invoicesContext.editPayment(invoiceId as string, payment);
+    await invoicesContext.editPayment(invoice as Invoice, payment);
     setIsLoading(false);
     toggleEditingPayment();
   };
@@ -70,7 +69,7 @@ export default function CustomersTable({
       <Typography mb={2} level="title-lg">
         Payments
       </Typography>
-      {payments.length > 0 ? (
+      {(invoice?.payments?.length ?? 0) > 0 ? (
         <TableWrapper>
           <Table aria-label="table payments" size="md">
             <thead>
@@ -86,11 +85,12 @@ export default function CustomersTable({
               </tr>
             </thead>
             <tbody>
-              {payments.map((payment, idx) => (
+              {invoice?.payments?.map((payment, idx) => (
                 <tr key={payment.paymentId ?? idx}>
                   <td>{idx + 1}</td>
                   <td>
-                    {(isAddingPayment && idx === payments.length - 1) ||
+                    {(isAddingPayment &&
+                      idx === invoice?.payments.length - 1) ||
                     paymentIndex === idx ? (
                       <GroupMenu
                         options={["CASH", "CHEQUE", "NEFT", "RTGS"]}
@@ -108,7 +108,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingPayment && idx === payments.length - 1) ||
+                    {(isAddingPayment &&
+                      idx === invoice?.payments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="paymentNumber"
@@ -121,7 +122,7 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingPayment && idx === payments.length - 1) ||
+                    {(isAddingPayment && idx === invoice.payments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="amount"
@@ -134,7 +135,8 @@ export default function CustomersTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingPayment && idx === payments.length - 1) ||
+                    {(isAddingPayment &&
+                      idx === invoice?.payments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="date"

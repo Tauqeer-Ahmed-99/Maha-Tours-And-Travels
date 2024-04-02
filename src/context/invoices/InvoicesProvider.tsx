@@ -151,18 +151,18 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const deleteInvoice = async (invoiceId: string) => {
+  const deleteInvoice = async (invoice: Invoice) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}.json?auth=${authToken}`;
 
       const res = await axios.delete(url);
 
       setInvoices((invoices) =>
-        invoices.filter((invoice) => invoice.invoiceId !== invoiceId),
+        invoices.filter((invoice) => invoice.invoiceId !== invoice.invoiceId),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -175,13 +175,13 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addCustomer = async (invoiceId: string, customer: Customer) => {
+  const addCustomer = async (invoice: Invoice, customer: Customer) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/customers.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/customers.json?auth=${authToken}`;
 
       delete customer.customerId;
 
@@ -191,8 +191,14 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
-            ? { ..._invoice, customers: [..._invoice.customers, customer] }
+          _invoice.invoiceId === invoice.invoiceId
+            ? {
+                ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
+                customers: [..._invoice.customers, customer],
+              }
             : _invoice,
         ),
       );
@@ -206,20 +212,26 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const saveAmounts = async (invoiceId: string, amounts: Amounts) => {
+  const saveAmounts = async (invoice: Invoice, amounts: Amounts) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/amounts.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/amounts.json?auth=${authToken}`;
 
       const res = await axios.put(url, amounts);
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
-            ? { ..._invoice, amounts }
+          _invoice.invoiceId === invoice.invoiceId
+            ? {
+                ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
+                amounts,
+              }
             : _invoice,
         ),
       );
@@ -234,13 +246,13 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addPayment = async (invoiceId: string, payment: Payment) => {
+  const addPayment = async (invoice: Invoice, payment: Payment) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/payments.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/payments.json?auth=${authToken}`;
 
       delete payment.paymentId;
 
@@ -250,8 +262,14 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
-            ? { ..._invoice, payments: [..._invoice.payments, payment] }
+          _invoice.invoiceId === invoice.invoiceId
+            ? {
+                ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
+                spayments: [..._invoice.payments, payment],
+              }
             : _invoice,
         ),
       );
@@ -265,21 +283,24 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const editCustomer = async (invoiceId: string, customer: Customer) => {
+  const editCustomer = async (invoice: Invoice, customer: Customer) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/customers/${customer.customerId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/customers/${customer.customerId}.json?auth=${authToken}`;
 
       const res = await axios.patch(url, customer);
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
+          _invoice.invoiceId === invoice.invoiceId
             ? {
                 ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
                 customers: _invoice.customers.map((_customer) =>
                   _customer.customerId === customer.customerId
                     ? customer
@@ -299,21 +320,24 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const editPayment = async (invoiceId: string, payment: Payment) => {
+  const editPayment = async (invoice: Invoice, payment: Payment) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/payments/${payment.paymentId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/payments/${payment.paymentId}.json?auth=${authToken}`;
 
       const res = await axios.patch(url, payment);
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
+          _invoice.invoiceId === invoice.invoiceId
             ? {
                 ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
                 payments: _invoice.payments.map((_payment) =>
                   _payment.paymentId === payment.paymentId ? payment : _payment,
                 ),
@@ -331,21 +355,24 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removeCustomer = async (invoiceId: string, customerId: string) => {
+  const removeCustomer = async (invoice: Invoice, customerId: string) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/customers/${customerId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/customers/${customerId}.json?auth=${authToken}`;
 
       const res = await axios.delete(url);
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
+          _invoice.invoiceId === invoice.invoiceId
             ? {
                 ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
                 customers: _invoice.customers.filter(
                   (_customer) => _customer.customerId !== customerId,
                 ),
@@ -363,21 +390,24 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removePayment = async (invoiceId: string, paymentId: string) => {
+  const removePayment = async (invoice: Invoice, paymentId: string) => {
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoiceId}/payments/${paymentId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/payments/${paymentId}.json?auth=${authToken}`;
 
       const res = await axios.delete(url);
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoiceId
+          _invoice.invoiceId === invoice.invoiceId
             ? {
                 ..._invoice,
+                travellingType: invoice.travellingType,
+                billToCustomer: invoice.billToCustomer,
+                isBillToATraveller: invoice.isBillToATraveller,
                 payments: _invoice.payments.filter(
                   (_payment) => _payment.paymentId !== paymentId,
                 ),

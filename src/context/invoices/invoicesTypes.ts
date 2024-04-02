@@ -20,13 +20,13 @@ export interface InvoiceContext {
   errorMessage: string;
   createNewInvoice: () => Promise<Response>;
   saveInvoice: (invoice: Invoice) => Promise<Response>;
-  addCustomer: (invoiceId: string, customer: Customer) => Promise<Response>;
-  editCustomer: (invoiceId: string, customer: Customer) => Promise<Response>;
-  saveAmounts: (invoiceId: string, amounts: Amounts) => Promise<Response>;
-  addPayment: (invoiceId: string, payment: Payment) => Promise<Response>;
-  editPayment: (invoiceId: string, payment: Payment) => Promise<Response>;
-  removeCustomer: (invoiceId: string, customerId: string) => Promise<Response>;
-  removePayment: (invoiceId: string, paymentId: string) => Promise<Response>;
-  deleteInvoice: (invoiceId: string) => Promise<Response>;
+  addCustomer: (invoice: Invoice, customer: Customer) => Promise<Response>;
+  editCustomer: (invoice: Invoice, customer: Customer) => Promise<Response>;
+  saveAmounts: (invoice: Invoice, amounts: Amounts) => Promise<Response>;
+  addPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
+  editPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
+  removeCustomer: (invoice: Invoice, customerId: string) => Promise<Response>;
+  removePayment: (invoice: Invoice, paymentId: string) => Promise<Response>;
+  deleteInvoice: (invoice: Invoice) => Promise<Response>;
   clearErrors: () => void;
 }

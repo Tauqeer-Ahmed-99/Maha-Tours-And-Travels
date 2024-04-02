@@ -6,21 +6,16 @@ import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 
 import { TravellingType } from "@src/utilities/types";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
 
 const InvoiceHeading = ({
-  billToCustomerName,
+  invoice,
   isCreatingNewInvoice,
-  travellingType,
   setTravellingType,
-  invoiceDate,
-  invoiceNumber,
 }: {
-  billToCustomerName?: string;
+  invoice?: Invoice;
   isCreatingNewInvoice: boolean;
-  travellingType: TravellingType;
   setTravellingType: (travellingType: TravellingType) => void;
-  invoiceDate?: Date;
-  invoiceNumber?: number;
 }) => {
   return (
     <Box
@@ -34,8 +29,9 @@ const InvoiceHeading = ({
       <Typography level="title-lg">
         {isCreatingNewInvoice
           ? "New Invoice"
-          : billToCustomerName?.trim() && billToCustomerName?.trim().length > 0
-          ? `${billToCustomerName}'s Invoice`
+          : invoice?.billToCustomer.name?.trim() &&
+            invoice?.billToCustomer.name?.trim().length > 0
+          ? `${invoice?.billToCustomer.name}'s Invoice`
           : "Customer's Invoice"}
       </Typography>
       <Box
@@ -52,7 +48,7 @@ const InvoiceHeading = ({
               onChange={(e) =>
                 setTravellingType(e.target.value as TravellingType)
               }
-              value={travellingType}
+              value={invoice?.travellingType ?? ""}
             >
               <Box display="flex" gap={2}>
                 <Radio value="Hajj" label="Hajj" variant="soft" />
@@ -67,11 +63,12 @@ const InvoiceHeading = ({
           Date:{" "}
           {isCreatingNewInvoice
             ? new Date().toDateString()
-            : invoiceDate?.toDateString()}
+            : invoice?.date?.toDateString()}
         </Typography>
         <Divider orientation="vertical" sx={{ mx: 2 }} />
         <Typography level="title-md">
-          Invoice Number: {travellingType + "-" + invoiceNumber}
+          Invoice Number:{" "}
+          {invoice?.travellingType + "-" + invoice?.invoiceNumber}
         </Typography>
       </Box>
     </Box>

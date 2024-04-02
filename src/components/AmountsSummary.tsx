@@ -9,13 +9,13 @@ const AmountsSummary = ({
   payments,
   handleTCSChange,
 }: {
-  amounts: Amounts;
-  payments: Payment[];
+  amounts?: Amounts;
+  payments?: Payment[];
   handleTCSChange: (tcsPercent: number) => void;
 }) => {
   const amountReceived = useMemo(() => {
     let amountReceived = 0;
-    payments.forEach((payment) => (amountReceived += payment.amount));
+    payments?.forEach((payment) => (amountReceived += payment.amount));
     return amountReceived;
   }, [payments]);
 
@@ -41,7 +41,7 @@ const AmountsSummary = ({
           <Typography>Sub Total</Typography>
           <Typography>
             &#8377;
-            {amounts.totalAmountWithGst}
+            {amounts?.totalAmountWithGst}
           </Typography>
         </Box>
         <Box
@@ -58,20 +58,22 @@ const AmountsSummary = ({
           >
             <Typography mr={2}>TCS</Typography>
             <GroupMenu
-              options={["5", "8", "10"]}
-              selectedOption={amounts.tcsPercent?.toString()}
+              options={["0", "5", "8", "10"]}
+              selectedOption={amounts?.tcsPercent?.toString() ?? "0"}
               setSelectedOption={(option) => handleTCSChange(+option)}
             />
             <Typography ml={1}>%</Typography>
           </Box>
           <Typography>
             &#8377;
-            {amounts.tcsAmount}
+            {amounts?.tcsAmount}
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography level="title-lg">Total</Typography>
-          <Typography level="title-lg">&#8377;{amounts.totalAmount}</Typography>
+          <Typography level="title-lg">
+            &#8377;{amounts?.totalAmount}
+          </Typography>
         </Box>
         <Box
           display="flex"
@@ -91,7 +93,7 @@ const AmountsSummary = ({
         >
           <Typography color="warning">Balance</Typography>
           <Typography color="warning">
-            &#8377;{amounts.totalAmount - amountReceived}
+            &#8377;{(amounts?.totalAmount ?? 0) - amountReceived}
           </Typography>
         </Box>
       </Box>
