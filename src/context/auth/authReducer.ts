@@ -45,6 +45,23 @@ const authReducer = (context = initialContext, action: IAction): IContext => {
         isError: true,
         errorMessage: payload?.errorMessage as string,
       };
+    case ActionType.UPDATE_USER_START:
+      return {
+        ...context,
+        isLoading: true,
+      };
+    case ActionType.UPDATE_USER_SUCCESS:
+      return {
+        ...context,
+        isLoading: false,
+      };
+    case ActionType.UPDATE_USER_FAIL:
+      return {
+        ...context,
+        isLoading: false,
+        isError: true,
+        errorMessage: payload?.errorMessage as string,
+      };
     case ActionType.USER_SIGNIN_START:
       return {
         ...context,

@@ -8,15 +8,15 @@ import {
   onAuthStateChanged,
   setPersistence,
   updateProfile,
-} from "firebase/auth";
-import { auth } from "../../../firebase";
-import {
+  updateEmail,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   signOut,
   sendPasswordResetEmail,
   confirmPasswordReset,
+  User,
 } from "firebase/auth";
+import { auth } from "../../../firebase";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Routes } from "../../routes/routes";
 
@@ -84,7 +84,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
         );
         await updateProfile(userCreds.user, {
           displayName: name,
-          photoURL: phone,
+          photoURL: `|||${"Admin"}|||${phone}`,
         });
         const user = userCreds.user;
         dispatch({
@@ -199,6 +199,36 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     }
   };
 
+  const updateUser = async (
+    name: string,
+    contact: string,
+    email: string,
+    role: string,
+    photoUrl?: string,
+  ) => {
+    try {
+      dispatch({ type: ActionType.UPDATE_USER_START });
+
+      const isEmailChanged = context.user?.email?.trim() !== email.trim();
+
+      await updateProfile(context.user as User, {
+        displayName: name,
+        photoURL: `${photoUrl ?? ""}|||${role}|||${contact}`,
+      });
+
+      if (isEmailChanged) {
+        await updateEmail(context.user as User, email.trim());
+      }
+
+      dispatch({ type: ActionType.UPDATE_USER_SUCCESS });
+    } catch (error) {
+      dispatch({
+        type: ActionType.UPDATE_USER_FAIL,
+        payload: { errorMessage: (error as Error).message },
+      });
+    }
+  };
+
   const clearError = () => {
     dispatch({
       type: ActionType.CLEAR_ERROR,
@@ -211,6 +241,7 @@ const AuthProvider = ({ children }: AuthProviderProps) => {
     signup,
     signin,
     signout,
+    updateUser,
     sendPasswordRecoveryEmail,
     confirmPasswordRecoveryCode,
     clearError,

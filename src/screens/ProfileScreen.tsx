@@ -1,5 +1,12 @@
+import Box from "@mui/joy/Box";
+import MyProfile from "@src/components/MyProfile";
+
 const ProfileScreen = () => {
-  return <div>ProfileScreen</div>;
+  return (
+    <Box>
+      <MyProfile />
+    </Box>
+  );
 };
 
 export default ProfileScreen;

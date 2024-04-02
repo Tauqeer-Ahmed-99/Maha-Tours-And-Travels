@@ -409,7 +409,7 @@ const InvoiceDetailsScreen = () => {
         handleTCSChange={handleTCSChange}
       />
       <InvoiceFooter
-        invoiceId={invoice?.invoiceId}
+        invoice={invoice ?? undefined}
         onSaveInvoice={onSaveInvoice}
       />
       <InvoiceConfirmationDialog

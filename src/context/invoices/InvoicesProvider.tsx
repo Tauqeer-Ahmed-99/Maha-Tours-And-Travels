@@ -21,7 +21,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
-        import.meta.env.VITE_RTDB_BASE_URL + `/invoices.json?auth=${authToken}`;
+        import.meta.env.VITE_RTDB_BASE_URL +
+        `/invoices.json?orderBy="isActive"&equalTo=true&auth=${authToken}`;
 
       const res = await axios.get(url);
 
@@ -99,7 +100,10 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       invoice.invoiceNumber = invoiceNumber;
 
-      const res = await axios.post(url, JSON.stringify(invoice));
+      const res = await axios.post(
+        url,
+        JSON.stringify({ ...invoice, isActive: true }),
+      );
 
       invoice.invoiceId = res.data.name;
 
@@ -159,10 +163,10 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
         import.meta.env.VITE_RTDB_BASE_URL +
         `/invoices/${invoice.invoiceId}.json?auth=${authToken}`;
 
-      const res = await axios.delete(url);
+      const res = await axios.patch(url, JSON.stringify({ isActive: false }));
 
       setInvoices((invoices) =>
-        invoices.filter((invoice) => invoice.invoiceId !== invoice.invoiceId),
+        invoices.filter((_invoice) => _invoice.invoiceId !== invoice.invoiceId),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);

@@ -12,14 +12,21 @@ export interface IAuthContext {
     phone: string,
     email: string,
     password: string,
-    securityKey: string
+    securityKey: string,
   ) => Promise<void>;
   signin: (email: string, password: string, remember: boolean) => Promise<void>;
   signout: () => Promise<void>;
+  updateUser: (
+    name: string,
+    contact: string,
+    email: string,
+    role: string,
+    photoUrl?: string,
+  ) => Promise<void>;
   sendPasswordRecoveryEmail: (email: string) => Promise<void>;
   confirmPasswordRecoveryCode: (
     code: string,
-    newPassword: string
+    newPassword: string,
   ) => Promise<void>;
   clearError: () => void;
 }
@@ -37,6 +44,9 @@ export enum ActionType {
   USER_SIGNOUT_START = "USER_SIGNOUT_START",
   USER_SIGNOUT_SUCCESS = "USER_SIGNOUT_SUCCESS",
   USER_SIGNOUT_FAIL = "USER_SIGNOUT_FAIL",
+  UPDATE_USER_START = "UPDATE_USER_START",
+  UPDATE_USER_SUCCESS = "UPDATE_USER_SUCCESS",
+  UPDATE_USER_FAIL = "UPDATE_USER_FAIL",
   PASSWORD_RECOVERY_START = "PASSWORD_RECOVERY_START",
   PASSWORD_RECOVERY_SUCCESS = "PASSWORD_RECOVERY_SUCCESS",
   PASSWORD_RECOVERY_FAIL = "PASSWORD_RECOVERY_FAIL",

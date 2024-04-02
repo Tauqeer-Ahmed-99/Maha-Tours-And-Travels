@@ -17,12 +17,13 @@ import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import { ResponseStatus } from "@src/utilities/types";
 import LoadingDialog from "./LoadingDialog";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
 
 const InvoiceFooter = ({
-  invoiceId,
+  invoice,
   onSaveInvoice,
 }: {
-  invoiceId?: string;
+  invoice?: Invoice;
   onSaveInvoice: () => void;
 }) => {
   const [open, setOpen] = useState(false);
@@ -35,7 +36,7 @@ const InvoiceFooter = ({
   const handlePreviewInvoice = () => {
     const url = Routes.InvoicePreviewScreen.replace(
       ":invoiceId",
-      invoiceId as string,
+      invoice?.invoiceId as string,
     );
 
     navigate(url);
@@ -49,7 +50,7 @@ const InvoiceFooter = ({
     setOpen(false);
     setIsDeleting(true);
 
-    const res = await invoicesContext.deleteInvoice(invoiceId as string);
+    const res = await invoicesContext.deleteInvoice(invoice as Invoice);
 
     setIsDeleting(false);
 

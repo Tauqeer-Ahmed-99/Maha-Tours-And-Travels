@@ -19,6 +19,13 @@ export const initialAuthContext: IAuthContext = {
   ) => {},
   signin: async (_email: string, _password: string, _remember: boolean) => {},
   signout: async () => {},
+  updateUser: async (
+    _name: string,
+    _contact: string,
+    _email: string,
+    _role: string,
+    _photoUrl?: string,
+  ) => {},
   sendPasswordRecoveryEmail: async (_email: string) => {},
   confirmPasswordRecoveryCode: async (
     _code: string,
