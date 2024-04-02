@@ -8,6 +8,7 @@ const TableWrapper = ({ children }: { children: React.ReactNode }) => {
       sx={{
         overflow: "auto",
         maxWidth: "calc(100vw - 3.2rem)",
+        ml: { xs: 1.25, md: 0 },
       }}
     >
       <Sheet sx={{ minWidth: "870px" }}>{children}</Sheet>
