@@ -50,7 +50,7 @@ export default function CustomersTable({
 
   const onSave = async () => {
     setIsLoading(true);
-    invoicesContext.addCustomer(
+    await invoicesContext.addCustomer(
       invoiceId as string,
       customers[customers.length - 1],
     );
@@ -58,9 +58,9 @@ export default function CustomersTable({
     setIsLoading(false);
   };
 
-  const onSaveEditing = (customer: Customer) => {
+  const onSaveEditing = async (customer: Customer) => {
     setIsLoading(true);
-    invoicesContext.editCustomer(invoiceId as string, customer);
+    await invoicesContext.editCustomer(invoiceId as string, customer);
     setIsLoading(false);
     toggleEditingCustomer();
   };

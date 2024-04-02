@@ -56,7 +56,8 @@ const InvoiceDetailsScreen = () => {
       5,
     ),
   );
-  const [isEditingAmounts, setIsEditingAmounts] = useState(false);
+  const [isDeletingCustomer, setIsDeletingCustomer] = useState(false);
+  const [isDeletingPayment, setIsDeletingPayment] = useState(false);
 
   const navigate = useNavigate();
 
@@ -243,27 +244,25 @@ const InvoiceDetailsScreen = () => {
   };
 
   const onRemoveCustomerConfirm = async () => {
+    setIsDeletingCustomer(true);
+    closeConfirmation();
     await invoicesContext.removeCustomer(
       invoiceId as string,
       customers[customerIndex as number].customerId as string,
     );
-    setCustomers((prevCustomers) =>
-      prevCustomers.filter((_, index) => index !== customerIndex),
-    );
+    setIsDeletingCustomer(false);
     setCustomerIndex(null);
-    closeConfirmation();
   };
 
   const onRemovePaymentConfirm = async () => {
+    setIsDeletingPayment(true);
+    closePaymentConfirmation();
     await invoicesContext.removePayment(
       invoiceId as string,
       payments[paymentIndex as number].paymentId as string,
     );
-    setPayments((prevPayments) =>
-      prevPayments.filter((_, index) => index !== paymentIndex),
-    );
+    setIsDeletingPayment(false);
     setPaymentIndex(null);
-    closePaymentConfirmation();
   };
 
   const onRemoveCustomerCancel = () => {
@@ -372,8 +371,6 @@ const InvoiceDetailsScreen = () => {
       <AmountTable
         invocieId={invoiceId}
         amounts={amounts}
-        isEditingAmounts={isEditingAmounts}
-        setIsEditingAmounts={setIsEditingAmounts}
         handleAmountsFieldChange={handleAmountsFieldChange}
       />
       <PaymentsTable
@@ -406,7 +403,16 @@ const InvoiceDetailsScreen = () => {
         onRemovePaymentCancel={onRemovePaymentCancel}
         onRemovePaymentConfirm={onRemovePaymentConfirm}
       />
-      <LoadingDialog open={isSaving} loadingMessage="Saving Invoice..." />
+      <LoadingDialog
+        open={isSaving || isDeletingCustomer || isDeletingPayment}
+        loadingMessage={
+          isSaving
+            ? "Saving Invoice..."
+            : isDeletingCustomer
+            ? "Deleting Customer..."
+            : "Deleting Payment..."
+        }
+      />
     </Box>
   );
 };

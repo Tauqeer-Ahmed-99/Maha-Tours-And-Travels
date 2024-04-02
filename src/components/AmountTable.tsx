@@ -16,26 +16,27 @@ import TableWrapper from "./TableWrapper";
 const AmountTable = ({
   invocieId,
   amounts,
-  isEditingAmounts,
-  setIsEditingAmounts,
   handleAmountsFieldChange,
 }: {
   invocieId?: string;
   amounts: Amounts;
-  isEditingAmounts: boolean;
-  setIsEditingAmounts: (isEditing: boolean) => void;
   handleAmountsFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
   ) => void;
 }) => {
-  const [isSaving, setIsSaving] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const invoicesContext = useContext(InvoicesContext);
 
+  const editAmounts = () => {
+    setIsEditing(true);
+  };
+
   const saveAmounts = async () => {
-    setIsSaving(true);
-    invoicesContext.saveAmounts(invocieId as string, amounts);
-    setIsSaving(false);
-    setIsEditingAmounts(!isEditingAmounts);
+    setIsEditing(false);
+    setIsLoading(true);
+    await invoicesContext.saveAmounts(invocieId as string, amounts);
+    setIsLoading(false);
   };
 
   return (
@@ -61,23 +62,23 @@ const AmountTable = ({
               <td></td>
               <td>{amounts.qty}</td>
               <td>
-                {isEditingAmounts ? (
+                {isEditing ? (
                   <InvoiceInput
                     name="pricePerUnit"
                     onChange={(e) => handleAmountsFieldChange(e)}
                     value={amounts.pricePerUnit?.toString()}
-                    disabled={isSaving}
+                    disabled={isLoading}
                   />
                 ) : (
                   amounts?.pricePerUnit
                 )}
               </td>
               <td>
-                {isEditingAmounts ? (
+                {isEditing ? (
                   <GroupMenu
                     options={["5", "10", "15", "18"]}
                     selectedOption={amounts.gstPercent?.toString()}
-                    disabled={isSaving}
+                    disabled={isLoading}
                     setSelectedOption={(option) =>
                       handleAmountsFieldChange({
                         target: { name: "gstPercent", value: option },
@@ -93,8 +94,8 @@ const AmountTable = ({
               <td>
                 <Tooltip
                   title={
-                    isEditingAmounts
-                      ? isSaving
+                    isEditing
+                      ? isLoading
                         ? "Saving Amount"
                         : "Save Amount"
                       : "Edit Amounts"
@@ -105,15 +106,13 @@ const AmountTable = ({
                   <IconButton
                     variant="outlined"
                     color="primary"
-                    onClick={saveAmounts}
-                    disabled={isSaving}
+                    onClick={isEditing ? saveAmounts : editAmounts}
+                    disabled={isLoading}
                   >
-                    {isEditingAmounts ? (
-                      isSaving ? (
-                        <CircularProgress />
-                      ) : (
-                        <SaveRoundedIcon />
-                      )
+                    {isEditing ? (
+                      <SaveRoundedIcon />
+                    ) : isLoading ? (
+                      <CircularProgress />
                     ) : (
                       <EditNoteOutlinedIcon />
                     )}
