@@ -42,7 +42,11 @@ const DahsboardGrid = () => {
           <SummaryTile
             key={card.name}
             heading={card.name}
-            content={card.value}
+            content={
+              card.name.toLocaleLowerCase().includes("amount")
+                ? "₹ " + card.value
+                : card.value
+            }
           />
         </Grid>
       ))}
