@@ -51,9 +51,9 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
         <td>
           <b>{row.billToCustomer.name}</b>
         </td>
-        <td>{row.amounts.totalAmount}</td>
-        <td>{amountReceived}</td>
-        <td>{row.amounts.totalAmount - amountReceived}</td>
+        <td>{row.amounts.totalAmount.toFixed(2)}</td>
+        <td>{amountReceived.toFixed(2)}</td>
+        <td>{(row.amounts.totalAmount - amountReceived).toFixed(2)}</td>
       </tr>
       <tr>
         <td style={{ height: 0, padding: 0 }} colSpan={6}>

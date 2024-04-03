@@ -43,7 +43,7 @@ const AmountsSummary = ({
           <Typography>Sub Total</Typography>
           <Typography>
             &#8377;
-            {amounts?.totalAmountWithGst}
+            {amounts?.totalAmountWithGst.toFixed(2)}
           </Typography>
         </Box>
         <Box
@@ -68,13 +68,13 @@ const AmountsSummary = ({
           </Box>
           <Typography>
             &#8377;
-            {amounts?.tcsAmount}
+            {amounts?.tcsAmount.toFixed(2)}
           </Typography>
         </Box>
         <Box display="flex" justifyContent="space-between" alignItems="center">
           <Typography level="title-lg">Total</Typography>
           <Typography level="title-lg">
-            &#8377;{amounts?.totalAmount}
+            &#8377;{amounts?.totalAmount.toFixed(2)}
           </Typography>
         </Box>
         <Box
@@ -85,7 +85,9 @@ const AmountsSummary = ({
           gap={1}
         >
           <Typography color="success">Received</Typography>
-          <Typography color="success">&#8377;{amountReceived}</Typography>
+          <Typography color="success">
+            &#8377;{amountReceived.toFixed(2)}
+          </Typography>
         </Box>
         <Box
           display="flex"
@@ -95,7 +97,7 @@ const AmountsSummary = ({
         >
           <Typography color="warning">Balance</Typography>
           <Typography color="warning">
-            &#8377;{(amounts?.totalAmount ?? 0) - amountReceived}
+            &#8377;{((amounts?.totalAmount ?? 0) - amountReceived).toFixed(2)}
           </Typography>
         </Box>
       </Box>

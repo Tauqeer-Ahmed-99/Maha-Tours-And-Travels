@@ -93,8 +93,8 @@ const AmountTable = ({
                   invoice?.amounts?.gstPercent + "%"
                 )}
               </td>
-              <td>{invoice?.amounts?.gstAmount}</td>
-              <td>{invoice?.amounts?.totalAmountWithGst}</td>
+              <td>{invoice?.amounts?.gstAmount.toFixed(2)}</td>
+              <td>{invoice?.amounts?.totalAmountWithGst.toFixed(2)}</td>
               <td>
                 <Tooltip
                   title={
