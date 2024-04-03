@@ -140,9 +140,10 @@ export default function CustomersTable({
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="date"
+                        type="date"
                         onChange={(e) => handlePaymentFieldChange(e, idx)}
-                        value={payment.date.toDateString()}
-                        disabled
+                        value={payment.date.toISOString().split("T")[0]}
+                        disabled={isLoading}
                       />
                     ) : (
                       payment.date.toDateString()

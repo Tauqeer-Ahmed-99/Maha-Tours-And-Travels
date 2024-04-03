@@ -15,7 +15,9 @@ const AmountsSummary = ({
 }) => {
   const amountReceived = useMemo(() => {
     let amountReceived = 0;
-    payments?.forEach((payment) => (amountReceived += payment.amount));
+    payments?.forEach(
+      (payment) => (amountReceived += parseFloat(payment.amount)),
+    );
     return amountReceived;
   }, [payments]);
 

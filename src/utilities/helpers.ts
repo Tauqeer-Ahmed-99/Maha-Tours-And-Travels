@@ -17,6 +17,8 @@ export const getCustomerFieldLabel = (
       return "Address Line 1";
     case "addressLine2":
       return "Address Line 2";
+    case "state":
+      return "State";
     case "city":
       return "City";
     case "country":

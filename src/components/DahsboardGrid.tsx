@@ -26,7 +26,9 @@ const DahsboardGrid = () => {
       invoicesData[`${travellingType}NetAmount`] += invoice.amounts.totalAmount;
       invoice.payments.forEach(
         (payment) =>
-          (invoicesData[`${travellingType}ReceivedAmount`] += payment.amount),
+          (invoicesData[`${travellingType}ReceivedAmount`] += parseFloat(
+            payment.amount,
+          )),
       );
     });
     return Object.entries(invoicesData).map(([name, value]) => ({

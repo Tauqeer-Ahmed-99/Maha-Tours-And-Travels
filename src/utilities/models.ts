@@ -11,6 +11,7 @@ export class Customer {
   addressLine1: string;
   addressLine2: string;
   city: string;
+  state: string;
   country: string;
   constructor(
     name?: string,
@@ -21,6 +22,7 @@ export class Customer {
     addressLine1?: string,
     addressLine2?: string,
     city?: string,
+    state?: string,
     country?: string,
   ) {
     this.name = name ?? "";
@@ -31,6 +33,7 @@ export class Customer {
     this.addressLine1 = addressLine1 ?? "";
     this.addressLine2 = addressLine2 ?? "";
     this.city = city ?? "";
+    this.state = state ?? "";
     this.country = country ?? "";
   }
 }
@@ -78,18 +81,18 @@ export class Payment {
   paymentId?: string;
   paymentNumber: number;
   mode: PaymentMode;
-  amount: number;
+  amount: string;
   date: Date;
 
   constructor(
     paymentNumber?: number,
     mode?: PaymentMode,
-    amount?: number,
+    amount?: string,
     date?: Date,
   ) {
     this.paymentNumber = paymentNumber ?? 0;
     this.mode = mode ?? PaymentMode.CHEQUE;
-    this.amount = amount ?? 0;
+    this.amount = amount ?? "0";
     this.date = date ?? new Date();
   }
 }

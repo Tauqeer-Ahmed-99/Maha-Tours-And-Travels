@@ -7,15 +7,18 @@ import Typography from "@mui/joy/Typography";
 
 import { TravellingType } from "@src/utilities/types";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
+import InvoiceInput from "./InvoiceInput";
 
 const InvoiceHeading = ({
   invoice,
   isCreatingNewInvoice,
   setTravellingType,
+  setInvoiceDate,
 }: {
   invoice?: Invoice;
   isCreatingNewInvoice: boolean;
   setTravellingType: (travellingType: TravellingType) => void;
+  setInvoiceDate: (date: string) => void;
 }) => {
   return (
     <Box
@@ -59,17 +62,22 @@ const InvoiceHeading = ({
           </FormControl>
         </Box>
         <Divider orientation="vertical" sx={{ mx: 2 }} />
-        <Typography level="title-md">
-          Date:{" "}
-          {isCreatingNewInvoice
-            ? new Date().toDateString()
-            : invoice?.date?.toDateString()}
+        <Typography level="title-md" sx={{ my: { xs: 2, lg: 0 } }}>
+          Invoice Number:{" "}
+          <b>{invoice?.travellingType + "-" + invoice?.invoiceNumber}</b>
         </Typography>
         <Divider orientation="vertical" sx={{ mx: 2 }} />
-        <Typography level="title-md">
-          Invoice Number:{" "}
-          {invoice?.travellingType + "-" + invoice?.invoiceNumber}
+        <Typography level="title-md" mr={1}>
+          Date:
         </Typography>
+        <InvoiceInput
+          value={
+            invoice?.date.toISOString().split("T")[0] ??
+            new Date().toISOString().split("T")[0]
+          }
+          onChange={(e) => setInvoiceDate(e.target.value)}
+          type="date"
+        />
       </Box>
     </Box>
   );

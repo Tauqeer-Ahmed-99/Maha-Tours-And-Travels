@@ -177,21 +177,21 @@ const InvoiceDetailsScreen = () => {
             payments: prevInvoice.payments.map((payment, i) => {
               const newPay = {
                 ...payment,
-                [e.target.name]: isNaN(
-                  Number(
-                    (e as React.ChangeEvent<HTMLInputElement>).target.value,
-                  ),
-                )
-                  ? (e as React.ChangeEvent<HTMLInputElement>).target.value
-                  : Number(
-                      (e as React.ChangeEvent<HTMLInputElement>).target.value,
-                    ),
+                [e.target.name]:
+                  e.target.name === "date"
+                    ? new Date(e.target.value)
+                    : (e as React.ChangeEvent<HTMLInputElement>).target.value,
               };
 
               const newPayment = new Payment(
                 newPay.paymentNumber,
                 newPay.mode,
-                newPay.amount,
+                newPay.amount === ""
+                  ? "0"
+                  : newPay.amount.length > 1 && newPay.amount.at(0) == "0"
+                  ? parseFloat(newPay.amount).toString()
+                  : newPay.amount,
+                newPay.date,
               );
 
               newPayment.paymentId = newPay.paymentId;
@@ -202,6 +202,8 @@ const InvoiceDetailsScreen = () => {
         : prevInvoice,
     );
   };
+
+  console.log(invoice);
 
   const handleAmountsFieldChange = (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
@@ -358,6 +360,12 @@ const InvoiceDetailsScreen = () => {
     );
   };
 
+  const setInvoiceDate = (date: string) => {
+    setInvoice((prevInvoice) =>
+      prevInvoice ? { ...prevInvoice, date: new Date(date) } : prevInvoice,
+    );
+  };
+
   if (invoicesContext.isLoading) {
     return <InvoiceLoadingSkeleton />;
   }
@@ -368,6 +376,7 @@ const InvoiceDetailsScreen = () => {
         invoice={invoice ?? undefined}
         isCreatingNewInvoice={isCreatingNewInvoice}
         setTravellingType={setTravellingType}
+        setInvoiceDate={setInvoiceDate}
       />
       <BillToCustomer
         billToCustomer={invoice?.billToCustomer}

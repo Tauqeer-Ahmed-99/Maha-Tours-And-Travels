@@ -18,7 +18,7 @@ const parseAmounts = (rawAmounts: any) => {
   );
 };
 
-const parseCustomer = ([id, rawCustomer]: [string | undefined, any]) => {
+const parseCustomer = ([id, rawCustomer]: [string, any]) => {
   const customer = new Customer(
     rawCustomer.name,
     rawCustomer.contact,
@@ -28,6 +28,7 @@ const parseCustomer = ([id, rawCustomer]: [string | undefined, any]) => {
     rawCustomer.addressLine1,
     rawCustomer.addressLine2,
     rawCustomer.city,
+    rawCustomer.state,
     rawCustomer.country,
   );
   customer.customerId = id;
@@ -54,7 +55,7 @@ export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
             invoiceNumber: rawInvoice.invoiceNumber,
             travellingType: rawInvoice.travellingType as TravellingType,
             billToCustomer: parseCustomer([
-              undefined,
+              invoiceId,
               rawInvoice.billToCustomer,
             ]),
             isBillToATraveller: rawInvoice.isBillToATraveller,
