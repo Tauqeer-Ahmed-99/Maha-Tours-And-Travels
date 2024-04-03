@@ -15,7 +15,7 @@ const BalanceSummary = () => {
     invoicesContext.invoices.forEach((invoice) => {
       netAmount += invoice.amounts.totalAmount;
       invoice.payments.forEach((payment) => {
-        netReceived += payment.amount;
+        netReceived += parseFloat(payment.amount);
       });
     });
     return {
