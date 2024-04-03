@@ -33,7 +33,7 @@ const DahsboardGrid = () => {
     });
     return Object.entries(invoicesData).map(([name, value]) => ({
       name: getDashboardCardLabel(name),
-      value,
+      value: value.toFixed(2),
     }));
   }, [invoicesContext.invoices]);
 
