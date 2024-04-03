@@ -272,7 +272,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 travellingType: invoice.travellingType,
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
-                spayments: [..._invoice.payments, payment],
+                payments: [..._invoice.payments, payment],
               }
             : _invoice,
         ),
