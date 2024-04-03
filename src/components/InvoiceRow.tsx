@@ -17,7 +17,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
 
   const amountReceived = useMemo(() => {
     let amountReceived = 0;
-    row.payments.forEach((payment) => (amountReceived += payment.amount));
+    row.payments.forEach((payment) => (amountReceived += parseFloat(payment.amount)));
     return amountReceived;
   }, [row]);
 
