@@ -51,9 +51,11 @@ const BalanceSummary = () => {
         </CircularProgress>
         <CardContent>
           <Typography level="body-md">Amount</Typography>
-          <Typography level="h2">₹ {netTotal.netReceived}</Typography>
+          <Typography level="h2">
+            ₹ {netTotal.netReceived.toFixed(2)}
+          </Typography>
           <Typography level="title-sm">
-            Received of ₹ {netTotal.netAmount}
+            Received of ₹ {netTotal.netAmount.toFixed(2)}
           </Typography>
         </CardContent>
       </CardContent>
