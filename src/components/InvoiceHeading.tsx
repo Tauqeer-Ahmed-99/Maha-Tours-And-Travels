@@ -4,10 +4,14 @@ import Radio from "@mui/joy/Radio";
 import RadioGroup from "@mui/joy/RadioGroup";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
+import Button from "@mui/joy/Button";
 
 import { TravellingType } from "@src/utilities/types";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
 import InvoiceInput from "./InvoiceInput";
+import { useNavigate } from "react-router-dom";
+import { Routes } from "@src/routes/routes";
+import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
 
 const InvoiceHeading = ({
   invoice,
@@ -20,6 +24,17 @@ const InvoiceHeading = ({
   setTravellingType: (travellingType: TravellingType) => void;
   setInvoiceDate: (date: string) => void;
 }) => {
+  const navigate = useNavigate();
+
+  const handlePreviewInvoice = () => {
+    const url = Routes.InvoicePreviewScreen.replace(
+      ":invoiceId",
+      invoice?.invoiceId as string
+    );
+
+    navigate(url);
+  };
+
   return (
     <>
       <Box
@@ -81,9 +96,26 @@ const InvoiceHeading = ({
           />
         </Box>
       </Box>
-      <Typography level="body-sm" mb={2}>
-        Quickly save invoice with ctrl+s
-      </Typography>
+      <Box
+        display="flex"
+        alignItems="center"
+        justifyContent="space-between"
+        my={2}
+      >
+        <Typography
+          level="body-sm"
+          sx={{ visbility: { xs: "hidden", md: "visible" } }}
+        >
+          Quickly save invoice with ctrl+s
+        </Typography>
+        <Button
+          onClick={handlePreviewInvoice}
+          startDecorator={<ReceiptRoundedIcon />}
+          sx={{ minWidth: "160px" }}
+        >
+          Preview Invoice
+        </Button>
+      </Box>
     </>
   );
 };

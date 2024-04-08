@@ -102,7 +102,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       const res = await axios.post(
         url,
-        JSON.stringify({ ...invoice, isActive: true }),
+        JSON.stringify({ ...invoice, isActive: true })
       );
 
       invoice.invoiceId = res.data.name;
@@ -141,8 +141,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoice.invoiceId ? invoice : _invoice,
-        ),
+          _invoice.invoiceId === invoice.invoiceId ? invoice : _invoice
+        )
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -166,7 +166,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await axios.patch(url, JSON.stringify({ isActive: false }));
 
       setInvoices((invoices) =>
-        invoices.filter((_invoice) => _invoice.invoiceId !== invoice.invoiceId),
+        invoices.filter((_invoice) => _invoice.invoiceId !== invoice.invoiceId)
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -202,9 +202,16 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 customers: [..._invoice.customers, customer],
+                amounts: new Amounts(
+                  _invoice.customers.length +
+                    (invoice.isBillToATraveller ? 2 : 1),
+                  _invoice.amounts.pricePerUnit,
+                  _invoice.amounts.gstPercent,
+                  _invoice.amounts.tcsPercent
+                ),
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -236,8 +243,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 isBillToATraveller: invoice.isBillToATraveller,
                 amounts,
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -274,8 +281,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 isBillToATraveller: invoice.isBillToATraveller,
                 payments: [..._invoice.payments, payment],
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -308,11 +315,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 customers: _invoice.customers.map((_customer) =>
                   _customer.customerId === customer.customerId
                     ? customer
-                    : _customer,
+                    : _customer
                 ),
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -343,11 +350,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 payments: _invoice.payments.map((_payment) =>
-                  _payment.paymentId === payment.paymentId ? payment : _payment,
+                  _payment.paymentId === payment.paymentId ? payment : _payment
                 ),
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -378,11 +385,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 customers: _invoice.customers.filter(
-                  (_customer) => _customer.customerId !== customerId,
+                  (_customer) => _customer.customerId !== customerId
                 ),
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -413,11 +420,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 payments: _invoice.payments.filter(
-                  (_payment) => _payment.paymentId !== paymentId,
+                  (_payment) => _payment.paymentId !== paymentId
                 ),
               }
-            : _invoice,
-        ),
+            : _invoice
+        )
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {

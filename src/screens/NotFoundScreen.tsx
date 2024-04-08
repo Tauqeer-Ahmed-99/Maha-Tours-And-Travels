@@ -2,7 +2,7 @@ import { Typography } from "@mui/joy";
 import Box from "@mui/joy/Box";
 import { useLocation } from "react-router-dom";
 
-const NotFoundScreen = () => {
+const NotFoundScreen = ({ isAutomated = true }: { isAutomated?: boolean }) => {
   const { pathname } = useLocation();
 
   return (
@@ -12,8 +12,8 @@ const NotFoundScreen = () => {
       alignItems="center"
       gap={8}
       sx={{
-        height: "100vh",
-        width: "100vw",
+        height: isAutomated ? "100vh" : undefined,
+        width: isAutomated ? "100vw" : undefined,
         flexDirection: { xs: "column-reverse", lg: "row" },
       }}
       p={8}

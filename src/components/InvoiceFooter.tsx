@@ -36,7 +36,7 @@ const InvoiceFooter = ({
   const handlePreviewInvoice = () => {
     const url = Routes.InvoicePreviewScreen.replace(
       ":invoiceId",
-      invoice?.invoiceId as string,
+      invoice?.invoiceId as string
     );
 
     navigate(url);
@@ -62,33 +62,51 @@ const InvoiceFooter = ({
   return (
     <Box
       display="flex"
-      justifyContent="flex-end"
       my={2}
-      sx={{ flexDirection: { xs: "column-reverse", lg: "row" } }}
+      sx={{
+        flexDirection: { xs: "column-reverse", lg: "row" },
+        justifyContent: { xs: "flex-end", lg: "space-between" },
+      }}
     >
-      <Button
-        onClick={handleDeleteInvoice}
-        startDecorator={<DeleteOutlineRoundedIcon />}
-        sx={{ m: 2 }}
-        color="danger"
-        variant="outlined"
+      <Box
+        display="flex"
+        sx={{
+          flexDirection: { xs: "column-reverse", lg: "row" },
+          justifyContent: { xs: "flex-end", lg: "space-between" },
+        }}
       >
-        Delete Invoice
-      </Button>
-      <Button
-        onClick={handlePreviewInvoice}
-        startDecorator={<ReceiptRoundedIcon />}
-        sx={{ m: 2 }}
+        <Button
+          onClick={handleDeleteInvoice}
+          startDecorator={<DeleteOutlineRoundedIcon />}
+          sx={{ m: 2 }}
+          color="danger"
+          variant="outlined"
+        >
+          Delete Invoice
+        </Button>
+      </Box>
+      <Box
+        display="flex"
+        sx={{
+          flexDirection: { xs: "column-reverse", lg: "row" },
+          justifyContent: { xs: "flex-end", lg: "space-between" },
+        }}
       >
-        Preview Invoice
-      </Button>
-      <Button
-        onClick={onSaveInvoice}
-        startDecorator={<SaveRoundedIcon />}
-        sx={{ m: 2 }}
-      >
-        Save Invoice
-      </Button>
+        <Button
+          onClick={handlePreviewInvoice}
+          startDecorator={<ReceiptRoundedIcon />}
+          sx={{ m: 2 }}
+        >
+          Preview Invoice
+        </Button>
+        <Button
+          onClick={onSaveInvoice}
+          startDecorator={<SaveRoundedIcon />}
+          sx={{ m: 2 }}
+        >
+          Save Invoice
+        </Button>
+      </Box>
       <Modal open={open}>
         <ModalDialog variant="outlined" role="alertdialog">
           <DialogTitle>

@@ -4,7 +4,7 @@ import { PaymentMode, TravellingType } from "./types";
 import { Amounts, Customer, Payment } from "./models";
 
 export const emailRegex = new RegExp(
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 );
 
 export const isEmail = (email: string) => emailRegex.test(email);
@@ -14,7 +14,7 @@ const parseAmounts = (rawAmounts: any) => {
     rawAmounts.qty,
     rawAmounts.pricePerUnit,
     rawAmounts.gstPercent,
-    rawAmounts.tcsPercent,
+    rawAmounts.tcsPercent
   );
 };
 
@@ -29,7 +29,7 @@ const parseCustomer = ([id, rawCustomer]: [string, any]) => {
     rawCustomer.addressLine2,
     rawCustomer.city,
     rawCustomer.state,
-    rawCustomer.country,
+    rawCustomer.country
   );
   customer.customerId = id;
   return customer;
@@ -40,7 +40,7 @@ const parsePayment = ([id, rawPayment]: [string, any]) => {
     rawPayment.paymentNumber,
     rawPayment.mode as PaymentMode,
     rawPayment.amount,
-    new Date(rawPayment.date),
+    new Date(rawPayment.date)
   );
   payment.paymentId = id;
   return payment;
@@ -68,9 +68,123 @@ export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
               : [],
             payments: rawInvoice.payments
               ? Object.entries(rawInvoice.payments).map((rawPayment) =>
-                  parsePayment(rawPayment),
+                  parsePayment(rawPayment)
                 )
               : [],
-          } as Invoice),
+          } as Invoice)
       )
     : [];
+
+export function convertAmountInWords(amount: any) {
+  const a = [
+    "",
+    "One ",
+    "Two ",
+    "Three ",
+    "Four ",
+    "Five ",
+    "Six ",
+    "Seven ",
+    "Eight ",
+    "Nine ",
+    "Ten ",
+    "Eleven ",
+    "Twelve ",
+    "Thirteen ",
+    "Fourteen ",
+    "Fifteen ",
+    "Sixteen ",
+    "Seventeen ",
+    "Eighteen ",
+    "Nineteen ",
+  ];
+  const b = [
+    "",
+    "",
+    "Twenty",
+    "Thirty",
+    "Forty",
+    "Fifty",
+    "Sixty",
+    "Seventy",
+    "Eighty",
+    "Ninety",
+  ];
+
+  function transform(value: any): any {
+    if (value) {
+      let number = parseFloat(value).toFixed(2).split(".");
+      let num = parseInt(number[0]);
+      let digit = parseInt(number[1]);
+      if (num) {
+        if (num.toString().length > 9) {
+          return "";
+        }
+        const n = ("000000000" + num)
+          .substr(-9)
+          .match(/^(\d{2})(\d{2})(\d{2})(\d{1})(\d{2})$/) as RegExpMatchArray;
+        const d = ("00" + digit).substr(-2).match(/^(\d{2})$/);
+        if (!n) {
+          return "";
+        }
+        let str = "";
+        str +=
+          Number(n[1]) !== 0
+            ? (a[Number(n[1])] ||
+                b[(n as RegExpMatchArray)[1][0] as unknown as number] +
+                  " " +
+                  a[(n as RegExpMatchArray)[1][1] as unknown as number]) +
+              "Crore "
+            : "";
+        str +=
+          Number(n[2]) !== 0
+            ? (a[Number(n[2])] ||
+                b[(n as RegExpMatchArray)[2][0] as unknown as number] +
+                  " " +
+                  a[(n as RegExpMatchArray)[2][1] as unknown as number]) +
+              "Lakh "
+            : "";
+        str +=
+          Number(n[3]) !== 0
+            ? (a[Number(n[3])] ||
+                b[(n as RegExpMatchArray)[3][0] as unknown as number] +
+                  " " +
+                  a[(n as RegExpMatchArray)[3][1] as unknown as number]) +
+              "Thousand "
+            : "";
+        str +=
+          Number(n[4]) !== 0
+            ? (a[Number(n[4])] ||
+                b[(n as RegExpMatchArray)[4][0] as unknown as number] +
+                  " " +
+                  a[(n as RegExpMatchArray)[4][1] as unknown as number]) +
+              "Hundred "
+            : "";
+        str +=
+          Number(n[5]) !== 0
+            ? (a[Number(n[5])] ||
+                b[(n as RegExpMatchArray)[5][0] as unknown as number] +
+                  " " +
+                  a[(n as RegExpMatchArray)[5][1] as unknown as number]) +
+              "Rupee "
+            : "";
+        str +=
+          Number(d?.[1]) !== 0
+            ? (str !== "" ? "and " : "") +
+              (a[Number(d?.[1])] ||
+                b[(d as RegExpMatchArray)[1][0] as unknown as number] +
+                  " " +
+                  a[(d as RegExpMatchArray)[1][1] as unknown as number]) +
+              "Paise Only"
+            : "Only";
+        return str;
+      } else {
+        return "";
+      }
+    } else {
+      return "";
+    }
+  }
+
+  return transform(amount);
+}

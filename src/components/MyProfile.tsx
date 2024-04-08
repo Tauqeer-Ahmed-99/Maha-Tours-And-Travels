@@ -48,7 +48,7 @@ const MyProfile = () => {
       profile.contact,
       profile.email,
       profile.role,
-      profile.photoUrl,
+      profile.photoUrl
     );
     setIsLoading(false);
     setIsEditing(false);
@@ -69,7 +69,6 @@ const MyProfile = () => {
     }
   }, [authContext.user]);
 
-  console.log(profile);
   return (
     <Box sx={{ flex: 1, width: "100%" }}>
       <Stack

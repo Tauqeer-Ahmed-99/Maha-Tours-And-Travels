@@ -4,7 +4,6 @@ import LoginScreen from "@src/screens/LoginScreen";
 import InvoicesScreen from "@src/screens/InvoicesScreen";
 import InvoiceDetailsScreen from "@src/screens/InvoiceDetailsScreen";
 import PreviewInvoiceScreen from "@src/screens/PreviewInvoiceScreen";
-import InvoiceTemplateScreen from "@src/screens/InvoiceTemplateScreen";
 import ProfileScreen from "@src/screens/ProfileScreen";
 import NotFoundScreen from "@src/screens/NotFoundScreen";
 
@@ -25,7 +24,6 @@ export enum Routes {
   InvoicesScreen = "/invoices",
   InvoiceDetailsScreen = "/invoices/invoice/:invoiceId",
   InvoicePreviewScreen = "/invoices/preview/:invoiceId",
-  InvoicesTemplateScreen = "/template",
   ProfileScreen = "/profile",
   NotFoundScreen = "/*",
 }
@@ -95,14 +93,6 @@ const routes: IRoute[] = [
     screen: PreviewInvoiceScreen,
     appBar: true,
     navigation: false,
-  },
-  {
-    name: "Invoice Template",
-    path: Routes.InvoicesTemplateScreen,
-    icon: ReceiptRoundedIcon,
-    screen: InvoiceTemplateScreen,
-    appBar: true,
-    navigation: true,
   },
   {
     name: "Profile",
