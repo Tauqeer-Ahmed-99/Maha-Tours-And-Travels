@@ -15,6 +15,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const authContext = useContext(AuthContext);
 
+  console.log(invoices);
+
   const loadInvoices = async () => {
     try {
       setIsLoading(true);
@@ -386,6 +388,13 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 isBillToATraveller: invoice.isBillToATraveller,
                 customers: _invoice.customers.filter(
                   (_customer) => _customer.customerId !== customerId
+                ),
+                amounts: new Amounts(
+                  _invoice.customers.length -
+                    (invoice.isBillToATraveller ? 0 : 1),
+                  _invoice.amounts.pricePerUnit,
+                  _invoice.amounts.gstPercent,
+                  _invoice.amounts.tcsPercent
                 ),
               }
             : _invoice

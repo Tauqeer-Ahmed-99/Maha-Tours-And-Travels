@@ -24,7 +24,7 @@ const InvoiceFooter = ({
   onSaveInvoice,
 }: {
   invoice?: Invoice;
-  onSaveInvoice: () => void;
+  onSaveInvoice: () => Promise<void>;
 }) => {
   const [open, setOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -33,7 +33,8 @@ const InvoiceFooter = ({
 
   const invoicesContext = useContext(InvoicesContext);
 
-  const handlePreviewInvoice = () => {
+  const handlePreviewInvoice = async () => {
+    await onSaveInvoice();
     const url = Routes.InvoicePreviewScreen.replace(
       ":invoiceId",
       invoice?.invoiceId as string

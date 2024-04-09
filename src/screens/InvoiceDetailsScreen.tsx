@@ -384,6 +384,7 @@ const InvoiceDetailsScreen = () => {
         isCreatingNewInvoice={isCreatingNewInvoice}
         setTravellingType={setTravellingType}
         setInvoiceDate={setInvoiceDate}
+        setIsSaving={setIsSaving}
       />
       <BillToCustomer
         billToCustomer={invoice?.billToCustomer}

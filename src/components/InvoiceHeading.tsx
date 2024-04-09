@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import Box from "@mui/joy/Box";
 import FormControl from "@mui/joy/FormControl";
 import Radio from "@mui/joy/Radio";
@@ -5,33 +6,39 @@ import RadioGroup from "@mui/joy/RadioGroup";
 import Divider from "@mui/joy/Divider";
 import Typography from "@mui/joy/Typography";
 import Button from "@mui/joy/Button";
-
 import { TravellingType } from "@src/utilities/types";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
 import InvoiceInput from "./InvoiceInput";
 import { useNavigate } from "react-router-dom";
 import { Routes } from "@src/routes/routes";
 import ReceiptRoundedIcon from "@mui/icons-material/ReceiptRounded";
+import InvoicesContext from "@src/context/invoices/InvoicesContext";
 
 const InvoiceHeading = ({
   invoice,
   isCreatingNewInvoice,
   setTravellingType,
   setInvoiceDate,
+  setIsSaving,
 }: {
   invoice?: Invoice;
   isCreatingNewInvoice: boolean;
   setTravellingType: (travellingType: TravellingType) => void;
   setInvoiceDate: (date: string) => void;
+  setIsSaving: (isSaving: boolean) => void;
 }) => {
   const navigate = useNavigate();
 
-  const handlePreviewInvoice = () => {
+  const invoicesContext = useContext(InvoicesContext);
+
+  const handlePreviewInvoice = async () => {
+    setIsSaving(true);
+    await invoicesContext.saveInvoice(invoice as Invoice);
+    setIsSaving(false);
     const url = Routes.InvoicePreviewScreen.replace(
       ":invoiceId",
       invoice?.invoiceId as string
     );
-
     navigate(url);
   };
 
