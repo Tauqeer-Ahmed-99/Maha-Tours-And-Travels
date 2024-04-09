@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import Box from "@mui/joy/Box";
 import {
   PDFViewer,
@@ -8,7 +8,7 @@ import {
   Text,
   Image,
 } from "@react-pdf/renderer";
-import React from "@src/assets/haramain-sharifain/Masjid-al-Haram/kaaba-1.jpg";
+import MahaToursLogo from "@src/assets/maha-tours-logo.jpeg";
 import RupeeSymbol from "@src/assets/svg/rupee.png";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
@@ -96,6 +96,25 @@ const TableRow = ({
   );
 };
 
+const Watermark = () => {
+  return (
+    <View>
+      <Image
+        src={MahaToursLogo}
+        style={{
+          height: "150px",
+          width: "200px",
+          position: "absolute",
+          top: "-200px",
+          left: "40%",
+          transform: "translate(-50%, -50%)",
+          opacity: 0.2,
+        }}
+      />
+    </View>
+  );
+};
+
 const PreviewInvoiceScreen = () => {
   const { invoiceId } = useParams();
 
@@ -167,375 +186,384 @@ const PreviewInvoiceScreen = () => {
     <Box height="100%" width="100%">
       <PDFViewer style={{ width: "100%", height: "100%" }}>
         <Document title={invoice.travellingType + "-" + invoice.invoiceNumber}>
-          <Page size="A4" style={{ padding: 20 }}>
-            <Text
-              style={{
-                textAlign: "center",
-                fontSize: "8px",
-                marginBottom: "2px",
-              }}
-            >
-              Tax Invoice
-            </Text>
-            <View
-              style={{
-                border: "1px solid black",
-                fontSize: "8px",
-              }}
-            >
+          {React.Children.map(
+            <>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: "8px",
+                  marginBottom: "2px",
+                }}
+              >
+                Tax Invoice
+              </Text>
               <View
                 style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  borderBottom: "1px solid black",
+                  border: "1px solid black",
+                  fontSize: "8px",
                 }}
               >
                 <View
                   style={{
-                    width: "80%",
-                    borderRight: "1px solid black",
                     display: "flex",
                     flexDirection: "row",
-                    alignItems: "center",
-                  }}
-                >
-                  <Image
-                    src={React}
-                    style={{ height: "50px", width: "50px", margin: "6px " }}
-                  />
-                  <View style={{ margin: "6px" }}>
-                    <Text style={{ fontSize: "12px", fontWeight: 800 }}>
-                      MAHA TOURS AND TRAVELS
-                    </Text>
-                    <Text style={{ marginTop: "4px" }}>
-                      SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA, CO.OP. HSG
-                      SOC, DR. AMBEDKAR ROAD,
-                    </Text>
-                    <Text style={{ marginVertical: "2px" }}>
-                      KALYAN WEST, THANE, MAHARASHTRA, 421301
-                    </Text>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginVertical: "4px",
-                      }}
-                    >
-                      <Text style={{ width: "50%" }}>
-                        Phone No.: 9819195267
-                      </Text>
-                      <Text style={{ width: "50%" }}>
-                        Email.: mahatoursntravels@gmail.com
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text style={{ width: "50%" }}>
-                        GSTIN.: 27ABHFM7829H1ZU
-                      </Text>
-                      <Text style={{ width: "50%" }}>
-                        State.: 27-Maharashtra
-                      </Text>
-                    </View>
-                  </View>
-                </View>
-                <View
-                  style={{
-                    width: "20%",
+                    borderBottom: "1px solid black",
                   }}
                 >
                   <View
                     style={{
-                      width: "100%",
+                      width: "80%",
+                      borderRight: "1px solid black",
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Image
+                      src={MahaToursLogo}
+                      style={{ height: "50px", width: "90px", margin: "6px " }}
+                    />
+                    <View style={{ margin: "6px" }}>
+                      <Text style={{ fontSize: "12px", fontWeight: 800 }}>
+                        MAHA TOURS AND TRAVELS
+                      </Text>
+                      <Text style={{ marginTop: "4px" }}>
+                        SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA, CO.OP. HSG
+                        SOC, DR. AMBEDKAR
+                      </Text>
+                      <Text style={{ marginVertical: "2px" }}>
+                        ROAD, KALYAN WEST, THANE, MAHARASHTRA, 421301
+                      </Text>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginVertical: "4px",
+                        }}
+                      >
+                        <Text style={{ width: "50%" }}>
+                          Phone No.: 9819195267
+                        </Text>
+                        <Text style={{ width: "50%" }}>
+                          Email.: mahatoursntravels@gmail.com
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text style={{ width: "50%" }}>
+                          GSTIN.: 27ABHFM7829H1ZU
+                        </Text>
+                        <Text style={{ width: "50%" }}>
+                          State.: 27-Maharashtra
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                  <View
+                    style={{
+                      width: "20%",
                     }}
                   >
                     <View
                       style={{
                         width: "100%",
-                        borderBottom: "1px solid black",
-                        padding: "6px",
                       }}
                     >
-                      <Text>Invoice No.</Text>
-                      <Text
+                      <View
                         style={{
-                          fontSize: "12px",
-                          fontWeight: 800,
-                          marginTop: "4px",
+                          width: "100%",
+                          borderBottom: "1px solid black",
+                          padding: "6px",
                         }}
                       >
-                        {invoice.travellingType + "-" + invoice.invoiceNumber}
-                      </Text>
-                    </View>
-                    <View style={{ width: "100%", padding: "6px" }}>
-                      <Text>Date</Text>
-                      <Text
-                        style={{
-                          fontSize: "12px",
-                          fontWeight: 800,
-                          marginTop: "4px",
-                        }}
-                      >
-                        {invoice.date.toDateString()}
-                      </Text>
+                        <Text>Invoice No.</Text>
+                        <Text
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: 800,
+                            marginTop: "4px",
+                          }}
+                        >
+                          {invoice.travellingType + "-" + invoice.invoiceNumber}
+                        </Text>
+                      </View>
+                      <View style={{ width: "100%", padding: "6px" }}>
+                        <Text>Date</Text>
+                        <Text
+                          style={{
+                            fontSize: "12px",
+                            fontWeight: 800,
+                            marginTop: "4px",
+                          }}
+                        >
+                          {invoice.date.toDateString()}
+                        </Text>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  borderBottom: "1px solid black",
-                }}
-              >
                 <View
                   style={{
-                    padding: "6px",
-                    width: "50%",
-                    borderRight: "1px solid black",
+                    display: "flex",
+                    flexDirection: "row",
+                    borderBottom: "1px solid black",
                   }}
                 >
-                  <Text style={{ marginBottom: "6px" }}>Bill To</Text>
-                  <Text
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 800,
-                      marginBottom: "6px",
-                    }}
-                  >
-                    {invoice.billToCustomer.name}
-                  </Text>
                   <View
                     style={{
-                      display: "flex",
-                      flexDirection: "row",
+                      padding: "6px",
+                      width: "50%",
+                      borderRight: "1px solid black",
                     }}
                   >
-                    <Text style={{ width: "60px" }}>Contact No.:</Text>
-                    <Text>{invoice.billToCustomer.contact}</Text>
+                    <Text style={{ marginBottom: "6px" }}>Bill To</Text>
+                    <Text
+                      style={{
+                        fontSize: "10px",
+                        fontWeight: 800,
+                        marginBottom: "6px",
+                      }}
+                    >
+                      {invoice.billToCustomer.name}
+                    </Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Text style={{ width: "60px" }}>Contact No.:</Text>
+                      <Text>{invoice.billToCustomer.contact}</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        marginVertical: "4px",
+                      }}
+                    >
+                      <Text style={{ width: "60px" }}>Passport No.:</Text>
+                      <Text>{invoice.billToCustomer.passport}</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
+                      <Text style={{ width: "60px" }}>Aadhar No.:</Text>
+                      <Text>{invoice.billToCustomer.aadhar}</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        marginTop: "4px",
+                      }}
+                    >
+                      <Text style={{ width: "60px" }}>PAN No.:</Text>
+                      <Text>{invoice.billToCustomer.pan}</Text>
+                    </View>
                   </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginVertical: "4px",
-                    }}
-                  >
-                    <Text style={{ width: "60px" }}>Passport No.:</Text>
-                    <Text>{invoice.billToCustomer.passport}</Text>
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                    }}
-                  >
-                    <Text style={{ width: "60px" }}>Aadhar No.:</Text>
-                    <Text>{invoice.billToCustomer.aadhar}</Text>
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      marginTop: "4px",
-                    }}
-                  >
-                    <Text style={{ width: "60px" }}>PAN No.:</Text>
-                    <Text>{invoice.billToCustomer.pan}</Text>
+                  <View style={{ padding: "6px", width: "50%" }}>
+                    <Text style={{ marginBottom: "6px" }}>Address</Text>
+                    <Text>{invoice.billToCustomer.addressLine1}</Text>
+                    <Text style={{ marginVertical: "4px" }}>
+                      {invoice.billToCustomer.addressLine2}
+                    </Text>
+                    <Text>{invoice.billToCustomer.city}</Text>
+                    <Text style={{ marginVertical: "4px" }}>
+                      {invoice.billToCustomer.state}
+                    </Text>
+                    <Text>{invoice.billToCustomer.country}</Text>
                   </View>
                 </View>
-                <View style={{ padding: "6px", width: "50%" }}>
-                  <Text style={{ marginBottom: "6px" }}>Address</Text>
-                  <Text>{invoice.billToCustomer.addressLine1}</Text>
-                  <Text style={{ marginVertical: "4px" }}>
-                    {invoice.billToCustomer.addressLine2}
-                  </Text>
-                  <Text>{invoice.billToCustomer.city}</Text>
-                  <Text style={{ marginVertical: "4px" }}>
-                    {invoice.billToCustomer.state}
-                  </Text>
-                  <Text>{invoice.billToCustomer.country}</Text>
+                <View>
+                  <Text style={{ padding: "6px" }}>Customers</Text>
+                  <TableRow tableName="customers" isHeading />
+                  {customersData.map((customerData, index) => (
+                    <TableRow
+                      key={customerData[1] + index}
+                      tableName="customers"
+                      content={customerData}
+                    />
+                  ))}
                 </View>
-              </View>
-              <View>
-                <Text style={{ padding: "6px" }}>Customers</Text>
-                <TableRow tableName="customers" isHeading />
-                {customersData.map((customerData, index) => (
-                  <TableRow
-                    key={customerData[1] + index}
-                    tableName="customers"
-                    content={customerData}
-                  />
-                ))}
-              </View>
-              <View>
-                <Text style={{ padding: "6px" }}>Amounts</Text>
-                <TableRow tableName="amounts" isHeading />
-                {amountsData.map((amountsData, index) => (
-                  <TableRow
-                    key={index}
-                    tableName="amounts"
-                    content={amountsData}
-                  />
-                ))}
-              </View>
-              <View>
-                <Text style={{ padding: "6px" }}>Payments</Text>
-                <TableRow tableName="payments" isHeading />
-                {paymentsData?.map((paymentsData, index) => (
-                  <TableRow
-                    key={paymentsData[1] + index}
-                    tableName="payments"
-                    content={paymentsData}
-                  />
-                ))}
-              </View>
-              <View
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  borderBottom: "1px solid black",
-                }}
-              >
+                <View>
+                  <Text style={{ padding: "6px" }}>Amounts</Text>
+                  <TableRow tableName="amounts" isHeading />
+                  {amountsData.map((amountsData, index) => (
+                    <TableRow
+                      key={index}
+                      tableName="amounts"
+                      content={amountsData}
+                    />
+                  ))}
+                </View>
+                <View>
+                  <Text style={{ padding: "6px" }}>Payments</Text>
+                  <TableRow tableName="payments" isHeading />
+                  {paymentsData?.map((paymentsData, index) => (
+                    <TableRow
+                      key={paymentsData[1] + index}
+                      tableName="payments"
+                      content={paymentsData}
+                    />
+                  ))}
+                </View>
                 <View
                   style={{
-                    width: "50%",
-                    borderRight: "1px solid black",
-                    padding: "6px",
+                    display: "flex",
+                    flexDirection: "row",
+                    borderBottom: "1px solid black",
                   }}
                 >
-                  <Text>Invoice Amount In Words</Text>
-                  <Text>
-                    {convertAmountInWords(invoice.amounts.totalAmount)}
-                  </Text>
-                </View>
-                <View style={{ width: "50%" }}>
                   <View
                     style={{
-                      paddingLeft: "6px",
-                      paddingTop: "6px",
-                      paddingBottom: "6px",
-                      paddingRight: "2px",
-                      borderBottom: "1px solid black",
+                      width: "50%",
+                      borderRight: "1px solid black",
+                      padding: "6px",
                     }}
                   >
-                    <Text>Amounts</Text>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginVertical: "6px",
-                      }}
-                    >
-                      <Text>Sub Total</Text>
-                      <Text>
-                        {RupeeIcon}
-                        {invoice.amounts.totalAmountWithGst.toFixed(2)}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text>{`TCS (${invoice.amounts.tcsPercent}%)`}</Text>
-                      <Text>
-                        {RupeeIcon}
-                        {invoice.amounts.tcsAmount.toFixed(2)}
-                      </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      paddingLeft: "6px",
-                      paddingTop: "6px",
-                      paddingBottom: "6px",
-                      paddingRight: "2px",
-                      borderBottom: "1px solid black",
-                    }}
-                  >
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Text>Total</Text>
-                      <Text>
-                        {RupeeIcon}
-                        {invoice.amounts.totalAmount.toFixed(2)}
-                      </Text>
-                    </View>
-                    <View
-                      style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        justifyContent: "space-between",
-                        marginVertical: "2px",
-                        marginTop: "6px",
-                      }}
-                    >
-                      <Text>Received</Text>
-                      <Text>
-                        {RupeeIcon}
-                        {amountReceived}
-                      </Text>
-                    </View>
-                  </View>
-                  <View
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                      paddingLeft: "6px",
-                      paddingTop: "6px",
-                      paddingBottom: "6px",
-                      paddingRight: "2px",
-                    }}
-                  >
-                    <Text>Balance</Text>
+                    <Text>Invoice Amount In Words</Text>
                     <Text>
-                      {RupeeIcon}
-                      {(
-                        invoice.amounts.totalAmount - parseFloat(amountReceived)
-                      ).toFixed(2)}
+                      {convertAmountInWords(invoice.amounts.totalAmount)}
+                    </Text>
+                  </View>
+                  <View style={{ width: "50%" }}>
+                    <View
+                      style={{
+                        paddingLeft: "6px",
+                        paddingTop: "6px",
+                        paddingBottom: "6px",
+                        paddingRight: "2px",
+                        borderBottom: "1px solid black",
+                      }}
+                    >
+                      <Text>Amounts</Text>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginVertical: "6px",
+                        }}
+                      >
+                        <Text>Sub Total</Text>
+                        <Text>
+                          {RupeeIcon}
+                          {invoice.amounts.totalAmountWithGst.toFixed(2)}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>{`TCS (${invoice.amounts.tcsPercent}%)`}</Text>
+                        <Text>
+                          {RupeeIcon}
+                          {invoice.amounts.tcsAmount.toFixed(2)}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        paddingLeft: "6px",
+                        paddingTop: "6px",
+                        paddingBottom: "6px",
+                        paddingRight: "2px",
+                        borderBottom: "1px solid black",
+                      }}
+                    >
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                        }}
+                      >
+                        <Text>Total</Text>
+                        <Text>
+                          {RupeeIcon}
+                          {invoice.amounts.totalAmount.toFixed(2)}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginVertical: "2px",
+                          marginTop: "6px",
+                        }}
+                      >
+                        <Text>Received</Text>
+                        <Text>
+                          {RupeeIcon}
+                          {amountReceived}
+                        </Text>
+                      </View>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        paddingLeft: "6px",
+                        paddingTop: "6px",
+                        paddingBottom: "6px",
+                        paddingRight: "2px",
+                      }}
+                    >
+                      <Text>Balance</Text>
+                      <Text>
+                        {RupeeIcon}
+                        {(
+                          invoice.amounts.totalAmount -
+                          parseFloat(amountReceived)
+                        ).toFixed(2)}
+                      </Text>
+                    </View>
+                  </View>
+                </View>
+                <View style={{ display: "flex", flexDirection: "row" }}>
+                  <View
+                    style={{
+                      width: "50%",
+                      padding: "6px",
+                      borderRight: "1px solid black",
+                    }}
+                  >
+                    <Text>Terms and Conditions</Text>
+                    <Text>Thanks for doing business with us!!!</Text>
+                  </View>
+                  <View style={{ width: "50%", padding: "6px" }}>
+                    <Text style={{ textAlign: "center", marginBottom: "50px" }}>
+                      For : MAHA TOURS AND TRAVELS
+                    </Text>
+                    <Text style={{ textAlign: "center" }}>
+                      Authorized Signatory
                     </Text>
                   </View>
                 </View>
               </View>
-              <View style={{ display: "flex", flexDirection: "row" }}>
-                <View
-                  style={{
-                    width: "50%",
-                    padding: "6px",
-                    borderRight: "1px solid black",
-                  }}
-                >
-                  <Text>Terms and Conditions</Text>
-                  <Text>Thanks for doing business with us!!!</Text>
-                </View>
-                <View style={{ width: "50%", padding: "6px" }}>
-                  <Text style={{ textAlign: "center", marginBottom: "50px" }}>
-                    For : MAHA TOURS AND TRAVELS
-                  </Text>
-                  <Text style={{ textAlign: "center" }}>
-                    Authorized Signatory
-                  </Text>
-                </View>
-              </View>
-            </View>
-          </Page>
+            </>,
+            (child, index) => (
+              <Page key={index} size="A4" style={{ padding: 20 }}>
+                {child}
+                <Watermark />
+              </Page>
+            )
+          )}
         </Document>
       </PDFViewer>
     </Box>

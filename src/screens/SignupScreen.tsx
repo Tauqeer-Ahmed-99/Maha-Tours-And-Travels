@@ -5,14 +5,12 @@ import Box from "@mui/joy/Box";
 import Button from "@mui/joy/Button";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
-import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import FormHelperText from "@mui/joy/FormHelperText";
-import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
-
+import MahaToursLogo from "@src/assets/maha-tours-logo.jpeg";
 import useForm, { FieldValue } from "../hooks/useForm";
 import ColorSchemeToggle from "../components/ColorSchemeToggle";
 import { isEmail } from "../utilities/utils";
@@ -76,7 +74,7 @@ const LoginScreen = () => {
         (formValues.phone as string).trim(),
         (formValues.email as string).trim(),
         (formValues.password as string).trim(),
-        (formValues.securityKey as string).trim(),
+        (formValues.securityKey as string).trim()
       );
     }
   };
@@ -126,9 +124,12 @@ const LoginScreen = () => {
             }}
           >
             <Box sx={{ gap: 2, display: "flex", alignItems: "center" }}>
-              <IconButton variant="soft" color="primary" size="sm">
-                <BadgeRoundedIcon />
-              </IconButton>
+              <img
+                src={MahaToursLogo}
+                alt="Logo"
+                style={{ height: "40px", width: "60px" }}
+                loading="lazy"
+              />
               <Typography level="title-lg">Maha Tours and Travels</Typography>
             </Box>
             <ColorSchemeToggle />

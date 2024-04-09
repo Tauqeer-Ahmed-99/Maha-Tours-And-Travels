@@ -18,7 +18,7 @@ import DialogTitle from "@mui/joy/DialogTitle";
 
 import DarkModeRoundedIcon from "@mui/icons-material/DarkModeRounded";
 import LightModeRoundedIcon from "@mui/icons-material/LightModeRounded";
-import LanguageRoundedIcon from "@mui/icons-material/LanguageRounded";
+import MahaToursLogo from "@src/assets/maha-tours-logo.jpeg";
 import SettingsRoundedIcon from "@mui/icons-material/SettingsRounded";
 import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
@@ -82,7 +82,7 @@ export default function Header() {
         spacing={1}
         sx={{ display: { xs: "none", sm: "flex" } }}
       >
-        <IconButton
+        {/* <IconButton
           size="md"
           variant="outlined"
           color="neutral"
@@ -93,7 +93,13 @@ export default function Header() {
           disabled
         >
           <LanguageRoundedIcon />
-        </IconButton>
+        </IconButton> */}
+        <img
+          src={MahaToursLogo}
+          alt="Logo"
+          style={{ height: "40px", width: "60px" }}
+          loading="lazy"
+        />
         <Button
           variant="plain"
           color="neutral"

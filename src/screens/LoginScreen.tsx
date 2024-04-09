@@ -6,12 +6,11 @@ import Button from "@mui/joy/Button";
 import Checkbox from "@mui/joy/Checkbox";
 import FormControl from "@mui/joy/FormControl";
 import FormLabel from "@mui/joy/FormLabel";
-import IconButton from "@mui/joy/IconButton";
 import Input from "@mui/joy/Input";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 import FormHelperText from "@mui/joy/FormHelperText";
-import BadgeRoundedIcon from "@mui/icons-material/BadgeRounded";
+import MahaToursLogo from "@src/assets/maha-tours-logo.jpeg";
 import InfoOutlined from "@mui/icons-material/InfoOutlined";
 import useForm, { FieldValue } from "@src/hooks/useForm";
 import ColorSchemeToggle from "@src/components/ColorSchemeToggle";
@@ -68,7 +67,7 @@ const LoginScreen = () => {
       authContext.signin(
         (formValues.email as string).trim(),
         (formValues.password as string).trim(),
-        formValues.remember as boolean,
+        formValues.remember as boolean
       );
     }
   };
@@ -78,7 +77,7 @@ const LoginScreen = () => {
     const isEmailValid = formErrors.email === false;
     if (isEmailValid) {
       await authContext.sendPasswordRecoveryEmail(
-        (formValues.email as string).trim(),
+        (formValues.email as string).trim()
       );
 
       setRecoveryEmailSent(true);
@@ -130,9 +129,12 @@ const LoginScreen = () => {
             }}
           >
             <Box sx={{ gap: 2, display: "flex", alignItems: "center" }}>
-              <IconButton variant="soft" color="primary" size="sm">
-                <BadgeRoundedIcon />
-              </IconButton>
+              <img
+                src={MahaToursLogo}
+                alt="Logo"
+                style={{ height: "40px", width: "60px" }}
+                loading="lazy"
+              />
               <Typography level="title-lg">Maha Tours and Travels</Typography>
             </Box>
             <ColorSchemeToggle />
