@@ -15,8 +15,6 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const authContext = useContext(AuthContext);
 
-  console.log(invoices);
-
   const loadInvoices = async () => {
     try {
       setIsLoading(true);

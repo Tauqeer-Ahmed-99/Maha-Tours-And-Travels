@@ -12,7 +12,8 @@ import Typography from "@mui/joy/Typography";
 import Card from "@mui/joy/Card";
 import CardActions from "@mui/joy/CardActions";
 import CardOverflow from "@mui/joy/CardOverflow";
-import { Avatar, CircularProgress } from "@mui/joy";
+import Avatar from "@mui/joy/Avatar";
+import CircularProgress from "@mui/joy/CircularProgress";
 
 import EmailRoundedIcon from "@mui/icons-material/EmailRounded";
 import EditRoundedIcon from "@mui/icons-material/EditRounded";

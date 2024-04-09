@@ -1,5 +1,5 @@
-import { Typography } from "@mui/joy";
 import Box from "@mui/joy/Box";
+import Typography from "@mui/joy/Typography";
 import { useLocation } from "react-router-dom";
 
 const NotFoundScreen = ({ isAutomated = true }: { isAutomated?: boolean }) => {
