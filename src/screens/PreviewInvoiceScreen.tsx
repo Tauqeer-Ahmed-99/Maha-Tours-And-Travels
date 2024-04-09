@@ -168,7 +168,13 @@ const PreviewInvoiceScreen = () => {
       <PDFViewer style={{ width: "100%", height: "100%" }}>
         <Document title={invoice.travellingType + "-" + invoice.invoiceNumber}>
           <Page size="A4" style={{ padding: 20 }}>
-            <Text style={{ textAlign: "center", fontSize: "10px" }}>
+            <Text
+              style={{
+                textAlign: "center",
+                fontSize: "8px",
+                marginBottom: "2px",
+              }}
+            >
               Tax Invoice
             </Text>
             <View
@@ -186,7 +192,7 @@ const PreviewInvoiceScreen = () => {
               >
                 <View
                   style={{
-                    width: "50%",
+                    width: "80%",
                     borderRight: "1px solid black",
                     display: "flex",
                     flexDirection: "row",
@@ -201,40 +207,58 @@ const PreviewInvoiceScreen = () => {
                     <Text style={{ fontSize: "12px", fontWeight: 800 }}>
                       MAHA TOURS AND TRAVELS
                     </Text>
-                    <Text style={{ marginVertical: "2px" }}>
-                      SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA
+                    <Text style={{ marginTop: "4px" }}>
+                      SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA, CO.OP. HSG
+                      SOC, DR. AMBEDKAR ROAD,
                     </Text>
-                    <Text>CO.OP. HSG SOC, DR. AMBEDKAR ROAD, KALYAN</Text>
                     <Text style={{ marginVertical: "2px" }}>
-                      WEST, THANE, MAHARASHTRA, 421301
+                      KALYAN WEST, THANE, MAHARASHTRA, 421301
                     </Text>
-                    <Text>Phone No.: 9819195267</Text>
-                    <Text style={{ marginVertical: "2px" }}>
-                      Email.: mahatoursntravels@gmail.com
-                    </Text>
-                    <Text>GSTIN.: 27ABHFM7829H1ZU</Text>
-                    <Text style={{ marginVertical: "2px" }}>
-                      State.: 27-Maharashtra
-                    </Text>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                        marginVertical: "4px",
+                      }}
+                    >
+                      <Text style={{ width: "50%" }}>
+                        Phone No.: 9819195267
+                      </Text>
+                      <Text style={{ width: "50%" }}>
+                        Email.: mahatoursntravels@gmail.com
+                      </Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Text style={{ width: "50%" }}>
+                        GSTIN.: 27ABHFM7829H1ZU
+                      </Text>
+                      <Text style={{ width: "50%" }}>
+                        State.: 27-Maharashtra
+                      </Text>
+                    </View>
                   </View>
                 </View>
                 <View
                   style={{
-                    width: "50%",
+                    width: "20%",
                   }}
                 >
                   <View
                     style={{
                       width: "100%",
-                      display: "flex",
-                      flexDirection: "row",
-                      borderBottom: "1px solid black",
                     }}
                   >
                     <View
                       style={{
-                        width: "50%",
-                        borderRight: "1px solid black",
+                        width: "100%",
+                        borderBottom: "1px solid black",
                         padding: "6px",
                       }}
                     >
@@ -249,7 +273,7 @@ const PreviewInvoiceScreen = () => {
                         {invoice.travellingType + "-" + invoice.invoiceNumber}
                       </Text>
                     </View>
-                    <View style={{ width: "50%", padding: "6px" }}>
+                    <View style={{ width: "100%", padding: "6px" }}>
                       <Text>Date</Text>
                       <Text
                         style={{
@@ -264,34 +288,81 @@ const PreviewInvoiceScreen = () => {
                   </View>
                 </View>
               </View>
-              <View style={{ padding: "6px" }}>
-                <Text>Bill To</Text>
-                <Text
+              <View
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  borderBottom: "1px solid black",
+                }}
+              >
+                <View
                   style={{
-                    fontSize: "10px",
-                    fontWeight: 800,
-                    marginVertical: "2px",
+                    padding: "6px",
+                    width: "50%",
+                    borderRight: "1px solid black",
                   }}
                 >
-                  {invoice.billToCustomer.name}
-                </Text>
-                <Text>{invoice.billToCustomer.addressLine1}</Text>
-                <Text style={{ marginVertical: "2px" }}>
-                  {invoice.billToCustomer.addressLine2}
-                </Text>
-                <Text>{invoice.billToCustomer.city}</Text>
-                <Text style={{ marginVertical: "2px" }}>
-                  {invoice.billToCustomer.state}
-                </Text>
-                <Text>{invoice.billToCustomer.country}</Text>
-                <Text style={{ marginVertical: "2px" }}>
-                  Contact No.: {invoice.billToCustomer.contact}
-                </Text>
-                <Text>Passport No.: {invoice.billToCustomer.passport}</Text>
-                <Text style={{ marginVertical: "2px" }}>
-                  Aadhar No.: {invoice.billToCustomer.aadhar}
-                </Text>
-                <Text>PAN No.: {invoice.billToCustomer.pan}</Text>
+                  <Text style={{ marginBottom: "6px" }}>Bill To</Text>
+                  <Text
+                    style={{
+                      fontSize: "10px",
+                      fontWeight: 800,
+                      marginBottom: "6px",
+                    }}
+                  >
+                    {invoice.billToCustomer.name}
+                  </Text>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Text style={{ width: "60px" }}>Contact No.:</Text>
+                    <Text>{invoice.billToCustomer.contact}</Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginVertical: "4px",
+                    }}
+                  >
+                    <Text style={{ width: "60px" }}>Passport No.:</Text>
+                    <Text>{invoice.billToCustomer.passport}</Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                    }}
+                  >
+                    <Text style={{ width: "60px" }}>Aadhar No.:</Text>
+                    <Text>{invoice.billToCustomer.aadhar}</Text>
+                  </View>
+                  <View
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      marginTop: "4px",
+                    }}
+                  >
+                    <Text style={{ width: "60px" }}>PAN No.:</Text>
+                    <Text>{invoice.billToCustomer.pan}</Text>
+                  </View>
+                </View>
+                <View style={{ padding: "6px", width: "50%" }}>
+                  <Text style={{ marginBottom: "6px" }}>Address</Text>
+                  <Text>{invoice.billToCustomer.addressLine1}</Text>
+                  <Text style={{ marginVertical: "4px" }}>
+                    {invoice.billToCustomer.addressLine2}
+                  </Text>
+                  <Text>{invoice.billToCustomer.city}</Text>
+                  <Text style={{ marginVertical: "4px" }}>
+                    {invoice.billToCustomer.state}
+                  </Text>
+                  <Text>{invoice.billToCustomer.country}</Text>
+                </View>
               </View>
               <View>
                 <Text style={{ padding: "6px" }}>Customers</Text>
