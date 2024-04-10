@@ -18,7 +18,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
   const amountReceived = useMemo(() => {
     let amountReceived = 0;
     row.payments.forEach(
-      (payment) => (amountReceived += parseFloat(payment.amount)),
+      (payment) => (amountReceived += parseFloat(payment.amount))
     );
     return amountReceived;
   }, [row]);
@@ -26,7 +26,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
   const handleInvoiceRowClick = () => {
     const url = Routes.InvoiceDetailsScreen.replace(
       ":invoiceId",
-      row.invoiceId as string,
+      row.invoiceId as string
     );
 
     navigate(url);
@@ -68,7 +68,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
                 boxShadow: "inset 0 3px 6px 0 rgba(0 0 0 / 0.08)",
               }}
             >
-              <Typography level="body-lg" component="div">
+              <Typography level="title-sm" component="div">
                 Payment History
               </Typography>
               {row.payments.length > 0 ? (
@@ -100,7 +100,9 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
                   </tbody>
                 </Table>
               ) : (
-                <Typography my={2}>No payment history found.</Typography>
+                <Typography my={2} level="body-sm">
+                  No payment history found.
+                </Typography>
               )}
             </Sheet>
           )}

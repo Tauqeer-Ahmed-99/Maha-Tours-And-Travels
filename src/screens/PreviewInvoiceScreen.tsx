@@ -13,7 +13,6 @@ import RupeeSymbol from "@src/assets/svg/rupee.png";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
 import { useParams } from "react-router-dom";
-
 import NotFoundScreen from "./NotFoundScreen";
 import { convertAmountInWords } from "@src/utilities/utils";
 
@@ -25,6 +24,13 @@ type ColumnDef = {
   includeRupeeSymbol?: boolean;
   textAlign?: "left" | "center" | "right" | "justify";
 };
+
+const BORDER = "1px solid black";
+const MARGIN_THIN = "2px";
+const MARGIN_MEDIUM = "4px";
+const MARGIN_THICK = "6px";
+const PADDING_THIN = "2px";
+const PADDING_THICK = "6px";
 
 const columnDefs: { [key in Tables]: ColumnDef[] } = {
   customers: [
@@ -77,11 +83,10 @@ const TableRow = ({
           key={column.label + index + column.width}
           style={{
             width: column.width,
-            padding: "2px",
-            borderTop: isHeading ? "1px solid black" : undefined,
-            borderRight:
-              index !== columns.length - 1 ? "1px solid black" : undefined,
-            borderBottom: "1px solid black",
+            padding: PADDING_THIN,
+            borderTop: isHeading ? BORDER : undefined,
+            borderRight: index !== columns.length - 1 ? BORDER : undefined,
+            borderBottom: BORDER,
             textAlign: column.textAlign ?? "right",
             fontWeight: isHeading ? 1000 : undefined,
             fontSize: isHeading ? "8px" : undefined,
@@ -98,17 +103,20 @@ const TableRow = ({
 
 const Watermark = () => {
   return (
-    <View>
+    <View
+      style={{
+        position: "absolute",
+        top: "50%",
+        left: "45%",
+        transform: "translate(-50%, -50%)",
+        opacity: 0.2,
+      }}
+    >
       <Image
         src={MahaToursLogo}
         style={{
           height: "150px",
           width: "200px",
-          position: "absolute",
-          top: "-200px",
-          left: "40%",
-          transform: "translate(-50%, -50%)",
-          opacity: 0.2,
         }}
       />
     </View>
@@ -192,14 +200,14 @@ const PreviewInvoiceScreen = () => {
                 style={{
                   textAlign: "center",
                   fontSize: "8px",
-                  marginBottom: "2px",
+                  marginBottom: MARGIN_THIN,
                 }}
               >
                 Tax Invoice
               </Text>
               <View
                 style={{
-                  border: "1px solid black",
+                  border: BORDER,
                   fontSize: "8px",
                 }}
               >
@@ -207,13 +215,13 @@ const PreviewInvoiceScreen = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    borderBottom: "1px solid black",
+                    borderBottom: BORDER,
                   }}
                 >
                   <View
                     style={{
                       width: "80%",
-                      borderRight: "1px solid black",
+                      borderRight: BORDER,
                       display: "flex",
                       flexDirection: "row",
                       alignItems: "center",
@@ -221,17 +229,21 @@ const PreviewInvoiceScreen = () => {
                   >
                     <Image
                       src={MahaToursLogo}
-                      style={{ height: "50px", width: "90px", margin: "6px " }}
+                      style={{
+                        height: "50px",
+                        width: "90px",
+                        margin: MARGIN_THICK,
+                      }}
                     />
-                    <View style={{ margin: "6px" }}>
+                    <View style={{ margin: MARGIN_THICK }}>
                       <Text style={{ fontSize: "12px", fontWeight: 800 }}>
                         MAHA TOURS AND TRAVELS
                       </Text>
-                      <Text style={{ marginTop: "4px" }}>
+                      <Text style={{ marginTop: MARGIN_MEDIUM }}>
                         SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA, CO.OP. HSG
                         SOC, DR. AMBEDKAR
                       </Text>
-                      <Text style={{ marginVertical: "2px" }}>
+                      <Text style={{ marginVertical: PADDING_THIN }}>
                         ROAD, KALYAN WEST, THANE, MAHARASHTRA, 421301
                       </Text>
                       <View
@@ -239,7 +251,7 @@ const PreviewInvoiceScreen = () => {
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-between",
-                          marginVertical: "4px",
+                          marginVertical: MARGIN_MEDIUM,
                         }}
                       >
                         <Text style={{ width: "50%" }}>
@@ -278,8 +290,8 @@ const PreviewInvoiceScreen = () => {
                       <View
                         style={{
                           width: "100%",
-                          borderBottom: "1px solid black",
-                          padding: "6px",
+                          borderBottom: BORDER,
+                          padding: PADDING_THICK,
                         }}
                       >
                         <Text>Invoice No.</Text>
@@ -287,19 +299,19 @@ const PreviewInvoiceScreen = () => {
                           style={{
                             fontSize: "12px",
                             fontWeight: 800,
-                            marginTop: "4px",
+                            marginTop: MARGIN_MEDIUM,
                           }}
                         >
                           {invoice.travellingType + "-" + invoice.invoiceNumber}
                         </Text>
                       </View>
-                      <View style={{ width: "100%", padding: "6px" }}>
+                      <View style={{ width: "100%", padding: PADDING_THICK }}>
                         <Text>Date</Text>
                         <Text
                           style={{
                             fontSize: "12px",
                             fontWeight: 800,
-                            marginTop: "4px",
+                            marginTop: MARGIN_MEDIUM,
                           }}
                         >
                           {invoice.date.toDateString()}
@@ -312,22 +324,22 @@ const PreviewInvoiceScreen = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    borderBottom: "1px solid black",
+                    borderBottom: BORDER,
                   }}
                 >
                   <View
                     style={{
-                      padding: "6px",
+                      padding: PADDING_THICK,
                       width: "50%",
-                      borderRight: "1px solid black",
+                      borderRight: BORDER,
                     }}
                   >
-                    <Text style={{ marginBottom: "6px" }}>Bill To</Text>
+                    <Text style={{ marginBottom: MARGIN_THICK }}>Bill To</Text>
                     <Text
                       style={{
                         fontSize: "10px",
                         fontWeight: 800,
-                        marginBottom: "6px",
+                        marginBottom: MARGIN_THICK,
                       }}
                     >
                       {invoice.billToCustomer.name}
@@ -345,7 +357,7 @@ const PreviewInvoiceScreen = () => {
                       style={{
                         display: "flex",
                         flexDirection: "row",
-                        marginVertical: "4px",
+                        marginVertical: MARGIN_MEDIUM,
                       }}
                     >
                       <Text style={{ width: "60px" }}>Passport No.:</Text>
@@ -364,28 +376,28 @@ const PreviewInvoiceScreen = () => {
                       style={{
                         display: "flex",
                         flexDirection: "row",
-                        marginTop: "4px",
+                        marginTop: MARGIN_MEDIUM,
                       }}
                     >
                       <Text style={{ width: "60px" }}>PAN No.:</Text>
                       <Text>{invoice.billToCustomer.pan}</Text>
                     </View>
                   </View>
-                  <View style={{ padding: "6px", width: "50%" }}>
-                    <Text style={{ marginBottom: "6px" }}>Address</Text>
+                  <View style={{ padding: PADDING_THICK, width: "50%" }}>
+                    <Text style={{ marginBottom: MARGIN_THICK }}>Address</Text>
                     <Text>{invoice.billToCustomer.addressLine1}</Text>
-                    <Text style={{ marginVertical: "4px" }}>
+                    <Text style={{ marginVertical: MARGIN_MEDIUM }}>
                       {invoice.billToCustomer.addressLine2}
                     </Text>
                     <Text>{invoice.billToCustomer.city}</Text>
-                    <Text style={{ marginVertical: "4px" }}>
+                    <Text style={{ marginVertical: MARGIN_MEDIUM }}>
                       {invoice.billToCustomer.state}
                     </Text>
                     <Text>{invoice.billToCustomer.country}</Text>
                   </View>
                 </View>
                 <View>
-                  <Text style={{ padding: "6px" }}>Customers</Text>
+                  <Text style={{ padding: PADDING_THICK }}>Customers</Text>
                   <TableRow tableName="customers" isHeading />
                   {customersData.map((customerData, index) => (
                     <TableRow
@@ -396,7 +408,7 @@ const PreviewInvoiceScreen = () => {
                   ))}
                 </View>
                 <View>
-                  <Text style={{ padding: "6px" }}>Amounts</Text>
+                  <Text style={{ padding: PADDING_THICK }}>Amounts</Text>
                   <TableRow tableName="amounts" isHeading />
                   {amountsData.map((amountsData, index) => (
                     <TableRow
@@ -407,7 +419,7 @@ const PreviewInvoiceScreen = () => {
                   ))}
                 </View>
                 <View>
-                  <Text style={{ padding: "6px" }}>Payments</Text>
+                  <Text style={{ padding: PADDING_THICK }}>Payments</Text>
                   <TableRow tableName="payments" isHeading />
                   {paymentsData?.map((paymentsData, index) => (
                     <TableRow
@@ -421,14 +433,14 @@ const PreviewInvoiceScreen = () => {
                   style={{
                     display: "flex",
                     flexDirection: "row",
-                    borderBottom: "1px solid black",
+                    borderBottom: BORDER,
                   }}
                 >
                   <View
                     style={{
                       width: "50%",
-                      borderRight: "1px solid black",
-                      padding: "6px",
+                      borderRight: BORDER,
+                      padding: PADDING_THICK,
                     }}
                   >
                     <Text>Invoice Amount In Words</Text>
@@ -439,11 +451,11 @@ const PreviewInvoiceScreen = () => {
                   <View style={{ width: "50%" }}>
                     <View
                       style={{
-                        paddingLeft: "6px",
-                        paddingTop: "6px",
-                        paddingBottom: "6px",
-                        paddingRight: "2px",
-                        borderBottom: "1px solid black",
+                        paddingLeft: PADDING_THICK,
+                        paddingTop: PADDING_THICK,
+                        paddingBottom: PADDING_THICK,
+                        paddingRight: PADDING_THIN,
+                        borderBottom: BORDER,
                       }}
                     >
                       <Text>Amounts</Text>
@@ -452,7 +464,7 @@ const PreviewInvoiceScreen = () => {
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-between",
-                          marginVertical: "6px",
+                          marginVertical: MARGIN_THICK,
                         }}
                       >
                         <Text>Sub Total</Text>
@@ -477,11 +489,11 @@ const PreviewInvoiceScreen = () => {
                     </View>
                     <View
                       style={{
-                        paddingLeft: "6px",
-                        paddingTop: "6px",
-                        paddingBottom: "6px",
-                        paddingRight: "2px",
-                        borderBottom: "1px solid black",
+                        paddingLeft: PADDING_THICK,
+                        paddingTop: PADDING_THICK,
+                        paddingBottom: PADDING_THICK,
+                        paddingRight: PADDING_THIN,
+                        borderBottom: BORDER,
                       }}
                     >
                       <View
@@ -502,8 +514,8 @@ const PreviewInvoiceScreen = () => {
                           display: "flex",
                           flexDirection: "row",
                           justifyContent: "space-between",
-                          marginVertical: "2px",
-                          marginTop: "6px",
+                          marginVertical: MARGIN_THIN,
+                          marginTop: MARGIN_THICK,
                         }}
                       >
                         <Text>Received</Text>
@@ -518,10 +530,10 @@ const PreviewInvoiceScreen = () => {
                         display: "flex",
                         flexDirection: "row",
                         justifyContent: "space-between",
-                        paddingLeft: "6px",
-                        paddingTop: "6px",
-                        paddingBottom: "6px",
-                        paddingRight: "2px",
+                        paddingLeft: PADDING_THICK,
+                        paddingTop: PADDING_THICK,
+                        paddingBottom: PADDING_THICK,
+                        paddingRight: PADDING_THIN,
                       }}
                     >
                       <Text>Balance</Text>
@@ -539,14 +551,14 @@ const PreviewInvoiceScreen = () => {
                   <View
                     style={{
                       width: "50%",
-                      padding: "6px",
-                      borderRight: "1px solid black",
+                      padding: PADDING_THICK,
+                      borderRight: BORDER,
                     }}
                   >
                     <Text>Terms and Conditions</Text>
                     <Text>Thanks for doing business with us!!!</Text>
                   </View>
-                  <View style={{ width: "50%", padding: "6px" }}>
+                  <View style={{ width: "50%", padding: PADDING_THICK }}>
                     <Text style={{ textAlign: "center", marginBottom: "50px" }}>
                       For : MAHA TOURS AND TRAVELS
                     </Text>

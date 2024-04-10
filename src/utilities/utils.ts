@@ -48,31 +48,33 @@ const parsePayment = ([id, rawPayment]: [string, any]) => {
 
 export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
   rawInvoices
-    ? Object.entries(rawInvoices).map(
-        ([invoiceId, rawInvoice]) =>
-          ({
-            invoiceId,
-            invoiceNumber: rawInvoice.invoiceNumber,
-            travellingType: rawInvoice.travellingType as TravellingType,
-            billToCustomer: parseCustomer([
+    ? Object.entries(rawInvoices)
+        .map(
+          ([invoiceId, rawInvoice]) =>
+            ({
               invoiceId,
-              rawInvoice.billToCustomer,
-            ]),
-            isBillToATraveller: rawInvoice.isBillToATraveller,
-            date: new Date(rawInvoice.date),
-            amounts: parseAmounts(rawInvoice.amounts),
-            customers: rawInvoice.customers
-              ? Object.entries(rawInvoice.customers).map((rawCustomer) => {
-                  return parseCustomer(rawCustomer);
-                })
-              : [],
-            payments: rawInvoice.payments
-              ? Object.entries(rawInvoice.payments).map((rawPayment) =>
-                  parsePayment(rawPayment)
-                )
-              : [],
-          } as Invoice)
-      )
+              invoiceNumber: rawInvoice.invoiceNumber,
+              travellingType: rawInvoice.travellingType as TravellingType,
+              billToCustomer: parseCustomer([
+                invoiceId,
+                rawInvoice.billToCustomer,
+              ]),
+              isBillToATraveller: rawInvoice.isBillToATraveller,
+              date: new Date(rawInvoice.date),
+              amounts: parseAmounts(rawInvoice.amounts),
+              customers: rawInvoice.customers
+                ? Object.entries(rawInvoice.customers).map((rawCustomer) => {
+                    return parseCustomer(rawCustomer);
+                  })
+                : [],
+              payments: rawInvoice.payments
+                ? Object.entries(rawInvoice.payments).map((rawPayment) =>
+                    parsePayment(rawPayment)
+                  )
+                : [],
+            } as Invoice)
+        )
+        .sort((a, b) => a.invoiceNumber - b.invoiceNumber)
     : [];
 
 export function convertAmountInWords(amount: any) {

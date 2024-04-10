@@ -9,20 +9,35 @@ import { Routes } from "@src/routes/routes";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import InvoiceInput from "@src/components/InvoiceInput";
 import InvoicesSkeleton from "@src/components/InvoicesSkeleton";
+import { Invoice } from "@src/context/invoices/invoicesTypes";
+import usePagination from "@src/hooks/usePagination";
+import InvoicesTablePagination from "@src/components/InvoicesTablePagination";
 
 const InvoicesScreen = () => {
   const navigate = useNavigate();
 
   const invoicesContext = useContext(InvoicesContext);
   const [filteredInvoices, setFilteredInvoices] = useState(
-    invoicesContext.invoices,
+    invoicesContext.invoices
   );
+
+  const {
+    page,
+    rowsPerPage,
+    rowsCount,
+    totalNumberOfPages,
+    currentShowingMax,
+    currentShowingMin,
+    handleChangePage,
+    handleChangeRowsPerPage,
+    activeRows,
+  } = usePagination<Invoice>(1, 10, filteredInvoices);
 
   const onNewInvoiceClick = () => {
     invoicesContext.createNewInvoice();
     const route = (Routes.InvoiceDetailsScreen as string).replace(
       ":invoiceId",
-      "new",
+      "new"
     );
     navigate(route);
   };
@@ -37,8 +52,8 @@ const InvoicesScreen = () => {
             .includes(term) ||
           invoice.billToCustomer.name.toLocaleLowerCase().includes(term) ||
           invoice.customers.some((customer) =>
-            customer.name.toLocaleLowerCase().includes(term),
-          ),
+            customer.name.toLocaleLowerCase().includes(term)
+          )
       );
       setFilteredInvoices(filteredInvocies);
     } else {
@@ -80,7 +95,19 @@ const InvoicesScreen = () => {
         {invoicesContext.isLoading ? (
           <InvoicesSkeleton />
         ) : filteredInvoices.length > 0 ? (
-          <InvoiceTabel invoices={filteredInvoices} />
+          <>
+            <InvoiceTabel invoices={activeRows} />
+            <InvoicesTablePagination
+              page={page}
+              rowsPerPage={rowsPerPage}
+              rowsCount={rowsCount}
+              totalNumberOfPages={totalNumberOfPages}
+              currentShowingMax={currentShowingMax}
+              currentShowingMin={currentShowingMin}
+              handleChangePage={handleChangePage}
+              handleChangeRowsPerPage={handleChangeRowsPerPage}
+            />
+          </>
         ) : (
           <Typography textAlign="center">
             Invoices not found. Create a new one.
