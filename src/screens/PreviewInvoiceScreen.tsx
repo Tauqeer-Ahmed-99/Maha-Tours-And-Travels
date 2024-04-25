@@ -9,6 +9,7 @@ import {
   Image,
 } from "@react-pdf/renderer";
 import MahaToursLogo from "@src/assets/maha-tours-logo.jpeg";
+import MahaToursLogoBW from "@src/assets/maha-tours-logo-b&w.jpeg";
 import RupeeSymbol from "@src/assets/svg/rupee.png";
 import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
@@ -106,17 +107,17 @@ const Watermark = () => {
     <View
       style={{
         position: "absolute",
-        top: "50%",
-        left: "45%",
+        top: "40%",
+        left: "30%",
         transform: "translate(-50%, -50%)",
         opacity: 0.2,
       }}
     >
       <Image
-        src={MahaToursLogo}
+        src={MahaToursLogoBW}
         style={{
-          height: "150px",
-          width: "200px",
+          height: "300px",
+          width: "400px",
         }}
       />
     </View>
@@ -255,7 +256,7 @@ const PreviewInvoiceScreen = () => {
                         }}
                       >
                         <Text style={{ width: "50%" }}>
-                          Phone No.: 9819195267
+                          Phone No.: 9029080708
                         </Text>
                         <Text style={{ width: "50%" }}>
                           Email.: mahatoursntravels@gmail.com
