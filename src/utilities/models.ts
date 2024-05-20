@@ -5,6 +5,7 @@ export class Customer {
   customerId?: string;
   name: string;
   contact: string;
+  email: string;
   passport: string;
   pan: string;
   aadhar: string;
@@ -16,6 +17,7 @@ export class Customer {
   constructor(
     name?: string,
     contact?: string,
+    email?: string,
     passport?: string,
     pan?: string,
     aadhar?: string,
@@ -27,6 +29,7 @@ export class Customer {
   ) {
     this.name = name ?? "";
     this.contact = contact ?? "";
+    this.email = email ?? "";
     this.passport = passport ?? "";
     this.pan = pan ?? "";
     this.aadhar = aadhar ?? "";
