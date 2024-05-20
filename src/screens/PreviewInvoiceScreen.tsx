@@ -130,7 +130,7 @@ const PreviewInvoiceScreen = () => {
   const invoicesContext = useContext(InvoicesContext);
 
   const invoice = invoicesContext.invoices.find(
-    (_invoice) => _invoice.invoiceId === invoiceId
+    (_invoice) => _invoice.invoiceId === invoiceId,
   );
 
   if (!invoice) {
@@ -155,10 +155,12 @@ const PreviewInvoiceScreen = () => {
   if (invoice) {
     customersData = [
       ...customersData,
+      // eslint-disable-next-line no-unsafe-optional-chaining
       ...(invoice as Invoice)?.customers.map((_customer, index) => [
         `${index + (invoice?.isBillToATraveller ? 2 : 1)}`,
         _customer.name,
         _customer.contact,
+        _customer.email,
         _customer.aadhar,
         _customer.pan,
         _customer.passport,
@@ -184,7 +186,7 @@ const PreviewInvoiceScreen = () => {
       `${_payment.mode} - Ending with - ${_payment.paymentNumber}`,
       _payment.date.toDateString(),
       `${parseFloat(_payment.amount).toFixed(2)}`,
-    ]
+    ],
   );
 
   const amountReceived = invoice.payments
@@ -241,8 +243,8 @@ const PreviewInvoiceScreen = () => {
                         MAHA TOURS AND TRAVELS
                       </Text>
                       <Text style={{ marginTop: MARGIN_MEDIUM }}>
-                        SHOP NO. 04, DATTA APARTMENT, AVADHUTCHINTA, CO.OP. HSG
-                        SOC, DR. AMBEDKAR
+                        SHOP NO. 04, DATTA APARTMENT, AVADHUT CHINTAN, CO.OP.
+                        HSG SOC, DR. AMBEDKAR
                       </Text>
                       <Text style={{ marginVertical: PADDING_THIN }}>
                         ROAD, KALYAN WEST, THANE, MAHARASHTRA, 421301
@@ -361,6 +363,15 @@ const PreviewInvoiceScreen = () => {
                         marginVertical: MARGIN_MEDIUM,
                       }}
                     >
+                      <Text style={{ width: "60px" }}>Email Add.:</Text>
+                      <Text>{invoice.billToCustomer.email}</Text>
+                    </View>
+                    <View
+                      style={{
+                        display: "flex",
+                        flexDirection: "row",
+                      }}
+                    >
                       <Text style={{ width: "60px" }}>Passport No.:</Text>
                       <Text>{invoice.billToCustomer.passport}</Text>
                     </View>
@@ -368,6 +379,7 @@ const PreviewInvoiceScreen = () => {
                       style={{
                         display: "flex",
                         flexDirection: "row",
+                        marginVertical: MARGIN_MEDIUM,
                       }}
                     >
                       <Text style={{ width: "60px" }}>Aadhar No.:</Text>
@@ -377,7 +389,6 @@ const PreviewInvoiceScreen = () => {
                       style={{
                         display: "flex",
                         flexDirection: "row",
-                        marginTop: MARGIN_MEDIUM,
                       }}
                     >
                       <Text style={{ width: "60px" }}>PAN No.:</Text>
@@ -575,7 +586,7 @@ const PreviewInvoiceScreen = () => {
                 {child}
                 <Watermark />
               </Page>
-            )
+            ),
           )}
         </Document>
       </PDFViewer>

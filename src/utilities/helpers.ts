@@ -7,6 +7,8 @@ export const getCustomerFieldLabel = (
       return isBillToCustomer ? "Bill To" : "Customer Name";
     case "contact":
       return "Contact";
+    case "email":
+      return "Email";
     case "passport":
       return "Passport Number";
     case "pan":
