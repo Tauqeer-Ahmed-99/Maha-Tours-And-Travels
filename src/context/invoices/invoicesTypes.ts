@@ -17,7 +17,7 @@ export interface InvoiceContext {
   invoices: Invoice[];
   isLoading: boolean;
   isError: boolean;
-  errorMessage: string;
+  errorMessage: string; 
   createNewInvoice: () => Promise<Response>;
   saveInvoice: (invoice: Invoice) => Promise<Response>;
   addCustomer: (invoice: Invoice, customer: Customer) => Promise<Response>;
