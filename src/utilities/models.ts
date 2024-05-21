@@ -100,6 +100,26 @@ export class Payment {
   }
 }
 
+export class ReturnPayment {
+  paymentId?: string;
+  paymentNumber: number;
+  mode: PaymentMode;
+  amount: string;
+  date: Date;
+
+  constructor(
+    paymentNumber?: number,
+    mode?: PaymentMode,
+    amount?: string,
+    date?: Date,
+  ) {
+    this.paymentNumber = paymentNumber ?? 0;
+    this.mode = mode ?? PaymentMode.CHEQUE;
+    this.amount = amount ?? "0";
+    this.date = date ?? new Date();
+  }
+}
+
 export class Response {
   status: ResponseStatus;
   response?: AxiosResponse;

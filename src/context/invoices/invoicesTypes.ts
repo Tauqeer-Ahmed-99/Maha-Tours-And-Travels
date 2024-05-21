@@ -9,6 +9,7 @@ export interface Invoice {
   isBillToATraveller: boolean;
   customers: Customer[];
   payments: Payment[];
+  returnPayments: Payment[];
   amounts: Amounts;
   date: Date;
 }
@@ -23,8 +24,9 @@ export interface InvoiceContext {
   addCustomer: (invoice: Invoice, customer: Customer) => Promise<Response>;
   editCustomer: (invoice: Invoice, customer: Customer) => Promise<Response>;
   saveAmounts: (invoice: Invoice, amounts: Amounts) => Promise<Response>;
-  addPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
-  editPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
+  addPayment: (invoice: Invoice, payment: Payment, returnPayment?: boolean) => Promise<Response>;
+  addReturnPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
+  editPayment: (invoice: Invoice, payment: Payment, returnPayment?: boolean) => Promise<Response>;
   removeCustomer: (invoice: Invoice, customerId: string) => Promise<Response>;
   removePayment: (invoice: Invoice, paymentId: string) => Promise<Response>;
   deleteInvoice: (invoice: Invoice) => Promise<Response>;

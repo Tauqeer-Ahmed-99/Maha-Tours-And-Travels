@@ -20,6 +20,8 @@ import { Routes } from "@src/routes/routes";
 import LoadingDialog from "@src/components/LoadingDialog";
 import useSaveShortcut from "@src/hooks/useSaveShortcut";
 import NotFoundScreen from "./NotFoundScreen";
+import ReturnPaymentsTable from "@src/components/ReturnPaymentsTable";
+import { getPaymentType } from "@src/utilities/utils";
 
 const InvoiceDetailsScreen = () => {
   const { invoiceId } = useParams();
@@ -34,6 +36,7 @@ const InvoiceDetailsScreen = () => {
   const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
   const [customerIndex, setCustomerIndex] = useState<number | null>(null);
   const [isAddingPayment, setIsAddingPayment] = useState(false);
+  const [isAddingReturnPayment, setIsAddingReturnPayment] = useState(false);
   const [isPaymentConfirmationOpen, setIsPaymentConfirmationOpen] =
     useState(false);
   const [paymentIndex, setPaymentIndex] = useState<number | null>(null);
@@ -124,13 +127,24 @@ const InvoiceDetailsScreen = () => {
     setCustomerIndex(null);
   };
 
-  const onAddPayment = () => {
+  const onAddPayment = (returnPayemnt: boolean | false) => {
+    const Type = getPaymentType(returnPayemnt);
     setInvoice((prevInvoice) =>
       prevInvoice
-        ? { ...prevInvoice, payments: [...prevInvoice.payments, new Payment()] }
+        ? { ...prevInvoice, [Type]: [...prevInvoice[Type], new Payment()] }
         : prevInvoice
     );
     setIsAddingPayment(true);
+    setCustomerIndex(null);
+  };
+
+  const onAddReturnPayment = () => {
+    setInvoice((prevInvoice) =>
+      prevInvoice
+        ? { ...prevInvoice, returnPayments: [...prevInvoice.returnPayments, new Payment()] }
+        : prevInvoice
+    );
+    setIsAddingReturnPayment(true);
     setCustomerIndex(null);
   };
 
@@ -253,10 +267,11 @@ const InvoiceDetailsScreen = () => {
     setIsAddingCustomer(false);
   };
 
-  const onCancelSavePayment = () => {
+  const onCancelSavePayment = (returnPayemnt: boolean | false) => {
+    const type = getPaymentType(returnPayemnt);
     setInvoice((prevInvoice) =>
       prevInvoice
-        ? { ...prevInvoice, payments: prevInvoice.payments.slice(0, -1) }
+        ? { ...prevInvoice, [type]: prevInvoice[type].slice(0, -1) }
         : prevInvoice
     );
     setIsAddingPayment(false);
@@ -413,6 +428,18 @@ const InvoiceDetailsScreen = () => {
         paymentIndex={paymentIndex}
         isAddingPayment={isAddingPayment}
         onAddPayment={onAddPayment}
+        onSavePayment={onSavePayment}
+        onCancelSavePayment={onCancelSavePayment}
+        handlePaymentFieldChange={handlePaymentFieldChange}
+        onEditPayment={onEditPayment}
+        onRemovePayment={onRemovePayment}
+        toggleEditingPayment={toggleEditingPayment}
+      />
+      <ReturnPaymentsTable 
+        invoice={invoice ?? undefined}
+        paymentIndex={paymentIndex}
+        isAddingPayment={isAddingReturnPayment}
+        onAddPayment={onAddReturnPayment}
         onSavePayment={onSavePayment}
         onCancelSavePayment={onCancelSavePayment}
         handlePaymentFieldChange={handlePaymentFieldChange}

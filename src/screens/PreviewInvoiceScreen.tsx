@@ -17,7 +17,7 @@ import { useParams } from "react-router-dom";
 import NotFoundScreen from "./NotFoundScreen";
 import { convertAmountInWords } from "@src/utilities/utils";
 
-type Tables = "customers" | "amounts" | "payments";
+type Tables = "customers" | "amounts" | "payments" | "returnpayment";
 
 type ColumnDef = {
   label: string;
@@ -50,6 +50,12 @@ const columnDefs: { [key in Tables]: ColumnDef[] } = {
     { label: "Amount", width: "24.25%", includeRupeeSymbol: true },
   ],
   payments: [
+    { label: "#", width: "3%" },
+    { label: "Payment Mode", width: "33.33%", textAlign: "left" },
+    { label: "Date", width: "30.33%" },
+    { label: "Amount", width: "33.33%", includeRupeeSymbol: true },
+  ],
+  returnpayment: [
     { label: "#", width: "3%" },
     { label: "Payment Mode", width: "33.33%", textAlign: "left" },
     { label: "Date", width: "30.33%" },
@@ -187,6 +193,15 @@ const PreviewInvoiceScreen = () => {
       _payment.date.toDateString(),
       `${parseFloat(_payment.amount).toFixed(2)}`,
     ],
+  );
+
+  const returnPaymentsData: string[][] = (invoice as Invoice)?.payments.map(
+    (_payment, index) => [
+      `${index + 1}`,
+      `${_payment.mode} - Ending with - ${_payment.paymentNumber}`,
+      _payment.date.toDateString(),
+      `${parseFloat(_payment.amount).toFixed(2)}`,
+    ]
   );
 
   const amountReceived = invoice.payments
@@ -434,6 +449,17 @@ const PreviewInvoiceScreen = () => {
                   <Text style={{ padding: PADDING_THICK }}>Payments</Text>
                   <TableRow tableName="payments" isHeading />
                   {paymentsData?.map((paymentsData, index) => (
+                    <TableRow
+                      key={paymentsData[1] + index}
+                      tableName="payments"
+                      content={paymentsData}
+                    />
+                  ))}
+                </View>
+                <View>
+                  <Text style={{ padding: PADDING_THICK }}>Return Payments</Text>
+                  <TableRow tableName="returnpayment" isHeading />
+                  {returnPaymentsData?.map((paymentsData, index) => (
                     <TableRow
                       key={paymentsData[1] + index}
                       tableName="payments"

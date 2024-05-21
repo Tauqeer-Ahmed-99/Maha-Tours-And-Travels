@@ -18,7 +18,7 @@ import InvoicesContext from "@src/context/invoices/InvoicesContext";
 import TableWrapper from "./TableWrapper";
 import { Invoice } from "@src/context/invoices/invoicesTypes";
 
-export default function CustomersTable({
+export default function ReturnPaymentsTable({
   invoice,
   isAddingPayment,
   paymentIndex,
@@ -35,7 +35,7 @@ export default function CustomersTable({
   paymentIndex: number | null;
   onAddPayment: () => void;
   onSavePayment: () => void;
-  onCancelSavePayment: (returnPayemnt : boolean) => void;
+  onCancelSavePayment: (returnPayemnt: boolean) => void;
   handlePaymentFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
     index: number,
@@ -51,7 +51,8 @@ export default function CustomersTable({
     setIsLoading(true);
     await invoicesContext.addPayment(
       invoice as Invoice,
-      invoice?.payments?.[invoice?.payments.length - 1] as Payment,
+      invoice?.returnPayments?.[invoice?.returnPayments.length - 1] as Payment,
+      true
     );
     setIsLoading(false);
     onSavePayment();
@@ -67,9 +68,9 @@ export default function CustomersTable({
   return (
     <Box my={2}>
       <Typography mb={2} level="title-lg">
-        Payments
+        Return Payments
       </Typography>
-      {(invoice?.payments?.length ?? 0) > 0 ? (
+      {(invoice?.returnPayments?.length ?? 0) > 0 ? (
         <TableWrapper>
           <Table aria-label="table payments" size="md">
             <thead>
@@ -85,12 +86,12 @@ export default function CustomersTable({
               </tr>
             </thead>
             <tbody>
-              {invoice?.payments?.map((payment, idx) => (
+              {invoice?.returnPayments?.map((payment, idx) => (
                 <tr key={payment.paymentId ?? idx}>
                   <td>{idx + 1}</td>
                   <td>
                     {(isAddingPayment &&
-                      idx === invoice?.payments.length - 1) ||
+                      idx === invoice?.returnPayments.length - 1) ||
                     paymentIndex === idx ? (
                       <GroupMenu
                         options={["CASH", "CHEQUE", "NEFT", "RTGS"]}
