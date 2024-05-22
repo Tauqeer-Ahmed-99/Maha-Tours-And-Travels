@@ -195,14 +195,14 @@ const PreviewInvoiceScreen = () => {
     ],
   );
 
-  const returnPaymentsData: string[][] = (invoice as Invoice)?.returnPayments.map(
-    (_payment, index) => [
-      `${index + 1}`,
-      `${_payment.mode} - Ending with - ${_payment.paymentNumber}`,
-      _payment.date.toDateString(),
-      `${parseFloat(_payment.amount).toFixed(2)}`,
-    ]
-  );
+  const returnPaymentsData: string[][] = (
+    invoice as Invoice
+  )?.returnPayments.map((_payment, index) => [
+    `${index + 1}`,
+    `${_payment.mode} - Ending with - ${_payment.paymentNumber}`,
+    _payment.date.toDateString(),
+    `${parseFloat(_payment.amount).toFixed(2)}`,
+  ]);
 
   const amountReceived = invoice.payments
     .reduce((prevVal, curVal) => (prevVal += parseFloat(curVal.amount)), 0)
@@ -461,7 +461,9 @@ const PreviewInvoiceScreen = () => {
                   ))}
                 </View>
                 <View>
-                  <Text style={{ padding: PADDING_THICK }}>Return Payments</Text>
+                  <Text style={{ padding: PADDING_THICK }}>
+                    Return Payments
+                  </Text>
                   <TableRow tableName="returnpayment" isHeading />
                   {returnPaymentsData?.map((paymentsData, index) => (
                     <TableRow
@@ -598,7 +600,8 @@ const PreviewInvoiceScreen = () => {
                         {RupeeIcon}
                         {(
                           invoice.amounts.totalAmount -
-                          parseFloat(amountReceived)
+                          parseFloat(amountReceived) +
+                          parseFloat(amountReturned)
                         ).toFixed(2)}
                       </Text>
                     </View>

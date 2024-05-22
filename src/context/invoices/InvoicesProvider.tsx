@@ -15,6 +15,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
   const authContext = useContext(AuthContext);
 
+  console.log(invoices);
+
   const loadInvoices = async () => {
     try {
       setIsLoading(true);
@@ -103,7 +105,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       const res = await axios.post(
         url,
-        JSON.stringify({ ...invoice, isActive: true })
+        JSON.stringify({ ...invoice, isActive: true }),
       );
 
       invoice.invoiceId = res.data.name;
@@ -142,8 +144,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       setInvoices((invoices) =>
         invoices.map((_invoice) =>
-          _invoice.invoiceId === invoice.invoiceId ? invoice : _invoice
-        )
+          _invoice.invoiceId === invoice.invoiceId ? invoice : _invoice,
+        ),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -167,7 +169,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await axios.patch(url, JSON.stringify({ isActive: false }));
 
       setInvoices((invoices) =>
-        invoices.filter((_invoice) => _invoice.invoiceId !== invoice.invoiceId)
+        invoices.filter((_invoice) => _invoice.invoiceId !== invoice.invoiceId),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -208,11 +210,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                     (invoice.isBillToATraveller ? 2 : 1),
                   _invoice.amounts.pricePerUnit,
                   _invoice.amounts.gstPercent,
-                  _invoice.amounts.tcsPercent
+                  _invoice.amounts.tcsPercent,
                 ),
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -244,8 +246,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 isBillToATraveller: invoice.isBillToATraveller,
                 amounts,
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
 
       return new Response(ResponseStatus.SUCCESS, res);
@@ -258,7 +260,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const addPayment = async (invoice: Invoice, payment: Payment, returnPayment?: boolean | false) => {
+  const addPayment = async (
+    invoice: Invoice,
+    payment: Payment,
+    returnPayment?: boolean | false,
+  ) => {
     const type = returnPayment ? "returnPayments" : "payments";
     try {
       const authToken = await authContext.user?.getIdToken();
@@ -283,44 +289,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 isBillToATraveller: invoice.isBillToATraveller,
                 [type]: [..._invoice[type], payment],
               }
-            : _invoice
-        )
-      );
-      return new Response(ResponseStatus.SUCCESS, res);
-    } catch (err) {
-      const error = err as AxiosError;
-      console.log(error);
-      setIsError(true);
-      setErrorMessage(error.message);
-      return new Response(ResponseStatus.ERROR, undefined, error);
-    }
-  };
-  const addReturnPayment = async (invoice: Invoice, payment: Payment) => {
-    try {
-      const authToken = await authContext.user?.getIdToken();
-
-      const url =
-        import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoice.invoiceId}/payments.json?auth=${authToken}`;
-
-      delete payment.paymentId;
-
-      const res = await axios.post(url, JSON.stringify(payment));
-
-      payment.paymentId = res.data.name;
-
-      setInvoices((invoices) =>
-        invoices.map((_invoice) =>
-          _invoice.invoiceId === invoice.invoiceId
-            ? {
-                ..._invoice,
-                travellingType: invoice.travellingType,
-                billToCustomer: invoice.billToCustomer,
-                isBillToATraveller: invoice.isBillToATraveller,
-                payments: [..._invoice.returnPayments, payment],
-              }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -353,11 +323,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 customers: _invoice.customers.map((_customer) =>
                   _customer.customerId === customer.customerId
                     ? customer
-                    : _customer
+                    : _customer,
                 ),
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -369,7 +339,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const editPayment = async (invoice: Invoice, payment: Payment, returnPayment: boolean | false) => {
+  const editPayment = async (
+    invoice: Invoice,
+    payment: Payment,
+    returnPayment: boolean | false,
+  ) => {
     const type = getPaymentType(returnPayment);
     try {
       const authToken = await authContext.user?.getIdToken();
@@ -389,11 +363,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 [type]: _invoice[type].map((_payment) =>
-                  _payment.paymentId === payment.paymentId ? payment : _payment
+                  _payment.paymentId === payment.paymentId ? payment : _payment,
                 ),
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -424,18 +398,18 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 customers: _invoice.customers.filter(
-                  (_customer) => _customer.customerId !== customerId
+                  (_customer) => _customer.customerId !== customerId,
                 ),
                 amounts: new Amounts(
                   _invoice.customers.length -
                     (invoice.isBillToATraveller ? 0 : 1),
                   _invoice.amounts.pricePerUnit,
                   _invoice.amounts.gstPercent,
-                  _invoice.amounts.tcsPercent
+                  _invoice.amounts.tcsPercent,
                 ),
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -447,7 +421,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removePayment = async (invoice: Invoice, paymentId: string, returnPayment: boolean | false) => {
+  const removePayment = async (
+    invoice: Invoice,
+    paymentId: string,
+    returnPayment: boolean | false,
+  ) => {
     const type = getPaymentType(returnPayment);
     try {
       const authToken = await authContext.user?.getIdToken();
@@ -467,11 +445,11 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
                 [type]: _invoice[type].filter(
-                  (_payment) => _payment.paymentId !== paymentId
+                  (_payment) => _payment.paymentId !== paymentId,
                 ),
               }
-            : _invoice
-        )
+            : _invoice,
+        ),
       );
       return new Response(ResponseStatus.SUCCESS, res);
     } catch (err) {
@@ -508,7 +486,6 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     removeCustomer,
     saveAmounts,
     addPayment,
-    addReturnPayment,
     editPayment,
     removePayment,
     clearErrors,

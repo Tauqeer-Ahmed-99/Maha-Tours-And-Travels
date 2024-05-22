@@ -119,7 +119,12 @@ const AmountsSummary = ({
         >
           <Typography color="warning">Balance</Typography>
           <Typography color="warning">
-            &#8377;{((amounts?.totalAmount ?? 0) - amountReceived).toFixed(2)}
+            &#8377;
+            {(
+              (amounts?.totalAmount ?? 0) -
+              amountReceived +
+              amountReturned
+            ).toFixed(2)}
           </Typography>
         </Box>
       </Box>

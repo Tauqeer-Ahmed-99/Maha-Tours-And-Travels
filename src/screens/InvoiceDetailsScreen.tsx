@@ -27,7 +27,7 @@ const InvoiceDetailsScreen = () => {
   const { invoiceId } = useParams();
   const invoicesContext = useContext(InvoicesContext);
   const [isCreatingNewInvoice, setIsCreatingNewInvoice] = useState(
-    invoiceId === "new"
+    invoiceId === "new",
   );
   const [isSaving, setIsSaving] = useState(false);
   const [invoice, setInvoice] = useState<Invoice | null>(null);
@@ -42,7 +42,9 @@ const InvoiceDetailsScreen = () => {
   const [isReturnPaymentConfirmationOpen, setIsReturnPaymentConfirmationOpen] =
     useState(false);
   const [paymentIndex, setPaymentIndex] = useState<number | null>(null);
-  const [returnPaymentIndex, setReturnPaymentIndex] = useState<number | null>(null);
+  const [returnPaymentIndex, setReturnPaymentIndex] = useState<number | null>(
+    null,
+  );
   const [isDeletingCustomer, setIsDeletingCustomer] = useState(false);
   const [isDeletingPayment, setIsDeletingPayment] = useState(false);
 
@@ -50,7 +52,7 @@ const InvoiceDetailsScreen = () => {
 
   useEffect(() => {
     const invoice = invoicesContext.invoices.find(
-      (invoice) => invoice.invoiceId === invoiceId
+      (invoice) => invoice.invoiceId === invoiceId,
     ) as Invoice;
 
     if (invoice) {
@@ -72,10 +74,10 @@ const InvoiceDetailsScreen = () => {
                 : prevInvoice.customers.length,
               prevInvoice.amounts.pricePerUnit,
               prevInvoice.amounts.gstPercent,
-              prevInvoice.amounts.tcsPercent
+              prevInvoice.amounts.tcsPercent,
             ),
           }
-        : prevInvoice
+        : prevInvoice,
     );
   }, [invoice?.isBillToATraveller, invoice?.customers]);
 
@@ -89,7 +91,7 @@ const InvoiceDetailsScreen = () => {
         const url = Routes.InvoiceDetailsScreen.replace(
           ":invoiceId",
           invoicesContext.invoices[invoicesContext.invoices.length - 1]
-            ?.invoiceId as string
+            ?.invoiceId as string,
         );
         navigate(url, { replace: true });
       }
@@ -113,7 +115,7 @@ const InvoiceDetailsScreen = () => {
               [e.target.name]: e.target.value,
             },
           }
-        : prevInvoice
+        : prevInvoice,
     );
   };
 
@@ -124,7 +126,7 @@ const InvoiceDetailsScreen = () => {
             ...prevInvoice,
             customers: [...prevInvoice.customers, new Customer()],
           }
-        : prevInvoice
+        : prevInvoice,
     );
     setIsAddingCustomer(true);
     setCustomerIndex(null);
@@ -134,18 +136,21 @@ const InvoiceDetailsScreen = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
         ? { ...prevInvoice, payments: [...prevInvoice.payments, new Payment()] }
-        : prevInvoice
+        : prevInvoice,
     );
-      setIsAddingPayment(true);
-    
+    setIsAddingPayment(true);
+
     setCustomerIndex(null);
   };
 
   const onAddReturnPayment = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
-        ? { ...prevInvoice, returnPayments: [...prevInvoice.returnPayments, new Payment()] }
-        : prevInvoice
+        ? {
+            ...prevInvoice,
+            returnPayments: [...prevInvoice.returnPayments, new Payment()],
+          }
+        : prevInvoice,
     );
     setIsAddingReturnPayment(true);
     setCustomerIndex(null);
@@ -160,9 +165,9 @@ const InvoiceDetailsScreen = () => {
   };
 
   const openPaymentConfirmation = (returnPayemnt: boolean | false) => {
-    if(!returnPayemnt){
+    if (!returnPayemnt) {
       setIsPaymentConfirmationOpen(true);
-    }else{
+    } else {
       setIsReturnPaymentConfirmationOpen(true);
     }
   };
@@ -177,7 +182,7 @@ const InvoiceDetailsScreen = () => {
 
   const handleCustomerFieldChange = (
     e: React.ChangeEvent<HTMLInputElement>,
-    index: number
+    index: number,
   ) => {
     setInvoice((prevInvoice) =>
       prevInvoice
@@ -189,16 +194,16 @@ const InvoiceDetailsScreen = () => {
                     ...customer,
                     [e.target.name]: e.target.value,
                   }
-                : customer
+                : customer,
             ),
           }
-        : prevInvoice
+        : prevInvoice,
     );
   };
 
   const handlePaymentFieldChange = (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
-    index: number
+    index: number,
   ) => {
     setInvoice((prevInvoice) =>
       prevInvoice
@@ -221,7 +226,7 @@ const InvoiceDetailsScreen = () => {
                   : newPay.amount.length > 1 && newPay.amount.at(0) == "0"
                   ? parseFloat(newPay.amount).toString()
                   : newPay.amount,
-                newPay.date
+                newPay.date,
               );
 
               newPayment.paymentId = newPay.paymentId;
@@ -229,12 +234,12 @@ const InvoiceDetailsScreen = () => {
               return i === index ? newPayment : payment;
             }),
           }
-        : prevInvoice
+        : prevInvoice,
     );
   };
   const handleReturnPaymentFieldChange = (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
-    index: number
+    index: number,
   ) => {
     setInvoice((prevInvoice) =>
       prevInvoice
@@ -257,30 +262,27 @@ const InvoiceDetailsScreen = () => {
                   : newPay.amount.length > 1 && newPay.amount.at(0) == "0"
                   ? parseFloat(newPay.amount).toString()
                   : newPay.amount,
-                newPay.date
+                newPay.date,
               );
-
-              console.log(newPay);
 
               newPayment.paymentId = newPay.paymentId;
 
               return i === index ? newPayment : payment;
             }),
           }
-        : prevInvoice
+        : prevInvoice,
     );
-    console.log(invoice);
   };
 
   const handleAmountsFieldChange = (
-    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent
+    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
   ) => {
     setInvoice((prevInvoice) => {
       if (prevInvoice) {
         const newAmount = {
           ...prevInvoice.amounts,
           [e.target.name]: isNaN(
-            Number((e as React.ChangeEvent<HTMLInputElement>).target.value)
+            Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
           )
             ? (e as React.ChangeEvent<HTMLInputElement>).target.value
             : Number((e as React.ChangeEvent<HTMLInputElement>).target.value),
@@ -291,7 +293,7 @@ const InvoiceDetailsScreen = () => {
             newAmount.qty,
             newAmount.pricePerUnit,
             newAmount.gstPercent,
-            newAmount.tcsPercent
+            newAmount.tcsPercent,
           ),
         };
       } else {
@@ -305,9 +307,9 @@ const InvoiceDetailsScreen = () => {
   };
 
   const onSavePayment = (returnPayemnt: boolean | false) => {
-    if(!returnPayemnt){
+    if (!returnPayemnt) {
       setIsAddingPayment(false);
-    }else{
+    } else {
       setIsAddingReturnPayment(false);
     }
   };
@@ -316,7 +318,7 @@ const InvoiceDetailsScreen = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
         ? { ...prevInvoice, customers: prevInvoice.customers.slice(0, -1) }
-        : prevInvoice
+        : prevInvoice,
     );
     setIsAddingCustomer(false);
   };
@@ -326,11 +328,11 @@ const InvoiceDetailsScreen = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
         ? { ...prevInvoice, [type]: prevInvoice[type].slice(0, -1) }
-        : prevInvoice
+        : prevInvoice,
     );
-    if(!returnPayemnt){
+    if (!returnPayemnt) {
       setIsAddingPayment(false);
-    }else{
+    } else {
       setIsAddingReturnPayment(false);
     }
   };
@@ -340,10 +342,13 @@ const InvoiceDetailsScreen = () => {
     openConfirmation();
   };
 
-  const onRemovePayment = (paymentIndex: number, returnPayemnt: boolean | false) => {
-    if(!returnPayemnt){
+  const onRemovePayment = (
+    paymentIndex: number,
+    returnPayemnt: boolean | false,
+  ) => {
+    if (!returnPayemnt) {
       setPaymentIndex(paymentIndex);
-    }else{
+    } else {
       setReturnPaymentIndex(paymentIndex);
     }
     openPaymentConfirmation(returnPayemnt);
@@ -354,7 +359,7 @@ const InvoiceDetailsScreen = () => {
     closeConfirmation();
     await invoicesContext.removeCustomer(
       invoice as Invoice,
-      invoice?.customers[customerIndex as number]?.customerId as string
+      invoice?.customers[customerIndex as number]?.customerId as string,
     );
     setIsDeletingCustomer(false);
     setCustomerIndex(null);
@@ -366,7 +371,7 @@ const InvoiceDetailsScreen = () => {
     await invoicesContext.removePayment(
       invoice as Invoice,
       invoice?.payments[paymentIndex as number]?.paymentId as string,
-      false
+      false,
     );
     setIsDeletingPayment(false);
     setPaymentIndex(null);
@@ -375,11 +380,11 @@ const InvoiceDetailsScreen = () => {
   const onRemoveReturnPaymentConfirm = async () => {
     setIsDeletingPayment(true);
     closeReturnPaymentConfirmation();
-    console.log(invoice, paymentIndex);
     await invoicesContext.removePayment(
       invoice as Invoice,
-      invoice?.returnPayments[returnPaymentIndex as number]?.paymentId as string,
-      true
+      invoice?.returnPayments[returnPaymentIndex as number]
+        ?.paymentId as string,
+      true,
     );
     setIsDeletingPayment(false);
     setReturnPaymentIndex(null);
@@ -404,10 +409,13 @@ const InvoiceDetailsScreen = () => {
     setCustomerIndex(customerIndex);
   };
 
-  const onEditPayment = (paymentIndex: number, returnPayemnt: boolean | false) => {
-    if(!returnPayemnt){
+  const onEditPayment = (
+    paymentIndex: number,
+    returnPayemnt: boolean | false,
+  ) => {
+    if (!returnPayemnt) {
       setPaymentIndex(paymentIndex);
-    }else{
+    } else {
       setReturnPaymentIndex(paymentIndex);
     }
   };
@@ -417,9 +425,9 @@ const InvoiceDetailsScreen = () => {
   };
 
   const toggleEditingPayment = (returnPayemnt: boolean | false) => {
-    if(!returnPayemnt){
+    if (!returnPayemnt) {
       setPaymentIndex(null);
-    }else{
+    } else {
       setReturnPaymentIndex(null);
     }
   };
@@ -433,10 +441,10 @@ const InvoiceDetailsScreen = () => {
               prevInvoice.amounts.qty,
               prevInvoice.amounts.pricePerUnit,
               prevInvoice.amounts.gstPercent,
-              tcsPercent
+              tcsPercent,
             ),
           }
-        : prevInvoice
+        : prevInvoice,
     );
   };
 
@@ -457,19 +465,19 @@ const InvoiceDetailsScreen = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
         ? { ...prevInvoice, isBillToATraveller: isTraveller }
-        : prevInvoice
+        : prevInvoice,
     );
   };
 
   const setTravellingType = (travellingType: TravellingType) => {
     setInvoice((prevInvoice) =>
-      prevInvoice ? { ...prevInvoice, travellingType } : prevInvoice
+      prevInvoice ? { ...prevInvoice, travellingType } : prevInvoice,
     );
   };
 
   const setInvoiceDate = (date: string) => {
     setInvoice((prevInvoice) =>
-      prevInvoice ? { ...prevInvoice, date: new Date(date) } : prevInvoice
+      prevInvoice ? { ...prevInvoice, date: new Date(date) } : prevInvoice,
     );
   };
 
@@ -524,7 +532,7 @@ const InvoiceDetailsScreen = () => {
         onRemovePayment={onRemovePayment}
         toggleEditingPayment={toggleEditingPayment}
       />
-      <ReturnPaymentsTable 
+      <ReturnPaymentsTable
         invoice={invoice ?? undefined}
         paymentIndex={returnPaymentIndex}
         isAddingPayment={isAddingReturnPayment}
