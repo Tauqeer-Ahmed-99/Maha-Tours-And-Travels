@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Invoice } from "@src/context/invoices/invoicesTypes";
-import { PaymentMode, TravellingType } from "./types";
+import { PaymentMode, PaymentType, TravellingType } from "./types";
 import { Amounts, Customer, Payment } from "./models";
 
 export const emailRegex = new RegExp(
@@ -70,6 +70,11 @@ export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
                 : [],
               payments: rawInvoice.payments
                 ? Object.entries(rawInvoice.payments).map((rawPayment) =>
+                    parsePayment(rawPayment),
+                  )
+                : [],
+              returnPayments: rawInvoice.returnPayments
+                ? Object.entries(rawInvoice.returnPayments).map((rawPayment) =>
                     parsePayment(rawPayment),
                   )
                 : [],
@@ -191,3 +196,5 @@ export function convertAmountInWords(amount: any) {
 
   return transform(amount);
 }
+
+export const getPaymentType = (returnP: boolean | false) => returnP ? PaymentType.RETURN_PAYMENT : PaymentType.PAYMENT;

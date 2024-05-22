@@ -7,10 +7,12 @@ import { Amounts, Payment } from "@src/utilities/models";
 const AmountsSummary = ({
   amounts,
   payments,
+  returnPayments,
   handleTCSChange,
 }: {
   amounts?: Amounts;
   payments?: Payment[];
+  returnPayments?: Payment[];
   handleTCSChange: (tcsPercent: number) => void;
 }) => {
   const amountReceived = useMemo(() => {
@@ -20,6 +22,14 @@ const AmountsSummary = ({
     );
     return amountReceived;
   }, [payments]);
+
+  const amountReturned = useMemo(() => {
+    let amountReturned = 0;
+    returnPayments?.forEach(
+      (payment) => (amountReturned += parseFloat(payment.amount)),
+    );
+    return amountReturned;
+  }, [returnPayments]);
 
   return (
     <Box
@@ -93,11 +103,28 @@ const AmountsSummary = ({
           display="flex"
           justifyContent="space-between"
           alignItems="center"
+          my={1}
+          gap={1}
+        >
+          <Typography color="success">Returned</Typography>
+          <Typography color="success">
+            &#8377;{amountReturned.toFixed(2)}
+          </Typography>
+        </Box>
+        <Box
+          display="flex"
+          justifyContent="space-between"
+          alignItems="center"
           gap={1}
         >
           <Typography color="warning">Balance</Typography>
           <Typography color="warning">
-            &#8377;{((amounts?.totalAmount ?? 0) - amountReceived).toFixed(2)}
+            &#8377;
+            {(
+              (amounts?.totalAmount ?? 0) -
+              amountReceived +
+              amountReturned
+            ).toFixed(2)}
           </Typography>
         </Box>
       </Box>

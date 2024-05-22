@@ -18,6 +18,11 @@ export enum ResponseStatus {
   ERROR = "error",
 }
 
+export enum PaymentType {
+  PAYMENT = "payments",
+  RETURN_PAYMENT = "returnPayments",
+}
+
 export interface IResponse {
   status: ResponseStatus;
   response: AxiosResponse;

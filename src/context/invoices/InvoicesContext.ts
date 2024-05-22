@@ -18,14 +18,23 @@ const invoicesContext: InvoiceContext = {
     new Response(ResponseStatus.SUCCESS),
   saveAmounts: async (_invoice: Invoice, _amounts: Amounts) =>
     new Response(ResponseStatus.SUCCESS),
-  addPayment: async (_invoice: Invoice, _payment: Payment) =>
-    new Response(ResponseStatus.SUCCESS),
-  editPayment: async (_invoice: Invoice, _payment: Payment) =>
-    new Response(ResponseStatus.SUCCESS),
+  addPayment: async (
+    _invoice: Invoice,
+    _payment: Payment,
+    _returnPayment?: boolean,
+  ) => new Response(ResponseStatus.SUCCESS),
+  editPayment: async (
+    _invoice: Invoice,
+    _payment: Payment,
+    _returnPaymen?: boolean,
+  ) => new Response(ResponseStatus.SUCCESS),
   removeCustomer: async (_invoice: Invoice, _customerId: string) =>
     new Response(ResponseStatus.SUCCESS),
-  removePayment: async (_invoice: Invoice, _paymentId: string) =>
-    new Response(ResponseStatus.SUCCESS),
+  removePayment: async (
+    _invoice: Invoice,
+    _paymentId: string,
+    _returnPaymen?: boolean,
+  ) => new Response(ResponseStatus.SUCCESS),
   deleteInvoice: async (_invoice: Invoice) =>
     new Response(ResponseStatus.SUCCESS),
   clearErrors: () => {},
