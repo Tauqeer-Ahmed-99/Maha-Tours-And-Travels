@@ -59,7 +59,7 @@ export default function CustomersTable({
 
   const onSaveEditing = async (payment: Payment) => {
     setIsLoading(true);
-    await invoicesContext.editPayment(invoice as Invoice, payment);
+    await invoicesContext.editPayment(invoice as Invoice, payment, false);
     setIsLoading(false);
     toggleEditingPayment(false);
   };

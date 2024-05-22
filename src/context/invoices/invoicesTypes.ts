@@ -26,9 +26,9 @@ export interface InvoiceContext {
   saveAmounts: (invoice: Invoice, amounts: Amounts) => Promise<Response>;
   addPayment: (invoice: Invoice, payment: Payment, returnPayment?: boolean) => Promise<Response>;
   addReturnPayment: (invoice: Invoice, payment: Payment) => Promise<Response>;
-  editPayment: (invoice: Invoice, payment: Payment, returnPayment?: boolean) => Promise<Response>;
+  editPayment: (invoice: Invoice, payment: Payment, returnPayment: boolean) => Promise<Response>;
   removeCustomer: (invoice: Invoice, customerId: string) => Promise<Response>;
-  removePayment: (invoice: Invoice, paymentId: string,returnPayment?: boolean) => Promise<Response>;
+  removePayment: (invoice: Invoice, paymentId: string,returnPayment: boolean) => Promise<Response>;
   deleteInvoice: (invoice: Invoice) => Promise<Response>;
   clearErrors: () => void;
 }

@@ -369,8 +369,8 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const editPayment = async (invoice: Invoice, payment: Payment, returnPayment?: boolean | false) => {
-    const type = returnPayment ? "returnPayments" : "payments";
+  const editPayment = async (invoice: Invoice, payment: Payment, returnPayment: boolean | false) => {
+    const type = getPaymentType(returnPayment);
     try {
       const authToken = await authContext.user?.getIdToken();
 
@@ -447,7 +447,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removePayment = async (invoice: Invoice, paymentId: string, returnPayment?: boolean | false) => {
+  const removePayment = async (invoice: Invoice, paymentId: string, returnPayment: boolean | false) => {
     const type = getPaymentType(returnPayment);
     try {
       const authToken = await authContext.user?.getIdToken();

@@ -365,7 +365,8 @@ const InvoiceDetailsScreen = () => {
     closePaymentConfirmation();
     await invoicesContext.removePayment(
       invoice as Invoice,
-      invoice?.payments[paymentIndex as number]?.paymentId as string
+      invoice?.payments[paymentIndex as number]?.paymentId as string,
+      false
     );
     setIsDeletingPayment(false);
     setPaymentIndex(null);
