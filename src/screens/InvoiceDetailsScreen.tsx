@@ -39,7 +39,10 @@ const InvoiceDetailsScreen = () => {
   const [isAddingReturnPayment, setIsAddingReturnPayment] = useState(false);
   const [isPaymentConfirmationOpen, setIsPaymentConfirmationOpen] =
     useState(false);
+  const [isReturnPaymentConfirmationOpen, setIsReturnPaymentConfirmationOpen] =
+    useState(false);
   const [paymentIndex, setPaymentIndex] = useState<number | null>(null);
+  const [returnPaymentIndex, setReturnPaymentIndex] = useState<number | null>(null);
   const [isDeletingCustomer, setIsDeletingCustomer] = useState(false);
   const [isDeletingPayment, setIsDeletingPayment] = useState(false);
 
@@ -127,14 +130,14 @@ const InvoiceDetailsScreen = () => {
     setCustomerIndex(null);
   };
 
-  const onAddPayment = (returnPayemnt: boolean | false) => {
-    const Type = getPaymentType(returnPayemnt);
+  const onAddPayment = () => {
     setInvoice((prevInvoice) =>
       prevInvoice
-        ? { ...prevInvoice, [Type]: [...prevInvoice[Type], new Payment()] }
+        ? { ...prevInvoice, payments: [...prevInvoice.payments, new Payment()] }
         : prevInvoice
     );
-    setIsAddingPayment(true);
+      setIsAddingPayment(true);
+    
     setCustomerIndex(null);
   };
 
@@ -156,12 +159,20 @@ const InvoiceDetailsScreen = () => {
     setIsConfirmationOpen(false);
   };
 
-  const openPaymentConfirmation = () => {
-    setIsPaymentConfirmationOpen(true);
+  const openPaymentConfirmation = (returnPayemnt: boolean | false) => {
+    if(!returnPayemnt){
+      setIsPaymentConfirmationOpen(true);
+    }else{
+      setIsReturnPaymentConfirmationOpen(true);
+    }
   };
 
   const closePaymentConfirmation = () => {
     setIsPaymentConfirmationOpen(false);
+  };
+
+  const closeReturnPaymentConfirmation = () => {
+    setIsReturnPaymentConfirmationOpen(false);
   };
 
   const handleCustomerFieldChange = (
@@ -221,6 +232,45 @@ const InvoiceDetailsScreen = () => {
         : prevInvoice
     );
   };
+  const handleReturnPaymentFieldChange = (
+    e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
+    index: number
+  ) => {
+    setInvoice((prevInvoice) =>
+      prevInvoice
+        ? {
+            ...prevInvoice,
+            returnPayments: prevInvoice.returnPayments.map((payment, i) => {
+              const newPay = {
+                ...payment,
+                [e.target.name]:
+                  e.target.name === "date"
+                    ? new Date(e.target.value)
+                    : (e as React.ChangeEvent<HTMLInputElement>).target.value,
+              };
+
+              const newPayment = new Payment(
+                newPay.paymentNumber,
+                newPay.mode,
+                newPay.amount === ""
+                  ? "0"
+                  : newPay.amount.length > 1 && newPay.amount.at(0) == "0"
+                  ? parseFloat(newPay.amount).toString()
+                  : newPay.amount,
+                newPay.date
+              );
+
+              console.log(newPay);
+
+              newPayment.paymentId = newPay.paymentId;
+
+              return i === index ? newPayment : payment;
+            }),
+          }
+        : prevInvoice
+    );
+    console.log(invoice);
+  };
 
   const handleAmountsFieldChange = (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent
@@ -254,8 +304,12 @@ const InvoiceDetailsScreen = () => {
     setIsAddingCustomer(false);
   };
 
-  const onSavePayment = () => {
-    setIsAddingPayment(false);
+  const onSavePayment = (returnPayemnt: boolean | false) => {
+    if(!returnPayemnt){
+      setIsAddingPayment(false);
+    }else{
+      setIsAddingReturnPayment(false);
+    }
   };
 
   const onCancelSaveCustomer = () => {
@@ -274,7 +328,11 @@ const InvoiceDetailsScreen = () => {
         ? { ...prevInvoice, [type]: prevInvoice[type].slice(0, -1) }
         : prevInvoice
     );
-    setIsAddingPayment(false);
+    if(!returnPayemnt){
+      setIsAddingPayment(false);
+    }else{
+      setIsAddingReturnPayment(false);
+    }
   };
 
   const onRemoveCustomer = (customerIndex: number) => {
@@ -282,9 +340,13 @@ const InvoiceDetailsScreen = () => {
     openConfirmation();
   };
 
-  const onRemovePayment = (paymentIndex: number) => {
-    setPaymentIndex(paymentIndex);
-    openPaymentConfirmation();
+  const onRemovePayment = (paymentIndex: number, returnPayemnt: boolean | false) => {
+    if(!returnPayemnt){
+      setPaymentIndex(paymentIndex);
+    }else{
+      setReturnPaymentIndex(paymentIndex);
+    }
+    openPaymentConfirmation(returnPayemnt);
   };
 
   const onRemoveCustomerConfirm = async () => {
@@ -309,6 +371,19 @@ const InvoiceDetailsScreen = () => {
     setPaymentIndex(null);
   };
 
+  const onRemoveReturnPaymentConfirm = async () => {
+    setIsDeletingPayment(true);
+    closeReturnPaymentConfirmation();
+    console.log(invoice, paymentIndex);
+    await invoicesContext.removePayment(
+      invoice as Invoice,
+      invoice?.returnPayments[returnPaymentIndex as number]?.paymentId as string,
+      true
+    );
+    setIsDeletingPayment(false);
+    setReturnPaymentIndex(null);
+  };
+
   const onRemoveCustomerCancel = () => {
     closeConfirmation();
     setCustomerIndex(null);
@@ -319,20 +394,33 @@ const InvoiceDetailsScreen = () => {
     setPaymentIndex(null);
   };
 
+  const onRemoveReturnPaymentCancel = () => {
+    closeReturnPaymentConfirmation();
+    setReturnPaymentIndex(null);
+  };
+
   const onEditCustomer = (customerIndex: number) => {
     setCustomerIndex(customerIndex);
   };
 
-  const onEditPayment = (paymentIndex: number) => {
-    setPaymentIndex(paymentIndex);
+  const onEditPayment = (paymentIndex: number, returnPayemnt: boolean | false) => {
+    if(!returnPayemnt){
+      setPaymentIndex(paymentIndex);
+    }else{
+      setReturnPaymentIndex(paymentIndex);
+    }
   };
 
   const toggleEditingCustomer = () => {
     setCustomerIndex(null);
   };
 
-  const toggleEditingPayment = () => {
-    setPaymentIndex(null);
+  const toggleEditingPayment = (returnPayemnt: boolean | false) => {
+    if(!returnPayemnt){
+      setPaymentIndex(null);
+    }else{
+      setReturnPaymentIndex(null);
+    }
   };
 
   const handleTCSChange = (tcsPercent: number) => {
@@ -437,12 +525,12 @@ const InvoiceDetailsScreen = () => {
       />
       <ReturnPaymentsTable 
         invoice={invoice ?? undefined}
-        paymentIndex={paymentIndex}
+        paymentIndex={returnPaymentIndex}
         isAddingPayment={isAddingReturnPayment}
         onAddPayment={onAddReturnPayment}
         onSavePayment={onSavePayment}
         onCancelSavePayment={onCancelSavePayment}
-        handlePaymentFieldChange={handlePaymentFieldChange}
+        handlePaymentFieldChange={handleReturnPaymentFieldChange}
         onEditPayment={onEditPayment}
         onRemovePayment={onRemovePayment}
         toggleEditingPayment={toggleEditingPayment}
@@ -450,6 +538,7 @@ const InvoiceDetailsScreen = () => {
       <AmountsSummary
         amounts={invoice?.amounts}
         payments={invoice?.payments}
+        returnPayments={invoice?.returnPayments}
         handleTCSChange={handleTCSChange}
       />
       <InvoiceFooter
@@ -463,6 +552,9 @@ const InvoiceDetailsScreen = () => {
         onRemoveCustomerConfirm={onRemoveCustomerConfirm}
         onRemovePaymentCancel={onRemovePaymentCancel}
         onRemovePaymentConfirm={onRemovePaymentConfirm}
+        onRemoveReturnPaymentConfirm={onRemoveReturnPaymentConfirm}
+        isReturnPaymentConfirmationOpen={isReturnPaymentConfirmationOpen}
+        onRemoveReturnPaymentCancel={onRemoveReturnPaymentCancel}
       />
       <LoadingDialog
         open={isSaving || isDeletingCustomer || isDeletingPayment}

@@ -33,16 +33,16 @@ export default function ReturnPaymentsTable({
   invoice?: Invoice;
   isAddingPayment: boolean;
   paymentIndex: number | null;
-  onAddPayment: () => void;
-  onSavePayment: () => void;
+  onAddPayment: (returnPayemnt: boolean) => void;
+  onSavePayment: (returnPayemnt: boolean) => void;
   onCancelSavePayment: (returnPayemnt: boolean) => void;
   handlePaymentFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
     index: number,
   ) => void;
-  onEditPayment: (paymentIndex: number) => void;
-  onRemovePayment: (paymentIndex: number) => void;
-  toggleEditingPayment: () => void;
+  onEditPayment: (paymentIndex: number,returnPayemnt: boolean) => void;
+  onRemovePayment: (paymentIndex: number,returnPayemnt: boolean) => void;
+  toggleEditingPayment: (returnPayemnt: boolean) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const invoicesContext = useContext(InvoicesContext);
@@ -55,14 +55,14 @@ export default function ReturnPaymentsTable({
       true
     );
     setIsLoading(false);
-    onSavePayment();
+    onSavePayment(true);
   };
 
   const onSaveEditing = async (payment: Payment) => {
     setIsLoading(true);
-    await invoicesContext.editPayment(invoice as Invoice, payment);
+    await invoicesContext.editPayment(invoice as Invoice, payment, true);
     setIsLoading(false);
-    toggleEditingPayment();
+    toggleEditingPayment(true);
   };
 
   return (
@@ -110,7 +110,7 @@ export default function ReturnPaymentsTable({
                   </td>
                   <td>
                     {(isAddingPayment &&
-                      idx === invoice?.payments.length - 1) ||
+                      idx === invoice?.returnPayments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="paymentNumber"
@@ -123,7 +123,7 @@ export default function ReturnPaymentsTable({
                     )}
                   </td>
                   <td>
-                    {(isAddingPayment && idx === invoice.payments.length - 1) ||
+                    {(isAddingPayment && idx === invoice.returnPayments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="amount"
@@ -137,7 +137,7 @@ export default function ReturnPaymentsTable({
                   </td>
                   <td>
                     {(isAddingPayment &&
-                      idx === invoice?.payments.length - 1) ||
+                      idx === invoice?.returnPayments.length - 1) ||
                     paymentIndex === idx ? (
                       <InvoiceInput
                         name="date"
@@ -182,7 +182,7 @@ export default function ReturnPaymentsTable({
                               <IconButton
                                 variant="outlined"
                                 color="warning"
-                                onClick={() => onRemovePayment(idx)}
+                                onClick={() => onRemovePayment(idx, true)}
                               >
                                 <CancelOutlinedIcon />
                               </IconButton>
@@ -195,7 +195,7 @@ export default function ReturnPaymentsTable({
                               <IconButton
                                 variant="outlined"
                                 color="primary"
-                                onClick={() => onEditPayment(idx)}
+                                onClick={() => onEditPayment(idx, true)}
                               >
                                 <EditNoteOutlinedIcon />
                               </IconButton>
@@ -220,7 +220,7 @@ export default function ReturnPaymentsTable({
           <>
             <Button
               startDecorator={<DoDisturbAltRoundedIcon />}
-              onClick={onCancelSavePayment}
+              onClick={()=> onCancelSavePayment(true)}
               variant="outlined"
               color="warning"
               sx={{ mr: 2 }}
@@ -241,7 +241,7 @@ export default function ReturnPaymentsTable({
         ) : (
           <Button
             startDecorator={<PriceCheckOutlinedIcon />}
-            onClick={onAddPayment}
+            onClick={()=> onAddPayment(true)}
             sx={{ my: 2 }}
           >
             Add Payment

@@ -195,7 +195,7 @@ const PreviewInvoiceScreen = () => {
     ],
   );
 
-  const returnPaymentsData: string[][] = (invoice as Invoice)?.payments.map(
+  const returnPaymentsData: string[][] = (invoice as Invoice)?.returnPayments.map(
     (_payment, index) => [
       `${index + 1}`,
       `${_payment.mode} - Ending with - ${_payment.paymentNumber}`,
@@ -205,6 +205,10 @@ const PreviewInvoiceScreen = () => {
   );
 
   const amountReceived = invoice.payments
+    .reduce((prevVal, curVal) => (prevVal += parseFloat(curVal.amount)), 0)
+    .toFixed(2);
+
+  const amountReturned = invoice.returnPayments
     .reduce((prevVal, curVal) => (prevVal += parseFloat(curVal.amount)), 0)
     .toFixed(2);
 
@@ -560,6 +564,21 @@ const PreviewInvoiceScreen = () => {
                         <Text>
                           {RupeeIcon}
                           {amountReceived}
+                        </Text>
+                      </View>
+                      <View
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          justifyContent: "space-between",
+                          marginVertical: MARGIN_THIN,
+                          marginTop: MARGIN_THICK,
+                        }}
+                      >
+                        <Text>Returned</Text>
+                        <Text>
+                          {RupeeIcon}
+                          {amountReturned}
                         </Text>
                       </View>
                     </View>

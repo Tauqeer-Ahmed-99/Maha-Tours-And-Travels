@@ -33,16 +33,16 @@ export default function CustomersTable({
   invoice?: Invoice;
   isAddingPayment: boolean;
   paymentIndex: number | null;
-  onAddPayment: () => void;
-  onSavePayment: () => void;
+  onAddPayment: (returnPayemnt : boolean) => void;
+  onSavePayment: (returnPayemnt : boolean) => void;
   onCancelSavePayment: (returnPayemnt : boolean) => void;
   handlePaymentFieldChange: (
     e: React.ChangeEvent<HTMLInputElement> | GroupMenuEvent,
     index: number,
   ) => void;
-  onEditPayment: (paymentIndex: number) => void;
-  onRemovePayment: (paymentIndex: number) => void;
-  toggleEditingPayment: () => void;
+  onEditPayment: (paymentIndex: number,returnPayemnt : boolean ) => void;
+  onRemovePayment: (paymentIndex: number,returnPayemnt : boolean) => void;
+  toggleEditingPayment: (returnPayemnt : boolean) => void;
 }) {
   const [isLoading, setIsLoading] = useState(false);
   const invoicesContext = useContext(InvoicesContext);
@@ -54,14 +54,14 @@ export default function CustomersTable({
       invoice?.payments?.[invoice?.payments.length - 1] as Payment,
     );
     setIsLoading(false);
-    onSavePayment();
+    onSavePayment(false);
   };
 
   const onSaveEditing = async (payment: Payment) => {
     setIsLoading(true);
     await invoicesContext.editPayment(invoice as Invoice, payment);
     setIsLoading(false);
-    toggleEditingPayment();
+    toggleEditingPayment(false);
   };
 
   return (
@@ -181,7 +181,7 @@ export default function CustomersTable({
                               <IconButton
                                 variant="outlined"
                                 color="warning"
-                                onClick={() => onRemovePayment(idx)}
+                                onClick={() => onRemovePayment(idx, false)}
                               >
                                 <CancelOutlinedIcon />
                               </IconButton>
@@ -194,7 +194,7 @@ export default function CustomersTable({
                               <IconButton
                                 variant="outlined"
                                 color="primary"
-                                onClick={() => onEditPayment(idx)}
+                                onClick={() => onEditPayment(idx, false)}
                               >
                                 <EditNoteOutlinedIcon />
                               </IconButton>
@@ -219,7 +219,7 @@ export default function CustomersTable({
           <>
             <Button
               startDecorator={<DoDisturbAltRoundedIcon />}
-              onClick={onCancelSavePayment}
+              onClick={()=> onCancelSavePayment(false)}
               variant="outlined"
               color="warning"
               sx={{ mr: 2 }}
@@ -240,7 +240,7 @@ export default function CustomersTable({
         ) : (
           <Button
             startDecorator={<PriceCheckOutlinedIcon />}
-            onClick={onAddPayment}
+            onClick={()=> onAddPayment(false)}
             sx={{ my: 2 }}
           >
             Add Payment

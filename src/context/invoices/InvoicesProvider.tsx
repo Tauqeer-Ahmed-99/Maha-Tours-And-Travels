@@ -5,7 +5,7 @@ import { Amounts, Customer, Payment, Response } from "@src/utilities/models";
 import { ResponseStatus, TravellingType } from "@src/utilities/types";
 import axios, { AxiosError } from "axios";
 import AuthContext from "../auth/AuthContext";
-import { parseInvoices } from "@src/utilities/utils";
+import { getPaymentType, parseInvoices } from "@src/utilities/utils";
 
 const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
@@ -447,13 +447,14 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const removePayment = async (invoice: Invoice, paymentId: string) => {
+  const removePayment = async (invoice: Invoice, paymentId: string, returnPayment?: boolean | false) => {
+    const type = getPaymentType(returnPayment);
     try {
       const authToken = await authContext.user?.getIdToken();
 
       const url =
         import.meta.env.VITE_RTDB_BASE_URL +
-        `/invoices/${invoice.invoiceId}/payments/${paymentId}.json?auth=${authToken}`;
+        `/invoices/${invoice.invoiceId}/${type}/${paymentId}.json?auth=${authToken}`;
 
       const res = await axios.delete(url);
 
@@ -465,7 +466,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
                 travellingType: invoice.travellingType,
                 billToCustomer: invoice.billToCustomer,
                 isBillToATraveller: invoice.isBillToATraveller,
-                payments: _invoice.payments.filter(
+                [type]: _invoice[type].filter(
                   (_payment) => _payment.paymentId !== paymentId
                 ),
               }

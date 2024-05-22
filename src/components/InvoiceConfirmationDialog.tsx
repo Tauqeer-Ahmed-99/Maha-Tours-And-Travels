@@ -12,25 +12,31 @@ import WarningRoundedIcon from "@mui/icons-material/WarningRounded";
 const InvoiceDialog = ({
   isConfirmationOpen,
   isPaymentConfirmationOpen,
+  isReturnPaymentConfirmationOpen,
   onRemoveCustomerConfirm,
   onRemovePaymentConfirm,
   onRemoveCustomerCancel,
   onRemovePaymentCancel,
+  onRemoveReturnPaymentConfirm,
+  onRemoveReturnPaymentCancel,
 }: {
   isConfirmationOpen: boolean;
   isPaymentConfirmationOpen: boolean;
+  isReturnPaymentConfirmationOpen: boolean;
   onRemoveCustomerConfirm: () => void;
   onRemovePaymentConfirm: () => void;
   onRemoveCustomerCancel: () => void;
   onRemovePaymentCancel: () => void;
+  onRemoveReturnPaymentConfirm: () => void;
+  onRemoveReturnPaymentCancel: () => void;
 }) => {
   return (
-    <Modal open={isConfirmationOpen || isPaymentConfirmationOpen}>
+    <Modal open={isReturnPaymentConfirmationOpen || isConfirmationOpen || isPaymentConfirmationOpen}>
       <ModalDialog variant="outlined" role="alertdialog">
         <DialogTitle>
           <WarningRoundedIcon />
           <Typography>
-            {isConfirmationOpen ? "Delete Customer?" : "Delete Payment?"}
+            {isConfirmationOpen ? "Delete Customer?" : isReturnPaymentConfirmationOpen? "Delete Return Payment" : "Delete Payment?"}
           </Typography>
         </DialogTitle>
         <Divider />
@@ -50,7 +56,7 @@ const InvoiceDialog = ({
             onClick={
               isConfirmationOpen
                 ? onRemoveCustomerCancel
-                : onRemovePaymentCancel
+                : isReturnPaymentConfirmationOpen ? onRemoveReturnPaymentCancel : onRemovePaymentCancel
             }
           >
             No
@@ -61,7 +67,7 @@ const InvoiceDialog = ({
             onClick={
               isConfirmationOpen
                 ? onRemoveCustomerConfirm
-                : onRemovePaymentConfirm
+                : isReturnPaymentConfirmationOpen ? onRemoveReturnPaymentConfirm : onRemovePaymentConfirm
             }
           >
             Yes

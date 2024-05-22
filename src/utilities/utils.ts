@@ -73,6 +73,11 @@ export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
                     parsePayment(rawPayment),
                   )
                 : [],
+              returnPayments: rawInvoice.returnPayments
+                ? Object.entries(rawInvoice.returnPayments).map((rawPayment) =>
+                    parsePayment(rawPayment),
+                  )
+                : [],
             } as Invoice),
         )
         .sort((a, b) => a.invoiceNumber - b.invoiceNumber)
