@@ -619,11 +619,8 @@ const PreviewInvoiceScreen = () => {
                     <Text>Thanks for doing business with us!!!</Text>
                   </View>
                   <View style={{ width: "50%", padding: PADDING_THICK }}>
-                    <Text style={{ textAlign: "center", marginBottom: "50px" }}>
-                      For : MAHA TOURS AND TRAVELS
-                    </Text>
                     <Text style={{ textAlign: "center" }}>
-                      Authorized Signatory
+                      For : MAHA TOURS AND TRAVELS
                     </Text>
                   </View>
                 </View>
