@@ -42,22 +42,39 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     }
   };
 
-  const generateInvoiceNumber = async () => {
+  function generateInvoiceCode(invoiceType: string, invoiceNumber: number): string {
+    const invoiceNumberStr = String(invoiceNumber);
+    const combinedLength = invoiceType.length + invoiceNumberStr.length;
+
+    if (combinedLength >= 8) {
+        return invoiceNumberStr; // No padding needed
+    }
+
+    const zerosNeeded = 8 - invoiceType.length - invoiceNumberStr.length;
+    const paddedNumber = '0'.repeat(zerosNeeded) + invoiceNumberStr;
+
+    return paddedNumber;
+  }
+
+
+  const generateInvoiceNumber = async (travellingType : string) => {
     const authToken = await authContext.user?.getIdToken();
     const url =
       import.meta.env.VITE_RTDB_BASE_URL +
       `/totalNumberOfInvoices.json?auth=${authToken}`;
 
     const res = await axios.get(url);
-
+  
     const invoiceNumber = res.data ? parseInt(res.data) + 1 : 1;
 
-    await axios.put(url, invoiceNumber);
+    const iNumber = generateInvoiceCode(travellingType,invoiceNumber);
 
-    return invoiceNumber;
+    await axios.put(url, JSON.stringify(iNumber));
+
+    return iNumber;
   };
 
-  const rollbackInvoiceNumber = async () => {
+  const rollbackInvoiceNumber = async (travellingType : string) => {
     try {
       const authToken = await authContext.user?.getIdToken();
       const url =
@@ -68,7 +85,9 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
 
       const invoiceNumber = res.data ? parseInt(res.data) - 1 : 0;
 
-      await axios.put(url, invoiceNumber);
+      const iNumber = generateInvoiceCode(travellingType, invoiceNumber);
+
+      await axios.put(url, JSON.stringify(iNumber));
     } catch (err) {
       const error = err as AxiosError;
       console.log(error);
@@ -80,7 +99,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
   const createNewInvoice = async () => {
     const invoice: Invoice = {
       billToCustomer: new Customer(),
-      invoiceNumber: Number(),
+      invoiceNumber: String(),
       isBillToATraveller: true,
       amounts: new Amounts(1, 500000, 5, 5),
       travellingType: TravellingType.HAJJ,
@@ -96,7 +115,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
       const url =
         import.meta.env.VITE_RTDB_BASE_URL + `/invoices.json?auth=${authToken}`;
 
-      const invoiceNumber = await generateInvoiceNumber();
+      const invoiceNumber = await generateInvoiceNumber(invoice.travellingType);
 
       invoice.invoiceNumber = invoiceNumber;
 
@@ -115,7 +134,7 @@ const InvoicesProvider = ({ children }: { children: React.ReactNode }) => {
     } catch (err) {
       const error = err as AxiosError;
       console.log(error);
-      await rollbackInvoiceNumber();
+      await rollbackInvoiceNumber(invoice.travellingType);
       setIsLoading(false);
       setIsError(true);
       setErrorMessage(error.message);

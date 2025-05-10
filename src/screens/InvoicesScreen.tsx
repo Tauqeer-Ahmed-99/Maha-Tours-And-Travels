@@ -47,7 +47,7 @@ const InvoicesScreen = () => {
     if (term.length > 0) {
       const filteredInvocies = invoicesContext.invoices.filter(
         (invoice) =>
-          (invoice.travellingType + "-" + invoice.invoiceNumber)
+          (invoice.travellingType + "" + invoice.invoiceNumber)
             .toLocaleLowerCase()
             .includes(term) ||
           invoice.billToCustomer.name.toLocaleLowerCase().includes(term) ||

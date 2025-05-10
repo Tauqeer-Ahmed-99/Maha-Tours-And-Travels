@@ -49,7 +49,7 @@ const InvoiceRow = (props: { row: Invoice; initialOpen?: boolean }) => {
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
           </IconButton>
         </td>
-        <td>{row.travellingType + "-" + row.invoiceNumber}</td>
+        <td>{row.travellingType + "" + row.invoiceNumber}</td>
         <td>
           <b>{row.billToCustomer.name}</b>
         </td>

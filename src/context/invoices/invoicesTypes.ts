@@ -3,7 +3,7 @@ import { Amounts, Customer, Payment, Response } from "@src/utilities/models";
 
 export interface Invoice {
   invoiceId?: string;
-  invoiceNumber: number;
+  invoiceNumber: string;
   travellingType: TravellingType;
   billToCustomer: Customer;
   isBillToATraveller: boolean;

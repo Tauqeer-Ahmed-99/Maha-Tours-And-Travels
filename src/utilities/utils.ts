@@ -75,7 +75,7 @@ export const parseInvoices = (rawInvoices: { [key: string]: any }) =>
                 : [],
             } as Invoice),
         )
-        .sort((a, b) => a.invoiceNumber - b.invoiceNumber)
+        .sort((a, b) => parseInt(a.invoiceNumber) - parseInt(b.invoiceNumber))
     : [];
 
 export function convertAmountInWords(amount: any) {

@@ -87,7 +87,7 @@ const InvoiceHeading = ({
           <Divider orientation="vertical" sx={{ mx: 2 }} />
           <Typography level="title-md" sx={{ my: { xs: 2, lg: 0 } }}>
             Invoice Number:{" "}
-            <b>{invoice?.travellingType + "-" + invoice?.invoiceNumber}</b>
+            <b>{invoice?.travellingType + "" + invoice?.invoiceNumber}</b>
           </Typography>
           <Divider orientation="vertical" sx={{ mx: 2 }} />
           <Typography level="title-md" mr={1}>

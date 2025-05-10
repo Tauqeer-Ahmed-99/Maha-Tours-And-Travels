@@ -196,7 +196,7 @@ const PreviewInvoiceScreen = () => {
   return (
     <Box height="100%" width="100%">
       <PDFViewer style={{ width: "100%", height: "100%" }}>
-        <Document title={invoice.travellingType + "-" + invoice.invoiceNumber}>
+        <Document title={invoice.travellingType + "" + invoice.invoiceNumber}>
           {React.Children.map(
             <>
               <Text
@@ -305,7 +305,7 @@ const PreviewInvoiceScreen = () => {
                             marginTop: MARGIN_MEDIUM,
                           }}
                         >
-                          {invoice.travellingType + "-" + invoice.invoiceNumber}
+                          {invoice.travellingType + "" + invoice.invoiceNumber}
                         </Text>
                       </View>
                       <View style={{ width: "100%", padding: PADDING_THICK }}>
@@ -580,6 +580,13 @@ const PreviewInvoiceScreen = () => {
                   </View>
                 </View>
               </View>
+              <Text
+                style={{
+                  textAlign: "center",
+                  fontSize: "8px",
+                  marginTop: MARGIN_THICK,
+                }}
+              >Computer Generated Report. Requires No Signature.</Text>
             </>,
             (child, index) => (
               <Page key={index} size="A4" style={{ padding: 20 }}>
