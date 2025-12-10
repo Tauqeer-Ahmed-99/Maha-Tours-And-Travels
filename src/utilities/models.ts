@@ -72,7 +72,7 @@ export class Amounts {
   }
 
   get tcsAmount() {
-    return (this.tcsPercent / 100) * this.totalAmountWithGst;
+    return (this.tcsPercent / 100) * this.totalAmountWithoutGst;
   }
 
   get totalAmount() {
